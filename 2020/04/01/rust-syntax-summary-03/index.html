@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="iMoeGirl" />
+    
+<title>Rust 基础 | 引用、切片 | 萌一小栈</title>
+
+ 
+<link rel="icon" href="/logo.png" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+        
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">萌一小栈</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+                <!-- <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label> -->
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">萌一小栈</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+<!-- <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Rust 基础 | 引用、切片</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">iMoeGirl</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">April 1, 2020&nbsp;&nbsp;12:13:24</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Rust/">Rust</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>在阅读Rust官方教程时，会看到两个词，引用和借用，也就是 References and Borrowing。这里很容易让人混乱，如果了解C/C++这类有指针的语言，则引用很容易理解，但是 Rust 中的<strong>借用</strong>这个词是什么意思呢？我觉得，在初学 Rust 时，可以忽略这个词，或者就简单理解为，它所涉及到的东西，就是引用，就是一个指针，就可以了，避免陷入进去。所以，接下来我就就聊一聊引用。</p>
+<h2 id="什么是引用"><a href="#什么是引用" class="headerlink" title="什么是引用"></a>什么是引用</h2><p>简单来说，引用就是一个指针，这个指针指向了某个内存地址。在说所有权时，我们知道，当把一个 <code>String</code> 当作参数传到函数时，它的所有权也就会被移动到函数的参数上，如果在调用完函数时，我们依旧想使用这个 String，则需要将所有权再返回，这样就很麻烦，所以用引用，会方便很多，因为引用，并不会获得这个 String 的所有权。看下面的代码</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> s1 = <span class="built_in">String</span>::from(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">    print_name(s1);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 下面这一句再访问 s1 就会编译出错，因为 s1 的所有权已经没了</span></span><br><span class="line">    <span class="comment">//println!(&quot;s1 again: &#123;&#125;&quot;, s1);</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">print_string</span></span>(s: <span class="built_in">String</span>) &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面是用引用作为参数</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> s1 = <span class="built_in">String</span>::from(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">    print_name(s1);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;s1 again: &#123;&#125;&quot;</span>, s1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">print_name</span></span>(s: &amp;<span class="built_in">String</span>) &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的代码中，我们将参数从 String 改为 &amp;String，这样函数的参数需要的就不是 String 的所有权，而是 String 的引用，所以在函数 print_name 结束时，main 函数中依然可以使用 name。下图是使用引用时的数据状态。</p>
+<p><img src="https://ae01.alicdn.com/kf/U3076d33eeae74c77999238e6374f69deu.png" alt="p003101_ref-pointer"></p>
+<h2 id="可变引用"><a href="#可变引用" class="headerlink" title="可变引用"></a>可变引用</h2><p>上面的代码中的引用是不可变的，现在我们来说一下可变引用，首先，有几条规则要记住。</p>
+<ol>
+<li>要使用可变引用，首先原始数据要是可变的 (Copy类型除外)</li>
+<li>在重叠的作用域中，可以有多个不可变引用，或者，只能有一个可变引用，但是可变与不可变引用，在重叠的作用域内不能共存</li>
+</ol>
+<p>下面的代码没问题，重叠的作用域内有多个不可变引用</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> s = <span class="built_in">String</span>::from(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">    <span class="keyword">let</span> r1 = &amp;s;</span><br><span class="line">    <span class="keyword">let</span> r2 = &amp;s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面的代码也没问题，作用域不重叠</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> s = <span class="built_in">String</span>::from(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">let</span> r1 = &amp;<span class="keyword">mut</span> s;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> r2 = &amp;<span class="keyword">mut</span> s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面的代码<code>有问题</code>，在重叠的作用域内同时存在可变和不可变引用</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> s = <span class="built_in">String</span>::from(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">    <span class="keyword">let</span> r1 = &amp;s;</span><br><span class="line">    <span class="keyword">let</span> r2 = &amp;s;</span><br><span class="line">    <span class="keyword">let</span> r3 = &amp;<span class="keyword">mut</span> s;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;, &#123;&#125;, &#123;&#125;&quot;</span>, r1, r2, r3); <span class="comment">// 因为这里访问了 r1 r2，所以 r1 r2 和 r3 作用域重叠</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果改成下面这样，就没有问题了，作用域不重叠</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> s = <span class="built_in">String</span>::from(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">    <span class="keyword">let</span> r1 = &amp;s;</span><br><span class="line">    <span class="keyword">let</span> r2 = &amp;s;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125; &#123;&#125;&quot;</span>, r1, r2);  <span class="comment">// 当前代码中，r1 r2 的作用域到此就结束了，因为后面没有再访问 r1 r2</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> r3 = &amp;<span class="keyword">mut</span> s;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, r3);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="什么是悬垂指针"><a href="#什么是悬垂指针" class="headerlink" title="什么是悬垂指针"></a>什么是悬垂指针</h2><p>一个指针所指向的内存已经被释放，但是还在使用这个指针，那这个指针就成为了悬垂指针，在其他编程语言中，编译时没问题，但是 Rust 中，编译时就会将错误暴露出来</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> name = get_name();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">get_name</span></span>() -&gt; &amp;<span class="built_in">String</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> new_name = <span class="built_in">String</span>::from(<span class="string">&quot;Fred&quot;</span>);</span><br><span class="line"></span><br><span class="line">     <span class="comment">// 这里会报错噢，因为在函数结束时，new_name 就会被释放，</span></span><br><span class="line">     <span class="comment">// &amp;new_name 会成为一个悬垂指针</span></span><br><span class="line">    &amp;new_name  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="什么是切片"><a href="#什么是切片" class="headerlink" title="什么是切片"></a>什么是切片</h2><p>切片，可以理解为对一个数据的部分引用，例如 String，之前 &amp;String 是获取一个 String 的完整引用，如果只想获取字符串内容中的部分引用，看下面的代码</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> s1 = <span class="built_in">String</span>::from(<span class="string">&quot;HelloRust&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取 s1 [0, 5) 这个索引区间内的字符串引用，也就是 Hello</span></span><br><span class="line">    <span class="comment">// 注意不包括索引为 5 这个字符</span></span><br><span class="line">    <span class="keyword">let</span> slice1 = &amp;s1[<span class="number">0</span>..<span class="number">5</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取 s1 [0, 5] 这个索引区间的字符串引用，也就是 HelloR</span></span><br><span class="line">    <span class="comment">// 这个是包含结尾索引 5</span></span><br><span class="line">    <span class="keyword">let</span> slice2 = &amp;s1[<span class="number">0</span>..=<span class="number">5</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果要从0开始，则可以省略开头索引</span></span><br><span class="line">    <span class="keyword">let</span> slice3 = &amp;s1[..<span class="number">5</span>];      <span class="comment">// Hello</span></span><br><span class="line">    <span class="keyword">let</span> slice4 = &amp;s1[..=<span class="number">5</span>];     <span class="comment">// HelloR</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果要截取到结尾，则可以省略结尾索引</span></span><br><span class="line">    <span class="keyword">let</span> slice5 = &amp;s1[<span class="number">5</span>..];  <span class="comment">// Rust</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在 Rust 中 <code>&amp;str</code> 类型就是一个字符串切片类型，注意，字符串切片也就是对于字符串的引用，所以引用规则也要遵从上面提到的规则。</p>
+<p>下面代码获取一个文件名的扩展名(仅做示例，不是生产代码)</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> file_name = <span class="built_in">String</span>::from(<span class="string">&quot;TheRustBook.pdf&quot;</span>);</span><br><span class="line">    <span class="keyword">let</span> extension = get_extension(&amp;file_name);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// .pdf</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;Extension: &#123;&#125;&quot;</span>, extension);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">get_extension</span></span>(file_name: &amp;<span class="built_in">String</span>) -&gt; &amp;<span class="built_in">str</span> &#123;</span><br><span class="line">    <span class="keyword">for</span>(i, c) <span class="keyword">in</span> file_name.chars().enumerate() &#123;</span><br><span class="line">        <span class="keyword">if</span> c == <span class="string">&#x27;.&#x27;</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> &amp;file_name[i..];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="对于数组的切片"><a href="#对于数组的切片" class="headerlink" title="对于数组的切片"></a>对于数组的切片</h2><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> scores = [<span class="number">100</span>, <span class="number">97</span>, <span class="number">45</span>, <span class="number">60</span>, <span class="number">88</span>];</span><br><span class="line">    <span class="keyword">let</span> score_slice = &amp;scores[<span class="number">1</span>..<span class="number">3</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// [97, 45]</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, score_slice);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>iMoeGirl</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://imoegirl.com/2020/04/01/rust-syntax-summary-03/">https://imoegirl.com/2020/04/01/rust-syntax-summary-03/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+                <p class="copyright-item">
+                    任何技术问题，欢迎在下面留言，或者直接Email我
+                </p>
+
+                <p class="copyright-item" style="margin-top: 10px;">
+                    <div style="display: flex">
+                        <div style="flex: 33%;">
+                            <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                            <br>
+                            <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px; border:1px solid #34495e"/>
+                        </div>
+
+                        <!-- <div style="flex: 33%; border: 2px solid yellow">
+                        <span style="font-weight: bold;">接受咖啡捐赠</span>
+                        </div>
+                        
+                        <div style="flex: 33%; border: 2px solid yellow">
+                            333
+                        </div> -->
+                        
+                    </div>
+
+
+                    <!-- <p style="border: 1px solid yellow;">
+                        <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                        <br>
+                        <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px"/>
+                    </p> -->
+
+                    
+                </p>
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Rust/"># Rust</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/04/02/rust-syntax-summary-04/">Rust 基础 | 结构体</a>
+            
+            
+            <a class="next" rel="next" href="/2020/03/29/rust-syntax-summary-02/">Rust 基础 | 所有权</a>
+            
+        </section>
+
+        <section class="post-talk">
+            
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '5b5aeaa767a06f6c23a4',
+          clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+          repo: 'imoegirl.github.io',
+          owner: 'imoegirl',
+          admin: ['imoegirl'],
+          id: location.pathname,
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')           
+       </script>
+  
+            <!-- <p>11111</p>
+            {{ window.location.pathname }} -->
+        </section>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    
+    <div class="copyright">
+        <span>© iMoeGirl | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+        <div style="margin-top: -40px; font-size: 12px">
+            <!-- <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span> -->
+            <!-- <span id="busuanzi_container_site_pv">
+                <i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+    
+            <span id="busuanzi_container_site_uv">
+                |<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span> -->
+        </div>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

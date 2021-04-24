@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="iMoeGirl" />
+    
+<title>浅谈在Unity3D中使用CriWare播放声音 | 萌一小栈</title>
+
+ 
+<link rel="icon" href="/logo.png" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+        
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">萌一小栈</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+                <!-- <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label> -->
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">萌一小栈</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+<!-- <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">浅谈在Unity3D中使用CriWare播放声音</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">iMoeGirl</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">November 30, 2019&nbsp;&nbsp;19:17:25</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Unity3D-%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/">Unity3D 游戏开发</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>在游戏开发中的音频解决方案，CriWare 是不错的选择，很多游戏大作也在使用。为什么使用CriWare呢？对于游戏运行时，可以<strong>显著提高加载速度</strong>和<strong>减小包体大小</strong>。而对于音频制作上，可以很方便地做更多的效果，例如多音源的避让等。</p>
+<p>今天我们就来浅浅地聊一下在 Unity3D 中使用 CriWare 播放声音，以及声音的管理等问题。</p>
+<a id="more"></a>
+
+<p>音频文件由做音频的同学使用CriWare的软件去制作，最终导出的文件是以acb或awb为扩展名的文件。如果采用的是Memory的形式，则导出的acb文件。</p>
+<p>对于开发来说，首先要知道两个东西，一个是CueSheet，一个是CueName。在音频制作的时候，多个音频可以打成一个组，每一个音频的名字，就是CueName，而这个组，就是CueSheet。我们要播放一个声音，首先要知道声音的名字，就是CueName，还要知道它所在的组，因为要加载到内存中。即使要播放组中的一个音频，也是要把整个组加载到内存中的。</p>
+<p>所以在制作时，音频那边的同学要规划好，哪些音频要在同一个组，哪些音频要在另外的组。当然，可以一个音频一个组，但是打成组可以做很多事情，这个等我请教一个音频那边的同学再补充。</p>
+<h2 id="先将声音播放出来"><a href="#先将声音播放出来" class="headerlink" title="先将声音播放出来"></a>先将声音播放出来</h2><ol>
+<li><p>首先把CriWare插件导入到Unity中</p>
+</li>
+<li><p>将做好的声音ACB文件放入StreamingAssets目录中</p>
+</li>
+<li><p>新建一个空物体，然后挂载CriAtom组件如下图</p>
+<p> <img src="https://ae01.alicdn.com/kf/Uc77ec5d9d1f84d7cb1e3e5475fb7509fb.png" alt="p000401_1"></p>
+<p>CriAtom 用于管理CueSheet，只有将CueSheet加入到CriAtom中，才能播放其中的某一个音频。将CueSheet加入到CriAtom中，意味着这个CueSheet会被加载到内存中，移除CueSheet，则会从内存中卸载。</p>
+<p>上图中每点击 <strong>Add CueSheet</strong>，就可以填入一个新的CueSheet，Name字段就是ACB文件的名字(不带扩展名)，ACB File字段填写ACB文件名字(带扩展名)。例如上图中我已经填了一个示例。</p>
+</li>
+<li><p>新建一个空物体，然后挂载 CriAtomSource 组件。这个组件，可以理解为Unity的AudioSource，就是用来播声音的。</p>
+<p> <img src="https://ae01.alicdn.com/kf/U253976346ba24a5a90577c278c65a568K.png" alt="p000402_2"></p>
+<p> 上图中，CueSheet字段，填写要播放的音源，所在的CueSheet名(不带扩展名)，而CueName，就填写要播放的声音的名字。这些名字，都是做音频的同学定好的。勾选上 <strong>Play On Start</strong>，然后运行Unity，就可以听到声音。</p>
+</li>
+</ol>
+<blockquote>
+<p>上面只是实现了声音能够<strong>播出来</strong>，要在真正的项目中使用，还需要管理声音，下面将说一下大概的思路。</p>
+</blockquote>
+<h2 id="声音管理器"><a href="#声音管理器" class="headerlink" title="声音管理器"></a>声音管理器</h2><p>基本思路是这样的，首先有一个声音管理器我们称为AudioManager，提供接口播放声音，停止声音，暂停声音，恢复声音，播放完毕，CueSheet加载卸载。外面模块调用AudioManager去控制声音。</p>
+<p>调用 AudioManager 播放声音的接口时，会生成一个新的对象, GameObject，挂载一个脚本，我们称为 AudioPlayer，这个 AudioPlayer 中会动态的挂载 CriAudioSource，然后将我们要播放的CueSheet，CueName这些值通过AudioManager传进去，设置 CriAudioSource 参数，然后调用 CriAudioSource的 Play 函数。</p>
+<p>当调用 AudioManager 的播放声音接口时，AudioManager 会动态记录这个 CueSheet 是否已经添加到 CriAtom 中，如果没有，则会添加，这时，CriAtom会去加载声音文件到内存中。</p>
+<p>AudioManager 在声音播放完，或者 GameObject 被销毁时，需要调用 AudioManager 的播放完毕接口，用于计数。这个计数，是为了让 AudioManager 知道一个CueSheet中，是否还有声音在播放，如果没有了，则要动态将 CueSheet 从 CriAtom 中移除掉，释放内存。</p>
+<p><strong>具体代码我还没写，请等待我有时间再补充~。</strong></p>
+<br>
+<br>
+一般不会有时间了...哈哈哈哈哈哈...
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>iMoeGirl</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://imoegirl.com/2019/11/30/unity-criware/">https://imoegirl.com/2019/11/30/unity-criware/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+                <p class="copyright-item">
+                    任何技术问题，欢迎在下面留言，或者直接Email我
+                </p>
+
+                <p class="copyright-item" style="margin-top: 10px;">
+                    <div style="display: flex">
+                        <div style="flex: 33%;">
+                            <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                            <br>
+                            <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px; border:1px solid #34495e"/>
+                        </div>
+
+                        <!-- <div style="flex: 33%; border: 2px solid yellow">
+                        <span style="font-weight: bold;">接受咖啡捐赠</span>
+                        </div>
+                        
+                        <div style="flex: 33%; border: 2px solid yellow">
+                            333
+                        </div> -->
+                        
+                    </div>
+
+
+                    <!-- <p style="border: 1px solid yellow;">
+                        <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                        <br>
+                        <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px"/>
+                    </p> -->
+
+                    
+                </p>
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"># 游戏开发</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/12/01/reload-native-unity-plugins/">怎样在Unity中Reload原生插件</a>
+            
+            
+            <a class="next" rel="next" href="/2019/11/20/computer-graphics-math/">图形学相关的基本数学</a>
+            
+        </section>
+
+        <section class="post-talk">
+            
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '5b5aeaa767a06f6c23a4',
+          clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+          repo: 'imoegirl.github.io',
+          owner: 'imoegirl',
+          admin: ['imoegirl'],
+          id: location.pathname,
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')           
+       </script>
+  
+            <!-- <p>11111</p>
+            {{ window.location.pathname }} -->
+        </section>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    
+    <div class="copyright">
+        <span>© iMoeGirl | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+        <div style="margin-top: -40px; font-size: 12px">
+            <!-- <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span> -->
+            <!-- <span id="busuanzi_container_site_pv">
+                <i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+    
+            <span id="busuanzi_container_site_uv">
+                |<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span> -->
+        </div>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

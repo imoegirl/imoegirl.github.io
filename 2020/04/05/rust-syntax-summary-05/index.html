@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="iMoeGirl" />
+    
+<title>Rust 基础 | 枚举、匹配 | 萌一小栈</title>
+
+ 
+<link rel="icon" href="/logo.png" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+        
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">萌一小栈</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+                <!-- <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label> -->
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">萌一小栈</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+<!-- <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Rust 基础 | 枚举、匹配</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">iMoeGirl</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">April 5, 2020&nbsp;&nbsp;22:29:14</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Rust/">Rust</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>这篇博客涉及到的知识点有 <strong>枚举的定义</strong>、<strong>Option 枚举</strong>、<strong>match 语法</strong>、<strong>if let 语法</strong>。</p>
+<h2 id="枚举的定义"><a href="#枚举的定义" class="headerlink" title="枚举的定义"></a>枚举的定义</h2><p>Rust 中定义一个枚举，使用关键字 <code>enum</code>，看下面的代码</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义一个NPC类型枚举</span></span><br><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">NPCType</span></span> &#123;</span><br><span class="line">    TalkNPC,</span><br><span class="line">    WalkNPC,</span><br><span class="line">    BattleNPC,</span><br><span class="line">    TaskNPC,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">GameState</span></span> &#123;</span><br><span class="line">    OnLogin = <span class="number">1</span>,</span><br><span class="line">    OnHall = <span class="number">2</span>,</span><br><span class="line">    OnWorld,</span><br><span class="line">    OnBattle,</span><br><span class="line">    OnLogOut,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是 Rust 的枚举是可以关联数据的，看下面的代码</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">CommandType</span></span> &#123;</span><br><span class="line">    Move(<span class="built_in">i32</span>, <span class="built_in">i32</span>, <span class="built_in">i32</span>),</span><br><span class="line">    Jump(<span class="built_in">u32</span>),</span><br><span class="line">    ChangeColor(<span class="built_in">u8</span>, <span class="built_in">u8</span>, <span class="built_in">u8</span>, <span class="built_in">u8</span>),</span><br><span class="line">    Smile,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> move_command = CommandType::Move(<span class="number">10</span>, -<span class="number">5</span>, <span class="number">3</span>);</span><br><span class="line">    <span class="keyword">let</span> jump_command = CommandType::Jump(<span class="number">2</span>);</span><br><span class="line">    <span class="keyword">let</span> change_color_command = CommandType::ChangeColor(<span class="number">110</span>,<span class="number">128</span>,<span class="number">55</span>,<span class="number">255</span>);</span><br><span class="line">    <span class="keyword">let</span> smile_command = CommandType::Smile;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>上面的代码中，可以给枚举中的字段关联数据，例如，Move 关联了3个i32类型的数据。我们可以关联任何类型的数据，也可以是自己定义的结构体，或者另一个枚举，都是可以的。</p>
+<h2 id="Option-枚举"><a href="#Option-枚举" class="headerlink" title="Option 枚举"></a>Option 枚举</h2><p>Rust 没有空值(Null)，但是可以使用 Option 枚举，来表示有和没有的概念。Option 枚举有两个字段，一个是 Some, 一个是 None，而 Option 是泛型的，就是说它可以面向任何类型的值 <code>Option&lt;T&gt;</code>，用于表示任何类型的值，有值，或者没有值。Some(T) 表示有值，而 None 表示没有值，以 i32 为例子，看下面的代码</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> has_value: <span class="built_in">Option</span>&lt;<span class="built_in">i32</span>&gt; = <span class="literal">Some</span>(<span class="number">200</span>);</span><br><span class="line">    <span class="keyword">let</span> none_value: <span class="built_in">Option</span>&lt;<span class="built_in">i32</span>&gt; = <span class="literal">None</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;has_value: &#123;:?&#125;&quot;</span>, has_value);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;none_value: &#123;:?&#125;&quot;</span>, none_value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Option 可以理解为盒子，Some(T) 表示有盒子，如果有盒子，那盒子里一定装了某种东西，也就是某种类型的值。而 None 表示没有盒子。上面的代码中，直接使用了 <code>Some(200)</code>，而不是 <code>Option::Some(200)</code>，是因为太常用，而被 Rust 包含在了 preload 中，所以我们可以省略前缀 <code>Option::</code>。在 Rust 的学习过程中，会经常遇到 Option。特别是函数的返回值。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> girl_age = get_girl_age(<span class="literal">true</span>);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;girl_age: &#123;:?&#125;&quot;</span>, girl_age);   <span class="comment">// Some(18)</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> boy_age = get_girl_age(<span class="literal">false</span>);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;boy_age: &#123;:?&#125;&quot;</span>, boy_age);     <span class="comment">// None</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">get_girl_age</span></span>(is_girl: <span class="built_in">bool</span>) -&gt; <span class="built_in">Option</span>&lt;<span class="built_in">u32</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> is_girl &#123;</span><br><span class="line">        <span class="literal">Some</span>(<span class="number">18</span>)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="literal">None</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="match-语法"><a href="#match-语法" class="headerlink" title="match 语法"></a>match 语法</h2><p>match 语法有点类型其他语言的 switch 语法，用于条件匹配。直接看代码</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">CommandType</span></span> &#123;</span><br><span class="line">    Move(<span class="built_in">i32</span>, <span class="built_in">i32</span>, <span class="built_in">i32</span>),</span><br><span class="line">    Jump(<span class="built_in">u32</span>),</span><br><span class="line">    ChangeColor(<span class="built_in">u8</span>, <span class="built_in">u8</span>, <span class="built_in">u8</span>, <span class="built_in">u8</span>),</span><br><span class="line">    Smile,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> move_command = CommandType::Move(<span class="number">10</span>, <span class="number">5</span>, <span class="number">2</span>);</span><br><span class="line">    process_command(&amp;move_command);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> change_color_command = CommandType::ChangeColor(<span class="number">154</span>,<span class="number">220</span>, <span class="number">14</span>, <span class="number">255</span>);</span><br><span class="line">    process_command(&amp;change_color_command);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">process_command</span></span>(command: &amp;CommandType) &#123;</span><br><span class="line">    <span class="keyword">match</span> command &#123;</span><br><span class="line">        CommandType::Move(x, y, z) =&gt; &#123;</span><br><span class="line">            <span class="built_in">println!</span>(<span class="string">&quot;Player Move, x: &#123;&#125;  y: &#123;&#125;  z: &#123;&#125;&quot;</span>, x, y, z);</span><br><span class="line">        &#125;,</span><br><span class="line">        CommandType::Jump(height) =&gt; &#123;</span><br><span class="line">            <span class="built_in">println!</span>(<span class="string">&quot;Player Jump to: &#123;&#125;&quot;</span>, height);</span><br><span class="line">        &#125;,</span><br><span class="line">        CommandType::ChangeColor(r, g, b, a) =&gt; &#123;</span><br><span class="line">            <span class="built_in">println!</span>(<span class="string">&quot;player change color: (&#123;&#125;, &#123;&#125;, &#123;&#125;, &#123;&#125;)&quot;</span>, r, g, b, a);</span><br><span class="line">        &#125;,</span><br><span class="line">        CommandType::Smile =&gt; &#123;</span><br><span class="line">            <span class="built_in">println!</span>(<span class="string">&quot;player smile&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码中，还是以 CommandType 枚举来举例。在 main 函数中定义了两个 CommandType 变量，分别使用不同的枚举，然后在 process_command 中，使用 match 语法匹配。在使用 match 匹配时， 一但类型匹配成功，就可以将其关联的值，绑定到某个变量上，然后在 match 逻辑中使用。例如上面代码中匹配上 CommandType::Move，Move 关联了三个 i32 类型的数据，所以在匹配时，就可以将关联的数据，绑定到 match 中的 x, y, z 三个变量上。</p>
+<p>Rust 的 match 匹配必须覆盖所有的类型，如果逻辑中只关心某些类型，则可以使用 <code>_</code> 忽略其他类型。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">CommandType</span></span> &#123;</span><br><span class="line">    Move(<span class="built_in">i32</span>, <span class="built_in">i32</span>, <span class="built_in">i32</span>),</span><br><span class="line">    Jump(<span class="built_in">u32</span>),</span><br><span class="line">    ChangeColor(<span class="built_in">u8</span>, <span class="built_in">u8</span>, <span class="built_in">u8</span>, <span class="built_in">u8</span>),</span><br><span class="line">    Smile,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> command = CommandType::Smile;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">match</span> command &#123;</span><br><span class="line">        CommandType::Smile =&gt; &#123;</span><br><span class="line">            <span class="built_in">println!</span>(<span class="string">&quot;Smile Command&quot;</span>);</span><br><span class="line">        &#125;,</span><br><span class="line">        _ =&gt; &#123;</span><br><span class="line">            <span class="built_in">println!</span>(<span class="string">&quot;Other Command&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="if-let-语法"><a href="#if-let-语法" class="headerlink" title="if let 语法"></a>if let 语法</h2><p>相比于 match 匹配的繁琐，if let 语法让匹配更简洁一些</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">CommandType</span></span> &#123;</span><br><span class="line">    Move(<span class="built_in">i32</span>, <span class="built_in">i32</span>, <span class="built_in">i32</span>),</span><br><span class="line">    Jump(<span class="built_in">u32</span>),</span><br><span class="line">    ChangeColor(<span class="built_in">u8</span>, <span class="built_in">u8</span>, <span class="built_in">u8</span>, <span class="built_in">u8</span>),</span><br><span class="line">    Smile,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> move_command = CommandType::Move(<span class="number">10</span>, <span class="number">5</span>, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> CommandType::Move(x, y, z) = move_command &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;Player Move: x: &#123;&#125;, y: &#123;&#125;, z: &#123;&#125;&quot;</span>, x, y, z);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;is not move command&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码中，if let 可以理解为，将右边的 move_command 和左边的枚举类型匹配，如果能匹配上，则将 move_command中的数据绑定到 x, y, z 上，然后执行匹配成功的逻辑，也就是打印出 x, y, z 的值，如果类型匹配不上，则执行匹配不上的逻辑。</p>
+<p>为了更好的理解，下面再看一个例子</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> x = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> x == <span class="number">2</span> &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;x = 2&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;x != 2&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> <span class="number">2</span> = x &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;x = 2&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;x != 2&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中 if 语句 和 if let 语句执行的打印是一样的，似乎是一个正向匹配测试，一个反向匹配测试的感觉。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>iMoeGirl</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://imoegirl.com/2020/04/05/rust-syntax-summary-05/">https://imoegirl.com/2020/04/05/rust-syntax-summary-05/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+                <p class="copyright-item">
+                    任何技术问题，欢迎在下面留言，或者直接Email我
+                </p>
+
+                <p class="copyright-item" style="margin-top: 10px;">
+                    <div style="display: flex">
+                        <div style="flex: 33%;">
+                            <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                            <br>
+                            <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px; border:1px solid #34495e"/>
+                        </div>
+
+                        <!-- <div style="flex: 33%; border: 2px solid yellow">
+                        <span style="font-weight: bold;">接受咖啡捐赠</span>
+                        </div>
+                        
+                        <div style="flex: 33%; border: 2px solid yellow">
+                            333
+                        </div> -->
+                        
+                    </div>
+
+
+                    <!-- <p style="border: 1px solid yellow;">
+                        <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                        <br>
+                        <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px"/>
+                    </p> -->
+
+                    
+                </p>
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Rust/"># Rust</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/04/12/configure-nginx-https-and-redirect/">nginx 配置 https 及重定向</a>
+            
+            
+            <a class="next" rel="next" href="/2020/04/02/rust-syntax-summary-04/">Rust 基础 | 结构体</a>
+            
+        </section>
+
+        <section class="post-talk">
+            
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '5b5aeaa767a06f6c23a4',
+          clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+          repo: 'imoegirl.github.io',
+          owner: 'imoegirl',
+          admin: ['imoegirl'],
+          id: location.pathname,
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')           
+       </script>
+  
+            <!-- <p>11111</p>
+            {{ window.location.pathname }} -->
+        </section>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    
+    <div class="copyright">
+        <span>© iMoeGirl | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+        <div style="margin-top: -40px; font-size: 12px">
+            <!-- <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span> -->
+            <!-- <span id="busuanzi_container_site_pv">
+                <i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+    
+            <span id="busuanzi_container_site_uv">
+                |<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span> -->
+        </div>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

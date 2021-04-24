@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="iMoeGirl" />
+    
+<title>怎样在Unity中Reload原生插件 | 萌一小栈</title>
+
+ 
+<link rel="icon" href="/logo.png" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+        
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">萌一小栈</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+                <!-- <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label> -->
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">萌一小栈</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+<!-- <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">怎样在Unity中Reload原生插件</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">iMoeGirl</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">December 1, 2019&nbsp;&nbsp;1:05:25</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Unity3D-%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/">Unity3D 游戏开发</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <blockquote>
+<p>这是一篇翻译文章，原文来自 <a target="_blank" rel="noopener" href="https://www.forrestthewoods.com/blog/how-to-reload-native-plugins-in-unity/">how-to-reload-native-plugins-in-unity</a></p>
+</blockquote>
+<p>在Unity编辑器使用原生插件，Dll之类的，经常会遇到一个问题，替换插件时，Unity会提示正在使用，无法替换，这是因为Unity一旦点了Play，加载了Dll，就不会去卸载。</p>
+<p><img src="https://ae01.alicdn.com/kf/Uf1f562e3e80d413e9c869924c49fbe2dW.png" alt="p000501_Unity-Dll-Replace-Faild.png"></p>
+<p>要解决这个问题也很简单，那就是先关掉Unity，然后替换Dll，然后再打开Unity。对于插件的使用者，倒不是什么大问题，但是如果你是插件的开发者，需要频繁的修改和测试插件，那就有点悲惨了。</p>
+<p>这篇博客将介绍一个我认为不错的解决方案，有很多开发者已经实现了这个或者类似的解决方案，但是在Google或者Github上很难找到。</p>
+<a id="more"></a>
+
+<h1 id="TLDR"><a href="#TLDR" class="headerlink" title="TLDR"></a>TLDR</h1><p>我写了一个200行的代码，在OnAwake时，会加载所有的Dll，在OnDestroy时会卸载所有的Dll，我们自己去管理Dll的加载和卸载，就可以做到停止Play时，卸载掉所有的Dll，这样就可以在不关闭Unity的情况下，替换Dll。</p>
+<p>要做到这个，就不能用 PInvoke 去调用，而是用类似的方式，达到相同的目的。</p>
+<p>完整的工程代码在 <a target="_blank" rel="noopener" href="https://github.com/forrestthewoods/fts_unity_native_plugin_reloader">Github</a>。但是我们只需要一个文件就可以 <a target="_blank" rel="noopener" href="https://github.com/forrestthewoods/fts_unity_native_plugin_reloader/blob/master/NativeReloadUnityProject/Assets/fts_native_plugin_reloader/Scripts/NativePluginLoader.cs">NativePluginLoader.cs</a></p>
+<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用:"></a>如何使用:</h2><ol>
+<li><p>将 NativePluginLoader.cs 放到你的工程中</p>
+</li>
+<li><p>在场景中新建一个GameObject，然后挂载 NativePluginLoader.cs</p>
+</li>
+<li><p>定义一个类，用于声明所有的插件方法，例如命名为 FooPlugin，然后给这个类赋予 <code>PluginAttr</code> 属性</p>
+</li>
+<li><p>给 delegate 添加 <code>PluginFunctionAttr</code> 属性，示例代码如下</p>
+ <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// C# 代码</span></span><br><span class="line">[<span class="meta">PluginAttr(<span class="meta-string">&quot;my_cool_plugin&quot;</span>)</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">FooPlugin</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">PluginFunctionAttr(<span class="meta-string">&quot;sum&quot;</span>)</span>] </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Sum sum = <span class="literal">null</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">delegate</span> <span class="keyword">float</span> <span class="title">Sum</span>(<span class="params"><span class="keyword">float</span> a, <span class="keyword">float</span> b</span>)</span>;  <span class="comment">// 原生方法的 delegate</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">CoolFunc</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">float</span> s = FooPlugin.sum(<span class="number">1.0</span>, <span class="number">2.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这里是原生C代码中的接口, 最后打成Dll给Unity调用</span></span><br><span class="line"><span class="comment">// my_cool_plugin.h</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> &#123;</span><br><span class="line">    __declspec(dllexport) <span class="function"><span class="keyword">float</span> <span class="title">sum</span><span class="params">(<span class="keyword">float</span> a, <span class="keyword">float</span> b)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+<h2 id="关于-PInvoke"><a href="#关于-PInvoke" class="headerlink" title="关于 PInvoke"></a>关于 PInvoke</h2><p>调用原生插件的常规方法是通过 <code>PInvoke</code></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">FooPlugin_PInvoke</span> &#123;</span><br><span class="line">    [<span class="meta">DllImport(<span class="meta-string">&quot;cpp_example_dll&quot;</span>, EntryPoint = <span class="meta-string">&quot;sum&quot;</span>)</span>]</span><br><span class="line">    <span class="function"><span class="keyword">extern</span> <span class="keyword">static</span> <span class="keyword">public</span> <span class="keyword">float</span> <span class="title">sum</span>(<span class="params"><span class="keyword">float</span> a, <span class="keyword">float</span> b</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是使用 <code>PInvoke</code> 会有一个问题，就是Dll永远不会 unload。解决方案就是我们自己控制加载和卸载，卸载将使用下面的接口</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">class</span> <span class="title">SystemLibrary</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">DllImport(<span class="meta-string">&quot;kernel32&quot;</span>, SetLastError = true, CharSet = CharSet.Unicode)</span>]</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">public</span> <span class="keyword">extern</span> IntPtr <span class="title">LoadLibrary</span>(<span class="params"><span class="keyword">string</span> lpFileName</span>)</span>;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">DllImport(<span class="meta-string">&quot;kernel32&quot;</span>, SetLastError = true)</span>]</span><br><span class="line">    [<span class="meta">return: MarshalAs(UnmanagedType.Bool)</span>]</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">public</span> <span class="keyword">extern</span> <span class="keyword">bool</span> <span class="title">FreeLibrary</span>(<span class="params">IntPtr hModule</span>)</span>;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">DllImport(<span class="meta-string">&quot;kernel32&quot;</span>)</span>]</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">public</span> <span class="keyword">extern</span> IntPtr <span class="title">GetProcAddress</span>(<span class="params">IntPtr hModule, <span class="keyword">string</span> procedureName</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="自动完成加载卸载工作"><a href="#自动完成加载卸载工作" class="headerlink" title="自动完成加载卸载工作"></a>自动完成加载卸载工作</h2><p><a target="_blank" rel="noopener" href="https://github.com/forrestthewoods/fts_unity_native_plugin_reloader/blob/master/NativeReloadUnityProject/Assets/fts_native_plugin_reloader/Scripts/NativePluginLoader.cs">NativePluginLoader.cs</a> 是一个单例类，负责完成所有的加载和卸载工作。</p>
+<p>主要的加载代码如下</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Loop over all assemblies</span></span><br><span class="line"><span class="keyword">foreach</span> (<span class="keyword">var</span> assembly <span class="keyword">in</span> assemblies) &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Loop over all types</span></span><br><span class="line">    <span class="keyword">foreach</span> (<span class="keyword">var</span> type <span class="keyword">in</span> assembly.GetTypes()) &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Consider types with the attribute PluginAttr</span></span><br><span class="line">        <span class="keyword">var</span> typeAttr = type.FindAttribute(<span class="keyword">typeof</span>(PluginAttr));</span><br><span class="line">        <span class="keyword">if</span> (!typeAttr)</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Load the Plugin (this is cached)</span></span><br><span class="line">        <span class="keyword">var</span> plugin = LoadLibrary(typeAttr.pluginName);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Loop over all fields for type</span></span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> field <span class="keyword">in</span> type.GetFields()) &#123;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// Find static, public fields with PluginFunctionAttr</span></span><br><span class="line">            <span class="keyword">var</span> fieldAttr = field.FindAttribute(<span class="keyword">typeof</span>(PluginFunctionAttr));</span><br><span class="line">            <span class="keyword">if</span> (!fieldAttr)</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Get function pointer and store in static delegate field</span></span><br><span class="line">            <span class="keyword">var</span> fnPtr = GetProcAddress(plugin, fieldAttr.functionName);</span><br><span class="line">            <span class="keyword">var</span> fnDelegate = Marshal.GetDelegateForFunctionPointer(fnPtr, field.FieldType);</span><br><span class="line">            field.SetValue(<span class="literal">null</span>, fnDelegate);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码在 <code>OnAwake</code> 时会加载所有的Dll，存到一个字典里，然后在 <code>OnDestroy</code> 时卸载所有的Dll。</p>
+<h2 id="其他注意的事情"><a href="#其他注意的事情" class="headerlink" title="其他注意的事情"></a>其他注意的事情</h2><p>从 Unity 2018.2 开始，设置里添加了新的特性。强烈推荐设置<br><code>Editor-&gt;Preferences-&gt;Script Changes While Playing = Recompile After Finished Playing</code><br>ScriptReload 会让所有的原生插件 unload 然后 reload。</p>
+<blockquote>
+<p>当前的 NativePluginLoader.cs 只支持 Windows 平台</p>
+</blockquote>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>Unity 支持原生插件是很不错的，因为有一些模块，使用C/C++之类的语言实现，然后提供API给C#调用是更好的选择。但是 Unity 现在对于这一块的支持还不够优雅。</p>
+<p>我没有在网络上找到一个更好的方法去解决这个问题。所以我写了这个脚本，它帮我解决了一部分繁琐的事情，希望也能帮到其他人。</p>
+<h2 id="原代码-Github"><a href="#原代码-Github" class="headerlink" title="原代码: Github"></a>原代码: <a target="_blank" rel="noopener" href="https://github.com/forrestthewoods/fts_unity_native_plugin_reloader">Github</a></h2>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>iMoeGirl</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://imoegirl.com/2019/12/01/reload-native-unity-plugins/">https://imoegirl.com/2019/12/01/reload-native-unity-plugins/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+                <p class="copyright-item">
+                    任何技术问题，欢迎在下面留言，或者直接Email我
+                </p>
+
+                <p class="copyright-item" style="margin-top: 10px;">
+                    <div style="display: flex">
+                        <div style="flex: 33%;">
+                            <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                            <br>
+                            <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px; border:1px solid #34495e"/>
+                        </div>
+
+                        <!-- <div style="flex: 33%; border: 2px solid yellow">
+                        <span style="font-weight: bold;">接受咖啡捐赠</span>
+                        </div>
+                        
+                        <div style="flex: 33%; border: 2px solid yellow">
+                            333
+                        </div> -->
+                        
+                    </div>
+
+
+                    <!-- <p style="border: 1px solid yellow;">
+                        <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                        <br>
+                        <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px"/>
+                    </p> -->
+
+                    
+                </p>
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"># 游戏开发</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/12/04/unity-audio-visualization/">浅谈Unity3D音频可视化效果原理</a>
+            
+            
+            <a class="next" rel="next" href="/2019/11/30/unity-criware/">浅谈在Unity3D中使用CriWare播放声音</a>
+            
+        </section>
+
+        <section class="post-talk">
+            
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '5b5aeaa767a06f6c23a4',
+          clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+          repo: 'imoegirl.github.io',
+          owner: 'imoegirl',
+          admin: ['imoegirl'],
+          id: location.pathname,
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')           
+       </script>
+  
+            <!-- <p>11111</p>
+            {{ window.location.pathname }} -->
+        </section>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    
+    <div class="copyright">
+        <span>© iMoeGirl | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+        <div style="margin-top: -40px; font-size: 12px">
+            <!-- <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span> -->
+            <!-- <span id="busuanzi_container_site_pv">
+                <i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+    
+            <span id="busuanzi_container_site_uv">
+                |<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span> -->
+        </div>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

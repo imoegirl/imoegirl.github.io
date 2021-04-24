@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="iMoeGirl" />
+    
+<title>Unity UGUI RGB通道分离抖动 | 萌一小栈</title>
+
+ 
+<link rel="icon" href="/logo.png" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+        
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">萌一小栈</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+                <!-- <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label> -->
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">萌一小栈</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+<!-- <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Unity UGUI RGB通道分离抖动</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">iMoeGirl</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 8, 2020&nbsp;&nbsp;22:18:03</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Unity3D-%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/">Unity3D 游戏开发</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>今天我们要在 UGUI 上实现图片RGB通道分离抖动效果，先看最终效果图</p>
+<p><img src="https://ae01.alicdn.com/kf/U48ba9b6c9e9b4e00972f0280399e07fbZ.gif" alt="p002701_imageglitch"></p>
+<p>实现这个效果，使用了 Shader 和 C# 代码，Shader 用于实现效果，C# 用于控制抖动开关，也就是什么时候抖动，什么时候停止。Shader 的原理大概就是通过不同的参数，分别采样图片的RGB三个通道的颜色，然后再合成最终的颜色。Shader代码如下</p>
+<a id="more"></a>
+
+<figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line">Shader &quot;iMoeGirl/DouYin&quot; &#123;</span><br><span class="line">    Properties &#123;</span><br><span class="line">        [PerRendererData] _MainTex(&quot;Sprite Texture&quot;, 2D) = &quot;white&quot; &#123;&#125;</span><br><span class="line">        _ScanLineJitter(&quot;ScanLineJitter&quot;, Vector) = (0, 0, 0, 0)</span><br><span class="line">        _VerticalJump(&quot;VerticalJump&quot;, Vector) = (0, 0, 0, 0)</span><br><span class="line">        _HorizontalShake(&quot;HorizontalShake&quot;, Float) = 0.005</span><br><span class="line">        _ColorDrift(&quot;ColorDrift&quot;, Vector) = (0.06, 0, 0, 0)</span><br><span class="line">        _IsOpen(&quot;IsOpen&quot;, Int) = 1</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    SubShader &#123;</span><br><span class="line">              </span><br><span class="line">        pass &#123;</span><br><span class="line">            Blend SrcAlpha OneMinusSrcAlpha</span><br><span class="line">        </span><br><span class="line">            CGPROGRAM</span><br><span class="line">            <span class="meta">#pragma vertex vert</span></span><br><span class="line">            <span class="meta">#pragma fragment frag</span></span><br><span class="line">            <span class="meta">#include &quot;UnityCG.cginc&quot;</span></span><br><span class="line"></span><br><span class="line">            float2 _ScanLineJitter;</span><br><span class="line">            float2 _VerticalJump;   </span><br><span class="line">            <span class="type">float</span> _HorizontalShake;</span><br><span class="line">            float2 _ColorDrift;     </span><br><span class="line"></span><br><span class="line">            struct appdata_t &#123;</span><br><span class="line">                float4 vertex : POSITION;</span><br><span class="line">                float2 uv : TEXCOORD0;</span><br><span class="line">            &#125;;</span><br><span class="line"></span><br><span class="line">            struct v2f &#123;</span><br><span class="line">                float4 vertex : SV_POSITION;</span><br><span class="line">                half2 uv : TEXCOORD0;</span><br><span class="line">            &#125;;</span><br><span class="line"></span><br><span class="line">            <span class="type">float</span> nrand(<span class="type">float</span> x, <span class="type">float</span> y)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">return</span> frac(<span class="built_in">sin</span>(<span class="built_in">dot</span>(float2(x, y), float2(<span class="number">12.9898</span>, <span class="number">78.233</span>))) * <span class="number">43758.5453</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            v2f vert(appdata_t IN)&#123;</span><br><span class="line">                v2f OUT;</span><br><span class="line">                OUT.vertex = UnityObjectToClipPos(IN.vertex);</span><br><span class="line">                OUT.uv = IN.uv;</span><br><span class="line">                <span class="keyword">return</span> OUT;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="type">sampler2D</span> _MainTex;</span><br><span class="line">            <span class="type">float</span> _Scale;</span><br><span class="line">            <span class="type">float</span> _IsOpen;</span><br><span class="line"></span><br><span class="line">            fixed4 frag(v2f i) : SV_TARGET &#123;</span><br><span class="line">                <span class="type">float</span> u = i.uv.x;</span><br><span class="line">                <span class="type">float</span> v = i.uv.y;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Scan line jitter</span></span><br><span class="line">                <span class="type">float</span> jitter = nrand(v, _Time.x) * <span class="number">2</span> - <span class="number">1</span>;</span><br><span class="line">                jitter *= <span class="built_in">step</span>(_ScanLineJitter.y, <span class="built_in">abs</span>(jitter)) * _ScanLineJitter.x;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// vertical jump</span></span><br><span class="line">                <span class="type">float</span> jump = lerp(v, frac(v + _VerticalJump.y), _VerticalJump.x);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Horizontal shake</span></span><br><span class="line">                <span class="type">float</span> shake = (nrand(_Time.x, <span class="number">2</span>) - <span class="number">0.5</span>) * _HorizontalShake;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Color drift</span></span><br><span class="line">                <span class="type">float</span> drift = (<span class="built_in">sin</span>(jump + _ColorDrift.y )) * _ColorDrift.x;</span><br><span class="line"></span><br><span class="line">                <span class="type">float</span> value = (nrand(_Time.x, <span class="number">2</span>) - <span class="number">0.5</span>) * <span class="number">0.002</span> * _IsOpen;</span><br><span class="line"></span><br><span class="line">                half4 src1 = tex2D(_MainTex, frac(float2(u + (jitter + shake) * _IsOpen, jump)));</span><br><span class="line">                half4 src2 = tex2D(_MainTex, frac(float2(u + (jitter + shake + drift + value) * _IsOpen, jump)));</span><br><span class="line">                half4 src3 = tex2D(_MainTex, frac(float2(u + (jitter + shake - drift - value * <span class="number">3</span>) * _IsOpen, jump)));</span><br><span class="line">                <span class="keyword">return</span> half4(src1.r, src2.g, src3.b, src1.a);</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            ENDCG</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>C# 代码通过控制Shader中的_IsOpen的值，设置为0则是关掉抖动效果，设置为1则是开启抖动效果。通过随机值来控制抖动间隔。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"><span class="keyword">using</span> UnityEngine.UI;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ImageGlitch</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> Image mImage;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">float</span> effectTicker = <span class="number">0.0f</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">float</span> stayTicker = <span class="number">0.0f</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">Start</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        mImage = gameObject.GetComponent&lt;Image&gt;();</span><br><span class="line">        CloseEffect();</span><br><span class="line">        stayTicker = Random.Range(<span class="number">0.2f</span>, <span class="number">0.6f</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Update is called once per frame</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Update</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        <span class="keyword">if</span>(stayTicker &gt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            stayTicker -= Time.deltaTime;</span><br><span class="line">            <span class="keyword">if</span>(stayTicker &lt;= <span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                effectTicker = Random.Range(<span class="number">0.2f</span>, <span class="number">0.6f</span>);</span><br><span class="line">                OpenEffect();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(effectTicker &gt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            effectTicker -= Time.deltaTime;</span><br><span class="line">            <span class="keyword">if</span>(effectTicker &lt;= <span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                stayTicker = Random.Range(<span class="number">1.0f</span>, <span class="number">2.0f</span>);</span><br><span class="line">                CloseEffect();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">OpenEffect</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        mImage.material.SetInt(<span class="string">&quot;_IsOpen&quot;</span>, <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">CloseEffect</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        mImage.material.SetInt(<span class="string">&quot;_IsOpen&quot;</span>, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>新建立 一个 Image 组件，然后将自己的图片赋予 Image。新建一个 Material，使用我们上面写的 Shader，然后将 Material 赋予 Image 组件，挂载 C# 代码，运行即可看到效果。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>iMoeGirl</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://imoegirl.com/2020/03/08/unity-ugui-tiktok-effect/">https://imoegirl.com/2020/03/08/unity-ugui-tiktok-effect/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+                <p class="copyright-item">
+                    任何技术问题，欢迎在下面留言，或者直接Email我
+                </p>
+
+                <p class="copyright-item" style="margin-top: 10px;">
+                    <div style="display: flex">
+                        <div style="flex: 33%;">
+                            <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                            <br>
+                            <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px; border:1px solid #34495e"/>
+                        </div>
+
+                        <!-- <div style="flex: 33%; border: 2px solid yellow">
+                        <span style="font-weight: bold;">接受咖啡捐赠</span>
+                        </div>
+                        
+                        <div style="flex: 33%; border: 2px solid yellow">
+                            333
+                        </div> -->
+                        
+                    </div>
+
+
+                    <!-- <p style="border: 1px solid yellow;">
+                        <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                        <br>
+                        <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px"/>
+                    </p> -->
+
+                    
+                </p>
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"># 游戏开发</a>
+                    
+                        <a href="/tags/Shader/"># Shader</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/03/15/unity-shader-basis-04/">Unity Shader | 光照模型和漫反射</a>
+            
+            
+            <a class="next" rel="next" href="/2020/03/07/unity-shader-basis-03/">Unity Shader | 使用Struct传递数据</a>
+            
+        </section>
+
+        <section class="post-talk">
+            
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '5b5aeaa767a06f6c23a4',
+          clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+          repo: 'imoegirl.github.io',
+          owner: 'imoegirl',
+          admin: ['imoegirl'],
+          id: location.pathname,
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')           
+       </script>
+  
+            <!-- <p>11111</p>
+            {{ window.location.pathname }} -->
+        </section>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    
+    <div class="copyright">
+        <span>© iMoeGirl | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+        <div style="margin-top: -40px; font-size: 12px">
+            <!-- <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span> -->
+            <!-- <span id="busuanzi_container_site_pv">
+                <i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+    
+            <span id="busuanzi_container_site_uv">
+                |<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span> -->
+        </div>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

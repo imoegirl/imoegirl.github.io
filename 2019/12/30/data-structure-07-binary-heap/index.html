@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="iMoeGirl" />
+    
+<title>二叉堆 | 萌一小栈</title>
+
+ 
+<link rel="icon" href="/logo.png" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+        
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">萌一小栈</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+                <!-- <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label> -->
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">萌一小栈</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+<!-- <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">二叉堆</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">iMoeGirl</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">December 30, 2019&nbsp;&nbsp;18:01:45</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>今天我们来说一下二叉堆(BinaryHeap)。堆是很有用的数据结构，例如后面会学到的优先队列，堆排序等，都和堆有关。操作系统中很多调度，也和堆有关。</p>
+<p>还记得我们之前学过的<a href="https://imoegirl.com/2019/12/21/data-structure-05-binary-tree/#%E4%BB%80%E4%B9%88%E6%98%AF%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91">完全二叉树吗</a>？如果不记得了，就需要先回去复习一下，因为二叉堆，首先是一棵完全二叉树，或者近似完全二叉树。</p>
+<p>再来说一下二叉堆的特性。二叉堆分为最小堆和最大堆。如果是最小堆，那么父节点的值，总是小于或等于任何一个子节点的值，通俗点就是把一棵树从上往下看，值在变大，下面的大于等于上面的。如果是最大堆，则是反过来，父节点的值，总是大于或等于任何一个子节点的值。</p>
+<p>如果要简单点记忆，那就是这棵树上的值按层来看，如果是从小到大，那就是最小堆，如果是从大到小，那就是最大堆。</p>
+<p>接下来我们就开始说二叉堆的细节，插入节点，删除节点。</p>
+<a id="more"></a>
+
+<h2 id="插入节点"><a href="#插入节点" class="headerlink" title="插入节点"></a>插入节点</h2><p>插入节点，其实也就是构建二叉堆的过程，语言描述流程如下。</p>
+<ol>
+<li><p>找到要插入的位置，这个位置就是当前这棵完全二叉树，最后一个位置 (不太好理解)。如果用代码流程来描述的话，就是按层遍历当前的树，如果遇到一个节点，左子树为空，或者又子树为空，或者左右子树都为空，那么，这个点就是要插入节点的父节点，而要插入的节点，将作为这个节点的左子树或右子树。看下面的图</p>
+<p><img src="https://ae01.alicdn.com/kf/Uaf57ff2ed5ae46c8a15a8e5a30205793g.png" alt="p001901_Binary-Heap-1"></p>
+<p>假设我们要在上面的堆中插入一个节点，按照上面代码流程中描述的，可以找到要插入节点的父节点，是11。</p>
+</li>
+<li><p>找到了要插入节点的父节点，还要判断这个父节点是左子树为空，还是右子树为空，还是都为空，如果左子树为空，则新点作为左子树，如果左子树不为空，则新点作为右子树。插入后的图如下(假设要插入的数值为3)</p>
+<p><img src="https://ae01.alicdn.com/kf/Ue05fd0d4b48d4be3b0aeb8a553db5d08H.png" alt="p001902_Binary-Heap-2"></p>
+</li>
+<li><p>节点插入后，当前的树并不满足二叉堆的规则，所以还需要将新插入的点向上浮动。如果当前节点值小于父节点的值，则交换当前节点和父节点的值。然后再次判断，直到当前值不再小于父节点值，或者父节点值为空了，则位置调整完毕，整个插入流程也就结束了。看下面的流程图</p>
+<p><img src="https://ae01.alicdn.com/kf/U9f1def5816f14efeaa318779f58000b3m.png" alt="p001903_Binary-Heap-3"></p>
+<p>上图中，首先用 3 和 11 比较，因为 3 小于 11，所以交换两个节点的值</p>
+<p><img src="https://ae01.alicdn.com/kf/U84369ee5821542b3b18dee3ade6a181ca.png" alt="p001904_Binary-Heap-4"></p>
+<p>上图中，再次用 3 和父节点 5 比较，因为 3 小于 5，所以再次交换两个节点的值</p>
+<p><img src="https://ae01.alicdn.com/kf/U23e249f056f94c8bad07c456b624d77e6.png" alt="p001905_Binary-Heap-5"></p>
+<p>上图中，再次用 3 和父节点 1 比较，咦，3 不小于 1，所以不交换，节点调整结束。此时的树满足二叉堆的规则。</p>
+</li>
+</ol>
+<p>以上就是整个插入节点的流程，下面我们用代码去实现一下。代码中的 <strong>TreeAlgo</strong> 类是我们为了方便写的一个帮助类，实现了层序打印和查找的一些方法。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义节点的结构</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Node</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> data;</span><br><span class="line">    <span class="keyword">public</span> Node parent = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">public</span> Node left = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">public</span> Node right = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span>(<span class="params"><span class="keyword">int</span> data</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.data = data;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义二叉堆操作类</span></span><br><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">BinaryHeap</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> Node root;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Insert</span>(<span class="params"><span class="keyword">int</span> data</span>)</span>&#123;</span><br><span class="line">        Node lastParentNode = TreeAlgo.FindParentOfFartestLeftLocation(root);</span><br><span class="line">        <span class="keyword">if</span>(lastParentNode == <span class="literal">null</span>)&#123;</span><br><span class="line">            Console.WriteLine(<span class="string">&quot;Insert Root Node &quot;</span> + data);</span><br><span class="line">            root = <span class="keyword">new</span> Node(data);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            Node newNode = <span class="keyword">new</span> Node(data);</span><br><span class="line">            <span class="keyword">if</span>(lastParentNode.left == <span class="literal">null</span>)&#123; <span class="comment">// 如果左子树为空，则插入到左子树</span></span><br><span class="line">                lastParentNode.left = newNode;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span>(lastParentNode.right == <span class="literal">null</span>)&#123; <span class="comment">// 如果右子树为空，则插入到右子树</span></span><br><span class="line">                lastParentNode.right = newNode;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                Console.WriteLine(<span class="string">&quot;父节点错误，父节点左右子树都不为空，无法插入!&quot;</span>);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            newNode.parent = lastParentNode;</span><br><span class="line"></span><br><span class="line">            Node opt = newNode;</span><br><span class="line">            <span class="comment">// 以最小堆的方式插入节点，即父节点小于等于子节点</span></span><br><span class="line">            <span class="comment">// 如果是以最大堆的方式插入，则父节点要大于等于子节点 只要将 &lt;= 改为 &gt;= 即可</span></span><br><span class="line">            <span class="keyword">while</span>(opt != <span class="literal">null</span> &amp;&amp; opt.parent != <span class="literal">null</span> &amp;&amp; opt.data &lt;= opt.parent.data)&#123;</span><br><span class="line">                <span class="keyword">int</span> tmp = opt.data;</span><br><span class="line">                opt.data = opt.parent.data;</span><br><span class="line">                opt.parent.data = tmp;</span><br><span class="line">                opt = opt.parent;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 运行刚才写的代码</span></span><br><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="keyword">string</span>[] args</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        BinaryHeap bh = <span class="keyword">new</span> BinaryHeap();</span><br><span class="line">        bh.Insert(<span class="number">1</span>);</span><br><span class="line">        bh.Insert(<span class="number">9</span>);</span><br><span class="line">        bh.Insert(<span class="number">22</span>);</span><br><span class="line">        bh.Insert(<span class="number">17</span>);</span><br><span class="line">        bh.Insert(<span class="number">11</span>);</span><br><span class="line">        bh.Insert(<span class="number">33</span>);</span><br><span class="line">        bh.Insert(<span class="number">27</span>);</span><br><span class="line">        bh.Insert(<span class="number">21</span>);</span><br><span class="line">        bh.Insert(<span class="number">19</span>);</span><br><span class="line">        TreeAlgo.LevelOrderTraversal(bh.root);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// TreeAlgo 帮助类代码</span></span><br><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">TreeAlgo</span> &#123;</span><br><span class="line">    <span class="comment">// 层序遍历树，打印出的内容，括号里面是父节点的值</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">LevelOrderTraversal</span>(<span class="params">Node root</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Queue&lt;Node&gt; q = <span class="keyword">new</span> Queue&lt;Node&gt;();</span><br><span class="line">        q.Enqueue(root);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(q.Count &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            Node currNode = q.Dequeue();</span><br><span class="line">            <span class="keyword">string</span> msg =<span class="keyword">string</span>.Format(<span class="string">&quot;&#123;0&#125;(&#123;1&#125;) &quot;</span>, currNode.data, currNode.parent != <span class="literal">null</span>?currNode.parent.data.ToString():<span class="string">&quot;null&quot;</span>);</span><br><span class="line">            Console.WriteLine(msg);</span><br><span class="line">            <span class="keyword">if</span>(currNode.left != <span class="literal">null</span>)&#123;</span><br><span class="line">                q.Enqueue(currNode.left);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(currNode.right != <span class="literal">null</span>)&#123;</span><br><span class="line">                q.Enqueue(currNode.right);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 按层遍历，获取第 index 个节点</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">GetIndexOfNodeWithLevelOrder</span>(<span class="params">Node root, <span class="keyword">int</span> index</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Queue&lt;Node&gt; q = <span class="keyword">new</span> Queue&lt;Node&gt;();</span><br><span class="line">        q.Enqueue(root);</span><br><span class="line">        <span class="keyword">int</span> iIndex = <span class="number">0</span>;</span><br><span class="line">        Node targetNode = <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">while</span>(q.Count &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            Node currNode = q.Dequeue();</span><br><span class="line">            <span class="keyword">if</span>(iIndex == index)&#123;</span><br><span class="line">                targetNode = currNode;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(currNode.left != <span class="literal">null</span>)&#123;</span><br><span class="line">                q.Enqueue(currNode.left);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(currNode.right != <span class="literal">null</span>)&#123;</span><br><span class="line">                q.Enqueue(currNode.right);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            iIndex += <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> targetNode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取按层遍历时，最后一层的最后一个节点</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">GetLastNodeOfLevelOrder</span>(<span class="params">Node root</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Queue&lt;Node&gt; q = <span class="keyword">new</span> Queue&lt;Node&gt;();</span><br><span class="line">        q.Enqueue(root);</span><br><span class="line">        Node lastNode = <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">while</span>(q.Count &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            lastNode = q.Dequeue();</span><br><span class="line">            <span class="keyword">if</span>(lastNode.left != <span class="literal">null</span>)&#123;</span><br><span class="line">                q.Enqueue(lastNode.left);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(lastNode.right != <span class="literal">null</span>)&#123;</span><br><span class="line">                q.Enqueue(lastNode.right);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> lastNode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 按层序遍历，只要任何一个节点左子对为空，或右子树为空，则为要找的点（前提是这棵树必须为完全二叉树）</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">FindParentOfFartestLeftLocation</span>(<span class="params">Node root</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Queue&lt;Node&gt; q = <span class="keyword">new</span> Queue&lt;Node&gt;();</span><br><span class="line">        q.Enqueue(root);</span><br><span class="line">        Node targetNode = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(q.Count &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            targetNode = q.Dequeue();</span><br><span class="line">            <span class="keyword">if</span>(targetNode.left == <span class="literal">null</span> || targetNode.right == <span class="literal">null</span>)&#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            q.Enqueue(targetNode.left);</span><br><span class="line">            q.Enqueue(targetNode.right);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> targetNode;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码可以自己使用C#运行一下看结果。下面我们继续说删除节点的操作。</p>
+<h2 id="删除节点"><a href="#删除节点" class="headerlink" title="删除节点"></a>删除节点</h2><p>删除节点，稍微复杂一点点，但也不是特别复杂，按下面的流程来操作即可</p>
+<ol>
+<li><p>找到按层序遍历的最后一个节点，然后用最后一个节点的值，替换要删除节点的值。然后将最后一个节点值删除掉。看下面的图</p>
+<p><img src="https://ae01.alicdn.com/kf/Ua19acb8a431a4486a073b6a3c56090dfG.png" alt="p001906_Binary-Heap-6"></p>
+<p><img src="https://ae01.alicdn.com/kf/Ucd6c0d0de79d4e90b3e54ce4cbe09aa5g.png" alt="p001907_Binary-Heap-7"></p>
+<p><img src="https://ae01.alicdn.com/kf/U9e2d852ae39b4722920550a12eac9ed0z.png" alt="p001908_Binary-Heap-8"></p>
+<p>上面的过程，我们已经将最后一个节点 21 替换到了要删除的节点 5 的位置，并且将原来 21 的节点从树中删除掉。但是现在的树不符合二叉堆的规则，所以我们需要浮动现在的 21 节点。</p>
+</li>
+<li><p>浮动节点，将树调整为正确的二叉堆。删除节点时，节点的浮动有可能需要往下浮动，也有可能需要往上浮动。我们当前所讲的，都是按最小堆来操作的。如果 21 节点比父节点小，则要往上浮动。如果 21 节点比父节点大，则要往下浮动。</p>
+<p>往上浮动，只要循环判断是否比父节点小即可，就像插入节点那样。而往下浮动，可能面对着两个又节点，所以要选择和两个子节点中值小的那个节点进行数据交换。显然，现在的 21 节点需要往下浮动，浮动到没有子节点，或者没有比当前节点小的节点位置。</p>
+<p><img src="https://ae01.alicdn.com/kf/Ubc207fab97b043c5a59fa266fcb594a1Y.png" alt="p001909_Binary-Heap-9"></p>
+<p>上图中，21 的子节点 9 和 11，需要和值更小的 9 进行交换</p>
+<p><img src="https://ae01.alicdn.com/kf/Ub11b7535297f47bcb16a62020e9c8b05B.png" alt="p001910_Binary-Heap-10"></p>
+<p>上图中，21 换到了原来 9 的位置，发现还有子节点，所以继续判断。因为 17 比 21 小，所以需要继续交换。</p>
+<p><img src="https://ae01.alicdn.com/kf/U82de104b50ef48a5bb01cbabd87acf20D.png" alt="p001911_Binary-Heap-11"></p>
+<p>到此，发现没有更小的节点了，浮动完毕，整棵树符合二叉堆规则。</p>
+</li>
+</ol>
+<p>以上就是删除节点的流程，下面我们用代码去实现。下面是加入了删除函数的 <strong>BinaryHeap类</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">BinaryHeap</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> Node root;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Insert</span>(<span class="params"><span class="keyword">int</span> data</span>)</span>&#123;</span><br><span class="line">        Node lastParentNode = TreeAlgo.FindParentOfFartestLeftLocation(root);</span><br><span class="line">        <span class="keyword">if</span>(lastParentNode == <span class="literal">null</span>)&#123;</span><br><span class="line">            Console.WriteLine(<span class="string">&quot;Insert Root Node &quot;</span> + data);</span><br><span class="line">            root = <span class="keyword">new</span> Node(data);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            Node newNode = <span class="keyword">new</span> Node(data);</span><br><span class="line">            <span class="keyword">if</span>(lastParentNode.left == <span class="literal">null</span>)&#123; <span class="comment">// 如果左子树为空，则插入到左子树</span></span><br><span class="line">                lastParentNode.left = newNode;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span>(lastParentNode.right == <span class="literal">null</span>)&#123; <span class="comment">// 如果右子树为空，则插入到右子树</span></span><br><span class="line">                lastParentNode.right = newNode;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                Console.WriteLine(<span class="string">&quot;父节点错误，父节点左右子树都不为空，无法插入!&quot;</span>);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            newNode.parent = lastParentNode;</span><br><span class="line"></span><br><span class="line">            Node opt = newNode;</span><br><span class="line">            <span class="comment">// 以最小堆的方式插入节点，即父节点小于等于子节点</span></span><br><span class="line">            <span class="comment">// 如果是以最大堆的方式插入，则父节点要大于等于子节点 只要将 &lt;= 改为 &gt;= 即可</span></span><br><span class="line">            <span class="keyword">while</span>(opt != <span class="literal">null</span> &amp;&amp; opt.parent != <span class="literal">null</span> &amp;&amp; opt.data &lt;= opt.parent.data)&#123;</span><br><span class="line">                <span class="keyword">int</span> tmp = opt.data;</span><br><span class="line">                opt.data = opt.parent.data;</span><br><span class="line">                opt.parent.data = tmp;</span><br><span class="line">                opt = opt.parent;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Delete</span>(<span class="params"><span class="keyword">int</span> index</span>)</span>&#123;</span><br><span class="line">        <span class="comment">// 1. 找到要删除的节点</span></span><br><span class="line">        Node optNode = TreeAlgo.GetIndexOfNodeWithLevelOrder(root, index);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. 按层序遍历，找到最后一层最后一个节点</span></span><br><span class="line">        Node lastNode = TreeAlgo.GetLastNodeOfLevelOrder(root);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3. 使用最后一个节点的数据替换掉要删除节点的数据</span></span><br><span class="line">        optNode.data = lastNode.data;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 4. 把最后一层最后一个节点删除掉</span></span><br><span class="line">        <span class="keyword">if</span>(lastNode.parent.left == lastNode)&#123;</span><br><span class="line">            lastNode.parent.left = <span class="literal">null</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(lastNode.parent.right == lastNode)&#123;</span><br><span class="line">            lastNode.parent.right = <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 5. 要删除的节点数据已经被替换，现在需要根据数据浮动到正确的位置</span></span><br><span class="line">        <span class="comment">// 首先要判断是往下浮动还是往上浮动，因为我们是按最小堆操作的，</span></span><br><span class="line">        <span class="comment">// 所以要先判断当前节点是否比父节点 &quot;小&quot;，如果是，则要往上浮动，反之往下浮动</span></span><br><span class="line">        <span class="keyword">if</span>(optNode.parent != <span class="literal">null</span> &amp;&amp; optNode.data &lt; optNode.parent.data)&#123;</span><br><span class="line">            <span class="keyword">while</span>(optNode.parent != <span class="literal">null</span> &amp;&amp; optNode.data &lt; optNode.parent.data)&#123;</span><br><span class="line">                <span class="keyword">int</span> tmp = optNode.data;</span><br><span class="line">                optNode.data = optNode.parent.data;</span><br><span class="line">                optNode.parent.data = tmp;</span><br><span class="line"></span><br><span class="line">                optNode = optNode.parent;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="comment">// 尝试往下浮动</span></span><br><span class="line">            <span class="keyword">while</span>(optNode.left != <span class="literal">null</span> || optNode.right != <span class="literal">null</span>)&#123;</span><br><span class="line">                Node compareNode = <span class="literal">null</span>;</span><br><span class="line">                <span class="keyword">if</span>(optNode.left != <span class="literal">null</span> &amp;&amp; optNode.right != <span class="literal">null</span>)&#123;</span><br><span class="line">                    <span class="keyword">if</span>(optNode.left.data &lt; optNode.right.data)&#123;</span><br><span class="line">                        compareNode = optNode.left;</span><br><span class="line">                    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                        compareNode = optNode.right;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">if</span>(optNode.left != <span class="literal">null</span>)&#123;</span><br><span class="line">                        compareNode = optNode.left;</span><br><span class="line">                    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(optNode.right != <span class="literal">null</span>)&#123;</span><br><span class="line">                        compareNode = optNode.right;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 往下浮动，交换数据</span></span><br><span class="line">                <span class="keyword">if</span>(compareNode != <span class="literal">null</span> &amp;&amp; optNode.data &gt; compareNode.data)&#123;</span><br><span class="line">                    <span class="keyword">int</span> temp = optNode.data;</span><br><span class="line">                    optNode.data = compareNode.data;</span><br><span class="line">                    compareNode.data = temp;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                optNode = compareNode;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码中，删除函数的参数传的是第几个节点。当然，你也可以改成删除某个特定值的节点，删除逻辑都是一样的。</p>
+<p>下面是运行的代码</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="keyword">string</span>[] args</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        BinaryHeap bh = <span class="keyword">new</span> BinaryHeap();</span><br><span class="line">        bh.Insert(<span class="number">1</span>);</span><br><span class="line">        bh.Insert(<span class="number">5</span>);</span><br><span class="line">        bh.Insert(<span class="number">6</span>);</span><br><span class="line">        bh.Insert(<span class="number">9</span>);</span><br><span class="line">        bh.Insert(<span class="number">11</span>);</span><br><span class="line">        bh.Insert(<span class="number">8</span>);</span><br><span class="line">        bh.Insert(<span class="number">15</span>);</span><br><span class="line">        bh.Insert(<span class="number">17</span>);</span><br><span class="line">        bh.Insert(<span class="number">21</span>);</span><br><span class="line"></span><br><span class="line">        TreeAlgo.LevelOrderTraversal(bh.root);</span><br><span class="line"></span><br><span class="line">        bh.Delete(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        Console.WriteLine(<span class="string">&quot;------ Delete 1&quot;</span>);</span><br><span class="line">        TreeAlgo.LevelOrderTraversal(bh.root);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上就是二叉堆插入和删除的逻辑。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>iMoeGirl</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://imoegirl.com/2019/12/30/data-structure-07-binary-heap/">https://imoegirl.com/2019/12/30/data-structure-07-binary-heap/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+                <p class="copyright-item">
+                    任何技术问题，欢迎在下面留言，或者直接Email我
+                </p>
+
+                <p class="copyright-item" style="margin-top: 10px;">
+                    <div style="display: flex">
+                        <div style="flex: 33%;">
+                            <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                            <br>
+                            <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px; border:1px solid #34495e"/>
+                        </div>
+
+                        <!-- <div style="flex: 33%; border: 2px solid yellow">
+                        <span style="font-weight: bold;">接受咖啡捐赠</span>
+                        </div>
+                        
+                        <div style="flex: 33%; border: 2px solid yellow">
+                            333
+                        </div> -->
+                        
+                    </div>
+
+
+                    <!-- <p style="border: 1px solid yellow;">
+                        <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                        <br>
+                        <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px"/>
+                    </p> -->
+
+                    
+                </p>
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/"># 数据结构与算法</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/01/06/unity-basis-01-clock/">制作一个会动的时钟</a>
+            
+            
+            <a class="next" rel="next" href="/2019/12/30/algo-knuth-shuffle/">一个公平的洗牌算法 | Knuth-Shuffle</a>
+            
+        </section>
+
+        <section class="post-talk">
+            
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '5b5aeaa767a06f6c23a4',
+          clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+          repo: 'imoegirl.github.io',
+          owner: 'imoegirl',
+          admin: ['imoegirl'],
+          id: location.pathname,
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')           
+       </script>
+  
+            <!-- <p>11111</p>
+            {{ window.location.pathname }} -->
+        </section>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    
+    <div class="copyright">
+        <span>© iMoeGirl | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+        <div style="margin-top: -40px; font-size: 12px">
+            <!-- <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span> -->
+            <!-- <span id="busuanzi_container_site_pv">
+                <i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+    
+            <span id="busuanzi_container_site_uv">
+                |<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span> -->
+        </div>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

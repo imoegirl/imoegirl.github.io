@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="iMoeGirl" />
+    
+<title>独立开发者，使用 Unity 开发 App | 萌一小栈</title>
+
+ 
+<link rel="icon" href="/logo.png" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+        
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">萌一小栈</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+                <!-- <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label> -->
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">萌一小栈</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+<!-- <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">独立开发者，使用 Unity 开发 App</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">iMoeGirl</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">April 24, 2021&nbsp;&nbsp;23:44:29</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h2><p>前一段时间公司因为资金问题解散了，我也有点厌倦了不断地加班，再加上资金可以维持一段时间，所以就果断尝试一下一直以来想做的事情，自由职业者，成为一名独立开发者。</p>
+<p>之前一直在游戏公司，主要做Unity客户端开发，做过休闲游戏，SLG，MMO，有的项目上线了，有的项目也因为公司非技术问题死在开发过程中，这些就不是我们开发人员所能控制的了。</p>
+<p>对于做独立开发者，我主要熟练的技术就是Unity了，的以就用了Unity来开发产品。今天要说的是用Unity来开发App。</p>
+<p>Unity是游戏引擎，对于开发游戏来说，很合适，但是用来开发App，也不是不可以。主要看要开发的产品是什么，以及产品所需要做的功能，对于用Unity来实现，是否有致命的问题。</p>
+<p>我觉得技术是为产品服务的，对于独立开发者来说，用自己最熟悉的技术，做出想做的产品，就是很不错的，大可不必纠结于应该用哪一项技术，先做出来。当然，开心最重要，自己说的算。</p>
+<h2 id="2-我刚上线的产品，物时-OMoment"><a href="#2-我刚上线的产品，物时-OMoment" class="headerlink" title="2. 我刚上线的产品，物时 (OMoment)"></a>2. 我刚上线的产品，物时 (OMoment)</h2><p>我刚刚上线的产品，是一个记录生活点滴的App。通过一张图片，一段文字，可以记录某一个时刻，可以知道曾经的时刻距离现在已经过去多久，也可以使用<code>分组</code>追踪某一个系列的东西。一个分组也可以使用故事模式来回放整个过程。例如记录每日的早餐，自己的健身过程，一个件东西的开启时间，等等。</p>
+<p><img src="OMomentCn.png" alt="OMoment"></p>
+<p>目前只有iOS版本，可以从通过AppStore下载<br><a target="_blank" rel="noopener" href="https://apps.apple.com/app/id1559510055">https://apps.apple.com/app/id1559510055</a></p>
+<p><img src="OMomentQRCode300.png" alt="OMomentQRCode"></p>
+<h2 id="3-使用-Unity-开发-App-的优点"><a href="#3-使用-Unity-开发-App-的优点" class="headerlink" title="3. 使用 Unity 开发 App 的优点"></a>3. 使用 Unity 开发 App 的优点</h2><ol>
+<li><p>使用Unity开发App，大部分是UI部分的工作，我主要使用的是UGUI。Unity有一个UIWidget，类似Flutter的东西，我并没有使用，我觉得UGUI更方便一点。</p>
+</li>
+<li><p>可视化的UI布局，这点太方便了，效率很高。</p>
+</li>
+<li><p>一些组件，直接做成一个Prefab，其他模块直接拖出来就可以用。</p>
+</li>
+<li><p>可以很方便的添加各种效果，例如按钮点击音效，背景音乐，游戏中的各涂特效，也可以在App中合适的地方使用，我在物时中内购成功后，就加了一个炸烟花的效果。</p>
+</li>
+<li><p>可以像游戏一样做功能和资源热更新，前提是使用Lua之类的方式实现逻辑。</p>
+</li>
+<li><p>UI管理模块做好了以后，后面的App可以直接使用，只要实现具体UI逻辑就好了。</p>
+</li>
+<li><p>各种第三方SDK，使用广告，数据统计，对于Unity都有很好的支持，接入很方便。</p>
+</li>
+<li><p>Unity跨平台，整个App大部分的逻辑不用分平台，只特定的，使用内购，第三方SDK之类的，才需要考虑平台相关的逻辑。</p>
+</li>
+<li><p>有人说运行效率会低，费电，其实还好啦。</p>
+</li>
+</ol>
+<h2 id="4-使用-Unity-开发-App-的缺点"><a href="#4-使用-Unity-开发-App-的缺点" class="headerlink" title="4. 使用 Unity 开发 App 的缺点"></a>4. 使用 Unity 开发 App 的缺点</h2><ol>
+<li><p>涉及到iOS和Android系统相关的东西，需要自己实现，使用从左边往右边滑动，切换页面，点击返回按钮，返回上一个页面，这一类需要自己在UI模块中实现逻辑。</p>
+</li>
+<li><p>原生输入框，Unity的输入框，不能像原生开发那样定制，对于一般的App，够用。但是如果文本输入对于App是一个很核心的需求，那可能就有点蛋疼了，特别是多行输入的时候。虽然有第三方插件，模拟了原生输入框，但是还是不够完美。</p>
+</li>
+<li><p>可能还有一些原生功能，也不那么完美，只是我的App中没有用到，这个要视具体产品来评估到底是否适合用Unity开发。</p>
+</li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>iMoeGirl</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://imoegirl.com/2021/04/24/app-dev-with-unity/">https://imoegirl.com/2021/04/24/app-dev-with-unity/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+                <p class="copyright-item">
+                    任何技术问题，欢迎在下面留言，或者直接Email我
+                </p>
+
+                <p class="copyright-item" style="margin-top: 10px;">
+                    <div style="display: flex">
+                        <div style="flex: 33%;">
+                            <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                            <br>
+                            <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px; border:1px solid #34495e"/>
+                        </div>
+
+                        <!-- <div style="flex: 33%; border: 2px solid yellow">
+                        <span style="font-weight: bold;">接受咖啡捐赠</span>
+                        </div>
+                        
+                        <div style="flex: 33%; border: 2px solid yellow">
+                            333
+                        </div> -->
+                        
+                    </div>
+
+
+                    <!-- <p style="border: 1px solid yellow;">
+                        <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                        <br>
+                        <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px"/>
+                    </p> -->
+
+                    
+                </p>
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E7%8B%AC%E7%AB%8B%E5%BC%80%E5%8F%91%E8%80%85/"># 独立开发者</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2021/03/12/unity-xcode-auto-signing/">Unity XCode 自动设置签名</a>
+            
+        </section>
+
+        <section class="post-talk">
+            
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '5b5aeaa767a06f6c23a4',
+          clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+          repo: 'imoegirl.github.io',
+          owner: 'imoegirl',
+          admin: ['imoegirl'],
+          id: location.pathname,
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')           
+       </script>
+  
+            <!-- <p>11111</p>
+            {{ window.location.pathname }} -->
+        </section>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    
+    <div class="copyright">
+        <span>© iMoeGirl | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+        <div style="margin-top: -40px; font-size: 12px">
+            <!-- <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span> -->
+            <!-- <span id="busuanzi_container_site_pv">
+                <i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+    
+            <span id="busuanzi_container_site_uv">
+                |<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span> -->
+        </div>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

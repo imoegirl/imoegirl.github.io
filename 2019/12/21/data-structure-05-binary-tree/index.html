@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="iMoeGirl" />
+    
+<title>二叉树 | 萌一小栈</title>
+
+ 
+<link rel="icon" href="/logo.png" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+        
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">萌一小栈</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+                <!-- <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label> -->
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">萌一小栈</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+<!-- <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">二叉树</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">iMoeGirl</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">December 21, 2019&nbsp;&nbsp;16:22:10</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>这篇博客来聊一下二叉树。呆萌数据结构系列，终于开始了树型结构的部分。这篇文章你能够学到的内容有 <code>树，有哪些应用</code>，<code>二叉树的结构</code>，<code>什么是满二叉树</code>，<code>什么是完全二叉树</code>，<code>二叉树的遍历方式</code>，<code>二叉树的构建</code>。二叉树是很基本的结构，在此基本上，会有很多很多变种，变成各种各样的树，理解了二叉树，对于后面学习其他更复杂的树型结构，会有很大的帮助。</p>
+<p><strong>这篇文章首先理解文字上的内容，不要管代码，对二叉树的结构，操作，理解原理，最后再看代码。</strong></p>
+<p>好了，下面开始吧。</p>
+<a id="more"></a>
+
+<h2 id="树，有哪些应用"><a href="#树，有哪些应用" class="headerlink" title="树，有哪些应用"></a>树，有哪些应用</h2><p>现在学习的目的，已经不是为了考试，而是为了能够用来做一些事情。对于我们来说，知识只有用起来，才是有意义的，所以，我们先说一下树型结构的一些应用。咦？为什么不是二叉树的应用呢，因为很多应用，都不是单纯地使用二叉树来实现的，而是在此基础上，使用了它的变种，所以我们这里直接说一下树型结构的一些应用。</p>
+<p>我们使用各种各样的数据结构，本质上似乎就是为了更方便或更高效地去组织数据，操作数据。我们平时用的搜索引擎，当你输入要搜索的内容时，可能在输入了前几个字，下面就已经出现了我们想要的结果，其实背后，就是用了树型结构，才能在这样庞大的数据中，找到与我们输入内容匹配的结构。</p>
+<p>我们手机中常用的电话薄，也是这个原理。当你找一个联系人时，输入第一个字，例如李，可能下面的结构是李四，李五，李六，但是输入第二个字时，结果就会更精确。</p>
+<p>我们平时用的压缩软件，其数据压缩算法，也离不开树型结构。</p>
+<p>操作系统中的文件系统，以及我们使用的数据库软件，也是树型结构的应用。</p>
+<h2 id="二叉树的结构"><a href="#二叉树的结构" class="headerlink" title="二叉树的结构"></a>二叉树的结构</h2><p>二叉树是由一个一个节点组成，每个节点，有数据部分，以及两个节点指针，一个指向<code>左子树</code>，一个指向<code>右子树</code>。二叉树每一个节点，最多拥有两个子树。就像下面中的图（图中的数字可以理解为要存储的数据）。另外，二叉树的分支，也就是左右子树，是具有左右次序的，不能随意颠倒。</p>
+<p><img src="https://ae01.alicdn.com/kf/U31369cd961d941b0810271d39d9a97a8w.png" alt="p001701_Binary-Tree"></p>
+<h2 id="什么是满二叉树"><a href="#什么是满二叉树" class="headerlink" title="什么是满二叉树"></a>什么是满二叉树</h2><p>满二叉树就除了最后一层，每一个节点，都拥有左右两个子树，没有空缺。</p>
+<p><img src="https://ae01.alicdn.com/kf/U8bd80ff12ef847eb86ec65b1d44cfe6aW.png" alt="p001702_Full-Binary-Tree"></p>
+<h2 id="什么是完全二叉树"><a href="#什么是完全二叉树" class="headerlink" title="什么是完全二叉树"></a>什么是完全二叉树</h2><p>在理解了满二叉树的基础上，才能理解完全二叉树。完全二叉树要满足两个条件。首先，如果不看最后一层，那这棵树是满二叉树。其次，最后一层，要尽可能的往左靠，中间不能有空缺。什么意思呢？我们看一张图。</p>
+<p><img src="https://ae01.alicdn.com/kf/Uf1b360b0909e474181473fef939ee05bR.png" alt="p001703_Complete-Tree"></p>
+<p>上图中，左边的图是一个完全二叉树。如果去掉最后一层，那这棵树是满二叉树，满足。最后一层，即使缺少了一个节点，但是所有的节点都是尽可能地往左靠了，所以，也满足第二个条件。</p>
+<p>而第二个图，不是完全二叉树。首先第一个条件就不满足。其实，最后一层的节点也不是尽可能地往左靠。什么叫尽可能得往左靠呢，如果 B 节点作为 A 节点的左子树，那就叫做尽可能地往左靠了。</p>
+<h2 id="二叉树的遍历方式"><a href="#二叉树的遍历方式" class="headerlink" title="二叉树的遍历方式"></a>二叉树的遍历方式</h2><p>树的遍历(不限于二叉树)，有广度优先遍历，和深度优先遍历。而深度优先遍历，分为前序遍历，中序遍历，后序遍历。</p>
+<p>我们以下面这张图为例子，分别说一下这几种遍历方式。</p>
+<p><img src="https://ae01.alicdn.com/kf/U214558b69dc344acab2f1df49a5d80a9G.png" alt="p001704_Full-Binary-Tree"></p>
+<ul>
+<li><p><strong>广度优先遍历</strong>：</p>
+<p>  广度优先遍历，其实就是一层一层地遍历，所以又可以称为层次遍历，会先访问离根节点最近的节点。按照广度优先遍历，上面的树中节点访问顺序是这样的。</p>
+<p>  8，4，12，2，6，10，14，1，3，5，7，9，11，13，15</p>
+</li>
+<li><p><strong>深度优先索索</strong><br>  深度优先搜索，通常采用递归的形式来进行。这里我们用简单的代码去描述，会比文字描述更直观。</p>
+<ul>
+<li><p><strong>前序遍历</strong><br>  前序遍历的顺序是先访问根节点，然后再访问子树。</p>
+  <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pre_order_traversal</span>(<span class="params">Node root</span>)</span> &#123;</span><br><span class="line">    <span class="comment">// TODO：操作当前节点</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果左子树不为空，则递归处理左子树</span></span><br><span class="line">    <span class="keyword">if</span>(root.left != <span class="literal">null</span>)&#123;</span><br><span class="line">        pre_order_traversal(root.left);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果右子树不为空，则递归处理右子树</span></span><br><span class="line">    <span class="keyword">if</span>(root.right != <span class="literal">null</span>)&#123;</span><br><span class="line">        pre_order_traversal(root.right);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>中序遍历</strong><br>  中序遍历的顺序是先访问左（右）子树，然后访问根，然后访问右（左）子树。</p>
+  <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">in_order_traversal</span>(<span class="params">Node root</span>)</span> &#123;</span><br><span class="line">    <span class="comment">// 如果左子树不为空，则递归处理左子树</span></span><br><span class="line">    <span class="keyword">if</span>(root.left != <span class="literal">null</span>)&#123;</span><br><span class="line">        in_order_traversal(root.left);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> 处理当前节点</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果右子树不为空，则递归处理右子树</span></span><br><span class="line">    <span class="keyword">if</span>(root.right != <span class="literal">null</span>)&#123;</span><br><span class="line">        in_order_traversal(root.right);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>后序遍历</strong><br>  后序遍历的顺序是先访问子树，然后再访问根。</p>
+  <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">post_order_traversal</span>(<span class="params">Node root</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// 如果左子树不为空，则递归处理左子树</span></span><br><span class="line">    <span class="keyword">if</span>(root.left != <span class="literal">null</span>)&#123;</span><br><span class="line">        post_order_traversal(root.left);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果右子树不为空，则递归处理右子树</span></span><br><span class="line">    <span class="keyword">if</span>(root.right != <span class="literal">null</span>)&#123;</span><br><span class="line">        post_order_traversal(root.right);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> 处理当前节点</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>仔细看上面的代码已经注释，可以发现三种遍历方式都是递归的方式，基本类似，主要区别，是 <code>什么时候处理当前节点</code>。</p>
+</li>
+</ul>
+<h2 id="按层次顺序构建上图中的二叉树"><a href="#按层次顺序构建上图中的二叉树" class="headerlink" title="按层次顺序构建上图中的二叉树"></a>按层次顺序构建上图中的二叉树</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> queue</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Node</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, data</span>):</span></span><br><span class="line">        self.data = data</span><br><span class="line">        self.left = self.right = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 二叉树构建函数（按层次构建）</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">construct_in_level_order</span>(<span class="params">data_queue</span>):</span></span><br><span class="line">    <span class="keyword">if</span> data_queue <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">or</span> data_queue.empty():</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建 Root 节点</span></span><br><span class="line">    root = Node(data_queue.get())   </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建一个队列，用于按层来构建二叉树</span></span><br><span class="line">    node_queue = queue.Queue()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将 Root 节点先放入节点队列中</span></span><br><span class="line">    node_queue.put(root)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">not</span> node_queue.empty():</span><br><span class="line">        <span class="comment"># 从队列中拿出一个节点作为当前节点</span></span><br><span class="line">        node = node_queue.get()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 创建当前节点的左子树节点</span></span><br><span class="line">        left_node = <span class="literal">None</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> data_queue.empty():</span><br><span class="line">            left_node = Node(data_queue.get())</span><br><span class="line">        node.left = left_node</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 创建当前节点的右子树节点</span></span><br><span class="line">        right_node = <span class="literal">None</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> data_queue.empty():</span><br><span class="line">            right_node = Node(data_queue.get())</span><br><span class="line">        node.right = right_node</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> left_node <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            node_queue.put(left_node)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> right_node <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            node_queue.put(right_node)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> root</span><br><span class="line"></span><br><span class="line"><span class="comment"># 二叉树层次遍历函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">level_order_traversal</span>(<span class="params">root</span>):</span></span><br><span class="line">    q = queue.Queue()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> root <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        q.put(root)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">not</span> q.empty():</span><br><span class="line">        node = q.get()</span><br><span class="line">        <span class="keyword">if</span> node.left <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            q.put(node.left)</span><br><span class="line">        <span class="keyword">if</span> node.right <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            q.put(node.right)</span><br><span class="line">        print(node.data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    data_queue = queue.Queue()</span><br><span class="line">    arr = [<span class="number">8</span>, <span class="number">4</span>, <span class="number">12</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">10</span>, <span class="number">14</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">11</span>, <span class="number">13</span>, <span class="number">15</span>]</span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> arr:</span><br><span class="line">        data_queue.put(item)</span><br><span class="line"></span><br><span class="line">    root = construct_in_level_order(data_queue)</span><br><span class="line">    level_order_traversal(root)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="如何删除一个节点"><a href="#如何删除一个节点" class="headerlink" title="如何删除一个节点"></a>如何删除一个节点</h2><p>删除一个节点，就是将某一个节点从整个树中踢除掉，重要的是，踢除某个节点后，需要调整整棵树的结构，这个要根据不同的规则去做。最简单的方法就是，删除某一个节点后，让左子树或右子树，上升成为替换删除掉的节点，改变对应的指针。具体的代码实现，我们将在后面其他树型结构的文章中介绍。</p>
+<h2 id="更多内容"><a href="#更多内容" class="headerlink" title="更多内容"></a>更多内容</h2><p>二叉树的结构我们先介绍到这里，后面还会有更多更复杂的关于树的结构，我们慢慢来，循序渐进。</p>
+<p>还有一些关于二叉树很不错的文章，推荐给大家</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/construct-complete-binary-tree-given-array/">Construct a complete binary tree from given array in level order fashion</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/full-and-complete-binary-tree-from-given-preorder-and-postorder-traversals/">Construct Full Binary Tree from given preorder and postorder traversals</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%BA%8C%E5%8F%89%E6%A0%91">维基百科 二叉树</a></p>
+</li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>iMoeGirl</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://imoegirl.com/2019/12/21/data-structure-05-binary-tree/">https://imoegirl.com/2019/12/21/data-structure-05-binary-tree/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+                <p class="copyright-item">
+                    任何技术问题，欢迎在下面留言，或者直接Email我
+                </p>
+
+                <p class="copyright-item" style="margin-top: 10px;">
+                    <div style="display: flex">
+                        <div style="flex: 33%;">
+                            <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                            <br>
+                            <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px; border:1px solid #34495e"/>
+                        </div>
+
+                        <!-- <div style="flex: 33%; border: 2px solid yellow">
+                        <span style="font-weight: bold;">接受咖啡捐赠</span>
+                        </div>
+                        
+                        <div style="flex: 33%; border: 2px solid yellow">
+                            333
+                        </div> -->
+                        
+                    </div>
+
+
+                    <!-- <p style="border: 1px solid yellow;">
+                        <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                        <br>
+                        <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px"/>
+                    </p> -->
+
+                    
+                </p>
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/"># 数据结构与算法</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/12/26/data-structure-06-binary-search-tree/">二叉查找树</a>
+            
+            
+            <a class="next" rel="next" href="/2019/12/18/data-structure-04-queue/">队列</a>
+            
+        </section>
+
+        <section class="post-talk">
+            
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '5b5aeaa767a06f6c23a4',
+          clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+          repo: 'imoegirl.github.io',
+          owner: 'imoegirl',
+          admin: ['imoegirl'],
+          id: location.pathname,
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')           
+       </script>
+  
+            <!-- <p>11111</p>
+            {{ window.location.pathname }} -->
+        </section>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    
+    <div class="copyright">
+        <span>© iMoeGirl | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+        <div style="margin-top: -40px; font-size: 12px">
+            <!-- <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span> -->
+            <!-- <span id="busuanzi_container_site_pv">
+                <i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+    
+            <span id="busuanzi_container_site_uv">
+                |<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span> -->
+        </div>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

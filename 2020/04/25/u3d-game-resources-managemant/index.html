@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="iMoeGirl" />
+    
+<title>游戏项目资源管理 | 萌一小栈</title>
+
+ 
+<link rel="icon" href="/logo.png" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+        
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">萌一小栈</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+                <!-- <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label> -->
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">萌一小栈</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+<!-- <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">游戏项目资源管理</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">iMoeGirl</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">April 25, 2020&nbsp;&nbsp;18:57:08</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Unity3D-%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/">Unity3D 游戏开发</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>在游戏开发的过程中，整个项目的资源管理是很重要的一部分。涉及到与美术、策划等同事的协作，以及资源的打包，和后续运行时资源的更新，加载，卸载，内存管理等方面。规划好资源的的各个目录存放，以及资源的分类，会为后续的开发工作节省不少时间。这一篇博客主要来聊一下到资源的存放问题，而 AssetBundle 打包，以及运行时的更新和资源管理，将在后面的博客中详细说明。</p>
+<h2 id="资源类型"><a href="#资源类型" class="headerlink" title="资源类型"></a>资源类型</h2><p>一个游戏项目，涉及到的资源主要有 <strong>配置数据</strong>、<strong>图片</strong>、<strong>模型</strong>、<strong>材质</strong>、<strong>Shader</strong>、<strong>字体</strong>、<strong>音频</strong>、<strong>视频</strong>、<strong>动画Clip</strong>、<strong>Prefab</strong>、<strong>Animator Controller</strong>、<strong>Timeline</strong>、<strong>场景文件</strong>、<strong>Lua脚本</strong> 等。</p>
+<h2 id="关于协作"><a href="#关于协作" class="headerlink" title="关于协作"></a>关于协作</h2><p>首先说一下协作问题。在游戏开发的过程中，美术的同学需要将资源直接提交到建立好的项目中的指定目录中，一般来说，提交到哪个目录，是由程序的同学来决定，具体哪个目录，要根据后续的资源打包以及管理等方面决定。美术的同学提交的资源一般就是模型、动画、贴图等。</p>
+<p>而配置数据，则通常由策划同学来提交。配置数据的方式有很多种，常用的例如 Excel，有的项目是直接将原始的 Excel 文件放到工程中，而有的是将 Excel 数据转成其他格式再放到项目中。改表由策划同学来着手操作，在配表的过程中，除了数值，可能也会涉及到一些资源路径，例如有一些图片，是要动态加载的，那么路径也就配在某个模块的相关配置表中。而这些路径配在表中的资源，通常也由策划同学根据不同的系统来操作资源的位置。当然，首先会有一个父目录，在这个父目录下，策划的同学可以自由操作资源的位置，然后将资源的路径配置在数据表中。</p>
+<p>还有一个很重要的部分是UI，对于UI来说，如果不打图集，放入项目目录中的都是一个一个的散图，则可以由UI部分的同学直接将UI的图提交到指定的UI父目录下，父目录下的子目录，根据不同的模块来划分，共用的同可以放到一个公用的目录中。对于图的移动操作，都要在 Unity 中进行操作，防止 Prefab 上的图片引用丢失。如果UI使用 TexturePacker 这类工具打成一张图集，则可以由程序同学来做，在开发某个模块时，顺便将对应UI的图打成一张图集，原始的UI图就不必放到工程中，放在外部的一个美术的资源目录即可。</p>
+<h2 id="资源存放"><a href="#资源存放" class="headerlink" title="资源存放"></a>资源存放</h2><p>接下来，就说一下各个资源怎么去划分。在运行时，需要手动加载的资源，一般有下面这些，<strong>Prefab</strong>、<strong>图片</strong>、<strong>音频</strong>、<strong>视频</strong>、<strong>动画Clip</strong>、<strong>Animator Controller</strong>、<strong>配置数据</strong> 等，Prefab 这个不用多说。而图片，主要是UI上的一些动态的图，例如头像，或者其他一些需要根据数值，来显示不同的图。动画Clip 可以做成动态加载，也可以直接放到动画状态机中，根据实际情况决定。Animator Controller 也要根据情况决定。配置数据一般需要动态加载。而像 Prefab中用到的材质，贴图等，一般不需要我们手动加载，我们只需要加载 Prefab 即可。</p>
+<p>这些需要动态加载的资源，我们可以放在一个父目录下，例如这个目录就叫 <strong>Prefabs</strong>，然后在 Prefabs 下面建立各个子目录，或者多级子目录来存放不同的资源。如下图</p>
+<p><img src="https://ae01.alicdn.com/kf/Ua0e8e748e65149ea8b07451e1582d24dQ.png" alt="p003201_prefabs_folder"></p>
+<p>上面的图中只是大概划分了一下，每一个目录下，都可以再次建立子目录，子目录下还可以再细分子目录，具体还需要根据实际项目来划分。</p>
+<p>上面图中的目录，是用于存放那些我们需要动态加载的资源，还有一些不需要我们动态加载的资源，例如美术同学上传的原始FBX，以及模型使用到的材质，贴图等等。对于这些资源，我们可以再建立一个目录，例如叫做 <strong>RawResources</strong>。在这个目录下，我们也需要清晰地去划分子目录，要清楚地知道哪一个目录放了什么资源，哪一些 Prefab 会引用这些资源，后面写 Bundle 打包模块时，可能会用得到。</p>
+<h2 id="关于-AssetBundle-问题"><a href="#关于-AssetBundle-问题" class="headerlink" title="关于 AssetBundle 问题"></a>关于 AssetBundle 问题</h2><p>在打包 AssetBundle 时，Unity是可以自己处理依赖关系，例如我们可以不用管 RawResources 中的东西，只把 Prefabs 目录下的资源打包，而Prefab引用的原始资源，例如贴图，材质等，会自动打进Bundle，不需要我们手动管理。但是这样有一个问题是，对于共用的资源，会造成重复包含。看下面的图</p>
+<p><img src="https://ae01.alicdn.com/kf/Ucc21ac5b6623441088e13fe19d31746aB.png" alt="p003202_asset_ref"></p>
+<p>上面的图中，两个 Prefab 引用了同一个材质，而材质，引用了一张贴图。如果我们将 PrefabA 和 PrefabB 分别打成一个Bundle，而让 Unity 自己处理依赖打包关系，那么就会出现 PrefabA 所在的 Bundle 中包含了材质和贴图，而 PrefabB 所在的 Bundle 中，也包含了材质和贴图。这样就造成了 Bundle 文件占用空间变大，在运行时，占用内存变大。</p>
+<p>要解决这个问题，方案1是将 PrefabA 和 PrefabB 打在一个 Bundle 中，这样贴图和材质也就只会包含在这一个 Bundle 中。方案2是将材质和贴图，或者只将贴图打成一个独立的Bundle，这样贴图就不会包含在 PrefabA 和 PrefabB 所在的 Bundle 中，只会在 Bundle 中记录一个引用信息。但是方案2在运行时，如果要使用 PrefabA 或 PrefabB，就需要先将它们所依赖的 Bundle，加载到内存中，这样才不会导致贴图丢失。</p>
+<p>这个问题总结下来就一句话 </p>
+<blockquote>
+<p><strong>被引用的资源</strong>，如果没有手动指定打到哪一个 Bundle 中，那么，被引用的资源会自动打到<strong>引用者</strong>所在的 Bundle 中，这时，如果<strong>多个引用者</strong>在不同的Bundle中，那么<strong>每一个引用者</strong>所在的Bundle，都会包含被引用的资源，造成资源的重复包含。</p>
+</blockquote>
+<p>在了解了上面的规则后，我们就可以规划项目的资源所在的目录。打Bundle时，可以按目录来打，不同目录下的资源，在一个Bundle。也可以每一个资源，打成一个Bundle。还可以混合打，某些资源放在一个目录中，打成一个Bundle，某些资源打成单独的Bundle。还可以根据游戏的不同系统来划分。</p>
+<p>一般来说，相对独立的东西，可以打成一个Bundle，例如某个特效。如果资源A出现时，那资源B一定存在，这时，资源A和资源B，以及他们所引用的资源，就可以打在一个Bundle中。</p>
+<p>颗粒度不要太细，也不要太粗。例如一个Bundle中有10个资源，但这10个资源都是不太相关的东西，那就没必要打到一起，因为你只用到了Bundle中的一个资源，却要加载一个包含了10个资源的Bundle，有9个资源是用不到的，这样会造成内存浪费。</p>
+<p>关于前期的资源管理，到这里就结束了，先了解 Unity AssetBundle 的规则，然后根据自己的项目去调整资源的存放。在接下来的博客中，会实现一个可配置的 Bundle 打包脚本。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>iMoeGirl</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://imoegirl.com/2020/04/25/u3d-game-resources-managemant/">https://imoegirl.com/2020/04/25/u3d-game-resources-managemant/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+                <p class="copyright-item">
+                    任何技术问题，欢迎在下面留言，或者直接Email我
+                </p>
+
+                <p class="copyright-item" style="margin-top: 10px;">
+                    <div style="display: flex">
+                        <div style="flex: 33%;">
+                            <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                            <br>
+                            <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px; border:1px solid #34495e"/>
+                        </div>
+
+                        <!-- <div style="flex: 33%; border: 2px solid yellow">
+                        <span style="font-weight: bold;">接受咖啡捐赠</span>
+                        </div>
+                        
+                        <div style="flex: 33%; border: 2px solid yellow">
+                            333
+                        </div> -->
+                        
+                    </div>
+
+
+                    <!-- <p style="border: 1px solid yellow;">
+                        <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                        <br>
+                        <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px"/>
+                    </p> -->
+
+                    
+                </p>
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"># 游戏开发</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/04/26/compare-rust-and-python-resize-image/">对比 Rust 和 Python 图片缩放速度</a>
+            
+            
+            <a class="next" rel="next" href="/2020/04/12/rust-syntax-summary-06/">Rust 基础 | 常用集合数据类型</a>
+            
+        </section>
+
+        <section class="post-talk">
+            
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '5b5aeaa767a06f6c23a4',
+          clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+          repo: 'imoegirl.github.io',
+          owner: 'imoegirl',
+          admin: ['imoegirl'],
+          id: location.pathname,
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')           
+       </script>
+  
+            <!-- <p>11111</p>
+            {{ window.location.pathname }} -->
+        </section>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    
+    <div class="copyright">
+        <span>© iMoeGirl | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+        <div style="margin-top: -40px; font-size: 12px">
+            <!-- <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span> -->
+            <!-- <span id="busuanzi_container_site_pv">
+                <i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+    
+            <span id="busuanzi_container_site_uv">
+                |<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span> -->
+        </div>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

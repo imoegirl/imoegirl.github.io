@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="iMoeGirl" />
+    
+<title>浅谈Unity3D音频可视化效果原理 | 萌一小栈</title>
+
+ 
+<link rel="icon" href="/logo.png" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+        
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">萌一小栈</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+                <!-- <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label> -->
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">萌一小栈</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+<!-- <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">浅谈Unity3D音频可视化效果原理</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">iMoeGirl</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">December 4, 2019&nbsp;&nbsp;16:08:42</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Unity3D-%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/">Unity3D 游戏开发</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>在游戏开发中，你是否也想将音乐旋律变为漂亮的图形显示？就像这样的效果。</p>
+<p><img src="https://ae01.alicdn.com/kf/U1dce6bd125944bba8cd4ca3efbaf7566h.jpg" alt="p000601_1"></p>
+<a id="more"></a>
+
+<p>或者这样的效果。</p>
+<p><img src="https://ae01.alicdn.com/kf/U477e6d392fc043d886c8fc2552fa878c4.jpg" alt="p000602_2"></p>
+<p>还有这样的效果。</p>
+<p><img src="https://ae01.alicdn.com/kf/U5cf48fe75d3e4d819078b4ad2cba06e6D.jpg" alt="p000603_3"></p>
+<p>但是，我们今天不会讨论怎样实现上面的那些效果(可以用插件实现，哈哈哈…)，而是聊一下最朴素的效果实现原理。了解了原理，再复杂的效果也可以实现。最朴素的效果，见下图，哈哈哈哈~</p>
+<p><img src="https://ae01.alicdn.com/kf/U01250aff4d4f403ca9f2518d0a00c580g.jpg" alt="p000604_4"></p>
+<p>简单来说，我们要实现的东西就是几个条状的UI，跟随音乐的旋律，进行上下缩放。而旋律，其实就是声音中的数据，就是一个int值，只要取到这个数据，就可以将数据通过一些计算，映射为UI的大小。</p>
+<p>下面整理一下要做的事情(以下事情都是在Update中做的): </p>
+<ol>
+<li><p>每一帧去取音频数据<br>查看Unity的 AudioSource API，我们发现有一个 <code>GetOutputData</code> 方法，获取音频输出数据，返回类型是一个 float 数组。</p>
+</li>
+<li><p>取到音频数据后，将数据进行标准化处理<br>就是找出音频数据中最大的值，然后用每一个值，除以最大值，就可以将所有音频数据映射为 0 到 1 之间的数值大小，返回新的 float 数组。</p>
+</li>
+<li><p>有了音频数据大小，我们就可以映射为UI的条形图的大小<br>假设我们限定条状UI的大小最小为10，最大为200，再配合上面取到的音频数据，就可以设定UI的大小了。假设有10个条，那只需要使 float 数组中前10个数值就行。</p>
+</li>
+</ol>
+<blockquote>
+<p>其中第二步还可以加入更多计算处理，最后只要映射到0~1之间的数值，就可以用，最终是要表现效果，并不是一定要准确的表示出音频的数据，只要该高的时候高，该低的时候低，那就没问题，至于高到多少，低到多少，都是相对的，并不重要。</p>
+</blockquote>
+<p>下面是示例代码:</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"><span class="keyword">using</span> System.Collections;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"><span class="keyword">using</span> UnityEngine.UI;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">AudioV</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> AudioSource audioSource;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">float</span> minSize = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">float</span> maxSize = <span class="number">200</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">float</span> lerpSpeed = <span class="number">20.0f</span>; <span class="comment">// 用于控制变化速度</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">List</span>&lt;<span class="title">RectTransform</span>&gt; barList</span> = <span class="keyword">new</span> List&lt;RectTransform&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 注意，采样数组的大小必须为2的次方</span></span><br><span class="line">    <span class="comment">// 另外，采样数据的个数，一定要 &gt;= 条形UI的数量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">float</span>[] sampleData = <span class="keyword">new</span> <span class="keyword">float</span>[<span class="number">64</span>];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">Start</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        <span class="comment">// 查找所有的子物体，就是我们要用来显示音频数据的条形UI</span></span><br><span class="line">        RectTransform[] childs = GetComponentsInChildren&lt;RectTransform&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; childs.Length; ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            barList.Add(childs[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 进行标准化数据，将数据映射为 0 到 1 之间的数值</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;input&quot;&gt;</span><span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;returns&gt;</span><span class="doctag">&lt;/returns&gt;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">float</span>[] <span class="title">NormalizeData</span>(<span class="params"><span class="keyword">float</span>[] input</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        <span class="keyword">float</span>[] output = <span class="keyword">new</span> <span class="keyword">float</span>[input.Length];</span><br><span class="line">        <span class="keyword">float</span> max = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">float</span> min = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; input.Length; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            max = Mathf.Max(max, input[i]);</span><br><span class="line">            min = Mathf.Min(min, input[i]);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">float</span> len = max - min;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; input.Length; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (len &lt;= <span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                output[i] = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                output[i] = (input[i] - min) / len;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> output;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Update</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        <span class="keyword">float</span>[] normalizedData = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取原始采样数据</span></span><br><span class="line">        audioSource.GetOutputData(sampleData, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 进行标准化处理</span></span><br><span class="line">        normalizedData = NormalizeData(sampleData);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; barList.Count; ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">float</span> newHeight = minSize + (maxSize - minSize) * normalizedData[i];</span><br><span class="line">            <span class="keyword">float</span> currHeight = Mathf.Lerp(barList[i].sizeDelta.y, newHeight, Time.deltaTime * lerpSpeed);</span><br><span class="line"></span><br><span class="line">            barList[i].SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, currHeight);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在上面的代码中，因为我们是每帧采样，所以UI变化会很剧烈，所以我们这里用了一个Lerp去控制变化速度，但是这样也会带来一个问题就是变化幅度的减小。大家可以自己试一下，自己尝试改进。</p>
+<p>如果你用的不是 AudioSource，用了别的音频插件，只要取到音频的采样数据，用法都是一样的。</p>
+<p>基本的原理已经介绍完，更复杂的表现形式，也就是改变音频数据的映射形式而已~</p>
+<p>如果你有更好的改进方法，欢迎在下面留言~</p>
+<blockquote>
+<p>上文中用到的图片分别来自Unity插件 <a target="_blank" rel="noopener" href="https://assetstore.unity.com/packages/tools/audio/3d-visualizer-spectrum-vu-meter-100995">3D Visualizer Spectrum Vu Meter</a> 和插件 <a target="_blank" rel="noopener" href="https://assetstore.unity.com/packages/tools/audio/sound-reactor-standard-116213">Sound Reactor - Standard</a></p>
+</blockquote>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>iMoeGirl</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://imoegirl.com/2019/12/04/unity-audio-visualization/">https://imoegirl.com/2019/12/04/unity-audio-visualization/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+                <p class="copyright-item">
+                    任何技术问题，欢迎在下面留言，或者直接Email我
+                </p>
+
+                <p class="copyright-item" style="margin-top: 10px;">
+                    <div style="display: flex">
+                        <div style="flex: 33%;">
+                            <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                            <br>
+                            <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px; border:1px solid #34495e"/>
+                        </div>
+
+                        <!-- <div style="flex: 33%; border: 2px solid yellow">
+                        <span style="font-weight: bold;">接受咖啡捐赠</span>
+                        </div>
+                        
+                        <div style="flex: 33%; border: 2px solid yellow">
+                            333
+                        </div> -->
+                        
+                    </div>
+
+
+                    <!-- <p style="border: 1px solid yellow;">
+                        <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                        <br>
+                        <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px"/>
+                    </p> -->
+
+                    
+                </p>
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"># 游戏开发</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/12/06/experience-at-game-company/">在游戏公司工作是什么体验呢？</a>
+            
+            
+            <a class="next" rel="next" href="/2019/12/01/reload-native-unity-plugins/">怎样在Unity中Reload原生插件</a>
+            
+        </section>
+
+        <section class="post-talk">
+            
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '5b5aeaa767a06f6c23a4',
+          clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+          repo: 'imoegirl.github.io',
+          owner: 'imoegirl',
+          admin: ['imoegirl'],
+          id: location.pathname,
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')           
+       </script>
+  
+            <!-- <p>11111</p>
+            {{ window.location.pathname }} -->
+        </section>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    
+    <div class="copyright">
+        <span>© iMoeGirl | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+        <div style="margin-top: -40px; font-size: 12px">
+            <!-- <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span> -->
+            <!-- <span id="busuanzi_container_site_pv">
+                <i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+    
+            <span id="busuanzi_container_site_uv">
+                |<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span> -->
+        </div>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

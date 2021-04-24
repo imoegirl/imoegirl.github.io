@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="iMoeGirl" />
+    
+<title>Unity 接入友盟SDK | 萌一小栈</title>
+
+ 
+<link rel="icon" href="/logo.png" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+        
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">萌一小栈</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+                <!-- <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label> -->
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">萌一小栈</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+<!-- <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Unity 接入友盟SDK</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">iMoeGirl</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">August 16, 2020&nbsp;&nbsp;10:56:24</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Unity3D-%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/">Unity3D 游戏开发</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>友盟游戏统计 SDK 可以很方便的统计一些游戏数据。使用他们的自定义事件，来统计自己项目关心的数据。现在接入 SDK 已经比以前方便了很多，不需要再导出 Android 工程去修改 Java。下面将一步一步详细说明。</p>
+<p>要使用友盟 SDK，一共有以下几步</p>
+<ul>
+<li><strong>在友盟后面新建应用</strong></li>
+<li><strong>在友盟后面建立自定义事件</strong></li>
+<li><strong>下载并导入 SDK</strong></li>
+<li><strong>调用 SDK</strong></li>
+</ul>
+<h2 id="1-在友盟后面新建应用"><a href="#1-在友盟后面新建应用" class="headerlink" title="1. 在友盟后面新建应用"></a>1. 在友盟后面新建应用</h2><p>首先注册账号，然后进入友盟工作台。↓ <a target="_blank" rel="noopener" href="https://www.umeng.com/">https://www.umeng.com/</a></p>
+<p><img src="https://p.pstatp.com/origin/137cf000092e790e2d14d" alt=""></p>
+<p>然后点击上面的产品，移动统计 ↓</p>
+<p><img src="https://p.pstatp.com/origin/137830000cb4ef2eed85c" alt=""></p>
+<p>点击添加应用 ↓</p>
+<p><img src="https://p.pstatp.com/origin/ffe700022c13e8e82398" alt=""></p>
+<p>然后填写应用信息，下面是我随便填的，根据自己的应用信息填写即可（随便填也没关系）↓</p>
+<p><img src="https://p.pstatp.com/origin/1375b00023d8563d2836e" alt=""></p>
+<p>点击注册后，将跳到下面的页面，这里我们只要关注这个 AppKey 即可，其他的不用管。这个 AppKey 会在 Unity 中用到 ↓</p>
+<p><img src="https://p.pstatp.com/origin/1381900003eecd16f78ef" alt=""></p>
+<h2 id="2-自定义事件"><a href="#2-自定义事件" class="headerlink" title="2. 自定义事件"></a>2. 自定义事件</h2><p>建立好了应用后，就要想好我们想要统计哪些数据。例如，有多少用户点了<strong>开始游戏</strong>，有多少用户点了 <strong>观看广告</strong>，有多少用户<strong>观看广告结束</strong>，等等，这些都可以统计。</p>
+<p>所谓的统计，也就是使用自定义的事件名，在不同的地方调用一下友盟的代码。所以接下来我们就建立自己想要统计的数据事件。</p>
+<p>在应用页面，点击我们刚才新建的应用 ↓</p>
+<p><img src="https://p.pstatp.com/origin/fe7f00011dddda623590" alt=""></p>
+<p>然后依次点击 设置 -&gt; 事件 -&gt; 手工添加 ↓</p>
+<p><img src="https://p.pstatp.com/origin/fe3a00021aca011d4f36" alt=""></p>
+<p>我们下面先定义一个统计游戏开始的事件，事件 ID 是这个事件的唯一表示，会在 SDK 调用时用到，显示名称是让我们自己知道这个事件是干嘛的。然后点击确定 ↓</p>
+<p><img src="https://p.pstatp.com/origin/ffc40001cfe11c16ba77" alt=""></p>
+<p>添加完后的事件，会显示在事件列表中。接下来我们再添加一个统计事件，例如游戏结束。↓</p>
+<p><img src="https://p.pstatp.com/origin/fe44000245c95d41477b" alt=""></p>
+<p><img src="https://p.pstatp.com/origin/137930000facf52897cfe" alt=""></p>
+<p>现在我们已经有了两个事件，当然，还可以添加更多，统计更多数据。这里为了演示，就只添加两个。↓</p>
+<p><img src="https://p.pstatp.com/origin/1384c000017ed51020bde" alt=""></p>
+<h2 id="3-下载并导入-SDK"><a href="#3-下载并导入-SDK" class="headerlink" title="3. 下载并导入 SDK"></a>3. 下载并导入 SDK</h2><p>建立好了事件，就可以在项目中使用了，首先要将友盟的 SDK 导入工程中。去友盟的 SDK 页面下载 SDK <a target="_blank" rel="noopener" href="https://developer.umeng.com/sdk/u3d">https://developer.umeng.com/sdk/u3d</a>，这里我们下载 Unity3D 的。</p>
+<p><img src="https://p.pstatp.com/origin/1377c0000ed86a9312ccf" alt=""></p>
+<p>下载下来的是一个 ZIP 压缩包，解压后，依次找到里面的 Unity3D -&gt; analytics -&gt; analytics_unit3d_x.x.x -&gt; analytics 目录下的 UmengGameAnalytics_vx.x.unitypackage 文件，将这个文件导入到 Unity 即可，其他的文件不用管。</p>
+<p>导入之后，就可以使用了。注意，如果导入后有什么报错，就看看错误是什么，尝试修复一下。</p>
+<h2 id="4-调用-SDK"><a href="#4-调用-SDK" class="headerlink" title="4. 调用 SDK"></a>4. 调用 SDK</h2><p>导入后，我们就需要写一个脚本，来调用 SDK。新建一个脚本，命名自己确定，这里我们使用 <code>UmengAgent</code>，代码如下</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System.Collections;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">UmengAgent</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> UmengAgent Inst;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> appKey;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> channelId;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Awake</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        Inst = <span class="keyword">this</span>;</span><br><span class="line">        DontDestroyOnLoad(gameObject);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Start</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        Umeng.GA.StartWithAppKeyAndChannelId(appKey, channelId);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnGameStart</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        Umeng.GA.Event(<span class="string">&quot;GameStart&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnGameOver</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        Umeng.GA.Event(<span class="string">&quot;GameStart&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>代码中的 <code>appKey</code> 就是我们在友盟后台建立应用时的那个 appKey 的字符串，channelId 是我们自己定义的，标识渠道，例如我们出了不同的包，有的放在 GooglePlay，有的放在 AppStore，就可以通过自定义一个 channelId，来分别统计不同渠道的数据情况。</p>
+<p>在场景中新建一个 GameObject，将这个脚本挂上去，然后在 Inspector 面板上赋值 appKey 和 channelId。↓</p>
+<p><img src="https://p.pstatp.com/origin/13842000086bf7a4719b2" alt=""></p>
+<p>接下来，就是在游戏逻辑中调用 UmengAgent，在游戏开始后，调用一下 <code>UmengAgent.Inst.OngameStart();</code>，在游戏结束时调用一下 <code>UmengAgent.Inst.OnGameOver();</code>。这样，有多少次游戏开始，有多少次游戏结束，就会被统计下来。</p>
+<p>下图是我另一个工程的统计数据，样式大家可以看一下。</p>
+<p><img src="https://p.pstatp.com/origin/138160000e561f813e2ec" alt=""></p>
+<blockquote>
+<p>注意，友盟统计的数据有一定的延迟性，这些事件统计，可能并不会在调用了后立刻就出现在后面。</p>
+</blockquote>
+<p>以上就是在 Unity 中使用友盟统计的详细过程。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>iMoeGirl</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://imoegirl.com/2020/08/16/unity-umeng-sdk/">https://imoegirl.com/2020/08/16/unity-umeng-sdk/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+                <p class="copyright-item">
+                    任何技术问题，欢迎在下面留言，或者直接Email我
+                </p>
+
+                <p class="copyright-item" style="margin-top: 10px;">
+                    <div style="display: flex">
+                        <div style="flex: 33%;">
+                            <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                            <br>
+                            <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px; border:1px solid #34495e"/>
+                        </div>
+
+                        <!-- <div style="flex: 33%; border: 2px solid yellow">
+                        <span style="font-weight: bold;">接受咖啡捐赠</span>
+                        </div>
+                        
+                        <div style="flex: 33%; border: 2px solid yellow">
+                            333
+                        </div> -->
+                        
+                    </div>
+
+
+                    <!-- <p style="border: 1px solid yellow;">
+                        <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                        <br>
+                        <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px"/>
+                    </p> -->
+
+                    
+                </p>
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"># 游戏开发</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/11/05/apk-signature/">Apk 上架前的签名操作</a>
+            
+            
+            <a class="next" rel="next" href="/2020/07/11/simple-understanding-of-ray-tracing/">简单理解光线追踪</a>
+            
+        </section>
+
+        <section class="post-talk">
+            
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '5b5aeaa767a06f6c23a4',
+          clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+          repo: 'imoegirl.github.io',
+          owner: 'imoegirl',
+          admin: ['imoegirl'],
+          id: location.pathname,
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')           
+       </script>
+  
+            <!-- <p>11111</p>
+            {{ window.location.pathname }} -->
+        </section>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    
+    <div class="copyright">
+        <span>© iMoeGirl | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+        <div style="margin-top: -40px; font-size: 12px">
+            <!-- <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span> -->
+            <!-- <span id="busuanzi_container_site_pv">
+                <i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+    
+            <span id="busuanzi_container_site_uv">
+                |<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span> -->
+        </div>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="iMoeGirl" />
+    
+<title>Unity Shader | 基础 | 萌一小栈</title>
+
+ 
+<link rel="icon" href="/logo.png" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+        
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">萌一小栈</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+                <!-- <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label> -->
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">萌一小栈</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+<!-- <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Unity Shader | 基础</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">iMoeGirl</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">February 24, 2020&nbsp;&nbsp;22:14:04</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Unity-Shader/">Unity Shader</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="MeshFilter"><a href="#MeshFilter" class="headerlink" title="MeshFilter"></a>MeshFilter</h2><p>存储一个Mesh（网格，模型的网格，模型的三角面顶点信息）</p>
+<h2 id="MeshRenderer"><a href="#MeshRenderer" class="headerlink" title="MeshRenderer"></a>MeshRenderer</h2><p>用于渲染一个物体的外观，数据来源于MeshFilter</p>
+<h2 id="Material"><a href="#Material" class="headerlink" title="Material"></a>Material</h2><p>材质包含两部分，贴图和Shader</p>
+<a id="more"></a>
+
+<h2 id="OpenGL-DirectX"><a href="#OpenGL-DirectX" class="headerlink" title="OpenGL DirectX"></a>OpenGL DirectX</h2><p>直接与显卡交互图形渲染库，可以理解为应用程序与显卡之间的桥梁，为应用程序提供一些渲染接口，用于渲染。</p>
+<h2 id="Shader"><a href="#Shader" class="headerlink" title="Shader"></a>Shader</h2><p>Shader可以理解为是一种渲染命令，由opengl或DX进行解析，用于控制图形的渲染。</p>
+<h2 id="GLSL-HLSL-CG"><a href="#GLSL-HLSL-CG" class="headerlink" title="GLSL/HLSL/CG"></a>GLSL/HLSL/CG</h2><p>shader编程语言，GLSL面向OpenGL，HLSL面向DirectX，CG是Nvidia公司出的，跨平台的shader编程语言。</p>
+<h2 id="ShaderLab"><a href="#ShaderLab" class="headerlink" title="ShaderLab"></a>ShaderLab</h2><p>我们在Unitiy中写Shader用的语言是ShaderLab，可以理解为Unity为了方便使用者写Shader而创造的一种新的Shader语言，最后其实都会在底层被翻译成GLSL或HLSL或CG。</p>
+<h2 id="Unity中的Shader分类"><a href="#Unity中的Shader分类" class="headerlink" title="Unity中的Shader分类"></a>Unity中的Shader分类</h2><p>Shader的中文名叫做着色器</p>
+<ul>
+<li>表面着色器，Surface Shader</li>
+<li>顶点/片元着色器，Vertex/Fragment Shader</li>
+<li>固定功能着色器，Fixed function Shader (在现代硬件上基本已被弃用)</li>
+</ul>
+<p>表面着色器可以理解为是对顶点/片元着色器的一种封装，它帮我们处理了很多渲染上比较麻烦的事情。而顶点/片元着色器就相对更灵活一些，也就是说很多东西要自己处理，相对来说要写的代码更多一些。进一步讲，使用顶点/片元着色器能实现的效果，使用表面着色器并不一定能实现，或者说，并不一定那么方便地实现。</p>
+<h2 id="Unity-Shader-结构"><a href="#Unity-Shader-结构" class="headerlink" title="Unity Shader 结构"></a>Unity Shader 结构</h2><figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Shader &quot;iMoeGirl/MyShader&quot; &#123;  // Shader 名字</span><br><span class="line">    Properties &#123;</span><br><span class="line">        <span class="comment">// 这里定义一些属性，可以显示在UI面板上用于调节</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    SubShader &#123;</span><br><span class="line">        <span class="comment">// 子 Shader，可以写多个，显卡运行时，</span></span><br><span class="line">        <span class="comment">// 从第一个SubShader开始，如果第一个里面的效果都支持，则使用第一个，</span></span><br><span class="line">        <span class="comment">// 如果发现这个SubShader里面某些效果不支持，则自动运行下一个SubShader</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果发现所有的SubShader都不支持，则使用Fallback，相当于后备方案</span></span><br><span class="line">    Fallback &quot;VertexLit&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Unity-Shader-属性类型"><a href="#Unity-Shader-属性类型" class="headerlink" title="Unity Shader 属性类型"></a>Unity Shader 属性类型</h2><figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">Shader &quot;iMoeGirl/MyShader&quot; &#123;  // Shader 名字</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 这里定义一些属性，可以显示在UI面板上用于调节</span></span><br><span class="line">    Properties &#123;</span><br><span class="line">        <span class="comment">// 属性名(&quot;Inspector面板上显示出来的属性名&quot;, 属性类型) = 默认值</span></span><br><span class="line">        _Color(&quot;颜色类型&quot;, Color) = (1,1,1,1)</span><br><span class="line">        _Vector(&quot;向量类型&quot;, Vector) = (1, 2, 3, 4)</span><br><span class="line">        _Int(&quot;整型&quot;, Int) = 11111</span><br><span class="line">        _Float(&quot;浮点型&quot;, Float) = 12.11</span><br><span class="line">        _Range(&quot;范围类型&quot;, Range(100, 1000)) = 128</span><br><span class="line">        _Tex2D(&quot;贴图类型&quot;, 2D) = &quot;white&quot;&#123;&#125;</span><br><span class="line">        _Cube(&quot;立方体贴图类型&quot;, Cube) = &quot;white&quot;&#123;&#125;</span><br><span class="line">        _Tex3D(&quot;3D纹理&quot;, 3D) = &quot;white&quot;&#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 子 Shader，可以写多个，显卡运行时，</span></span><br><span class="line">    <span class="comment">// 从第一个SubShader开始，如果第一个里面的效果都支持，则使用第一个，</span></span><br><span class="line">    <span class="comment">// 如果发现这个SubShader里面某些效果不支持，则自动运行下一个SubShader</span></span><br><span class="line">    SubShader &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 至少有一个Pass，相当于一个方法</span></span><br><span class="line">        Pass &#123;</span><br><span class="line">            <span class="comment">// 在Pass块里写Shader代码</span></span><br><span class="line"></span><br><span class="line">            CGPROGRAM</span><br><span class="line">            <span class="comment">// 使用 CG语言编写Shader</span></span><br><span class="line">            ENDCG</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果发现所有的SubShader都不支持，则使用Fallback，相当于后备方案</span></span><br><span class="line">    Fallback &quot;VertexLit&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>iMoeGirl</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://imoegirl.com/2020/02/24/unity-shader-basis-01/">https://imoegirl.com/2020/02/24/unity-shader-basis-01/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+                <p class="copyright-item">
+                    任何技术问题，欢迎在下面留言，或者直接Email我
+                </p>
+
+                <p class="copyright-item" style="margin-top: 10px;">
+                    <div style="display: flex">
+                        <div style="flex: 33%;">
+                            <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                            <br>
+                            <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px; border:1px solid #34495e"/>
+                        </div>
+
+                        <!-- <div style="flex: 33%; border: 2px solid yellow">
+                        <span style="font-weight: bold;">接受咖啡捐赠</span>
+                        </div>
+                        
+                        <div style="flex: 33%; border: 2px solid yellow">
+                            333
+                        </div> -->
+                        
+                    </div>
+
+
+                    <!-- <p style="border: 1px solid yellow;">
+                        <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                        <br>
+                        <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px"/>
+                    </p> -->
+
+                    
+                </p>
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"># 游戏开发</a>
+                    
+                        <a href="/tags/Shader/"># Shader</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/03/02/unity-shader-basis-02/">Unity Shader |  属性、顶点与片元函数</a>
+            
+            
+            <a class="next" rel="next" href="/2020/02/13/solve-svn-clean-up-error/">SVN Cleanup错误 Faild to run the wc db work queue associated with</a>
+            
+        </section>
+
+        <section class="post-talk">
+            
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '5b5aeaa767a06f6c23a4',
+          clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+          repo: 'imoegirl.github.io',
+          owner: 'imoegirl',
+          admin: ['imoegirl'],
+          id: location.pathname,
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')           
+       </script>
+  
+            <!-- <p>11111</p>
+            {{ window.location.pathname }} -->
+        </section>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    
+    <div class="copyright">
+        <span>© iMoeGirl | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+        <div style="margin-top: -40px; font-size: 12px">
+            <!-- <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span> -->
+            <!-- <span id="busuanzi_container_site_pv">
+                <i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+    
+            <span id="busuanzi_container_site_uv">
+                |<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span> -->
+        </div>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
