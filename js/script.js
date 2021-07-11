@@ -26,7 +26,10 @@
                     clearInterval(t), run();
             }, 0);
     };
+
 })();
+
+
 
 
 document.ready(
@@ -93,3 +96,11 @@ document.ready(
 
     }
 );
+
+// var _hmt = _hmt || [];
+// (function() {
+//   var hm = document.createElement("script");
+//   hm.src = "https://hm.baidu.com/hm.js?ae464fe0e62cef297c26908427b0e7bd";
+//   var s = document.getElementsByTagName("script")[0]; 
+//   s.parentNode.insertBefore(hm, s);
+// })();

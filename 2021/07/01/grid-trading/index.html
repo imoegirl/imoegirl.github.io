@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="iMoeGirl" />
+    
+<title>从万亿美元的市场赚点小钱 | 萌一小栈</title>
+
+ 
+<link rel="icon" href="/logo.png" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+        
+
+<script src="https://hm.baidu.com/hm.js?ae464fe0e62cef297c26908427b0e7bd"></script>
+
+<!-- <script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?ae464fe0e62cef297c26908427b0e7bd";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+  </script> -->
+  
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">萌一小栈</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://buymeacoffee.com/imoegirl">咖啡</a>
+                
+                <!-- <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label> -->
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">萌一小栈</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">博客</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/projects">产品</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                    <a class="menu-item" href="/links">链接</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://dun.mianbaoduo.com/@imoegirl">顿顿饭</a>
+                
+                    <a class="menu-item" target="_blank" rel="noopener" href="https://buymeacoffee.com/imoegirl">咖啡</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+<!-- <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">从万亿美元的市场赚点小钱</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">iMoeGirl</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">July 1, 2021&nbsp;&nbsp;15:16:44</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>今天要说的内容是对于程序化网格交易的简单理解，目标是通过简单的代码逻辑，实现自己的网格交易程序。</p>
+<p>网格交易简单来说就是在一个上下震荡的市场，以网格的形式，设定不同的价格，进行买单和卖单的挂单，等待挂成成交。当一买一卖成交，或者一卖一买成交，这其中的差额，就是利润。</p>
+<p>使用网格交易的好处是，在震荡的市场，可以不用去追踪价格的走势，只要设定好网格，只要价格在网格范围内上下波动，就会有利润。</p>
+<p>接下来以虚拟货币为例子，进行网格交易的解释，例如 DOTUSDT 交易对，看下面的图。</p>
+<p><img src="grids.png" alt=""></p>
+<p>首先要为程序设定一个开始价格，这里以 15.0 USDT 为例。在开始网格交易前，还有一个前提，就是要保证账户里有足够的币，和足够的USDT，用来买，和卖。</p>
+<p>然后在其上方，设定五个价格线，在下方，设定五个价格线，上面的价格是用来挂卖单的，也就是价格上涨，我们就卖。下方的价格线，是用来挂买单的，也就是价格下跌，我们就买。</p>
+<p>首先，我们在 D1 到 D5 这五个价格上，分别挂一个买单，每一单买的数量假设是2个DOT。在 U2到U5 这五个价格上分别挂一个卖单，数量也是2个DOT。为什么不在U1上挂卖单呢，因为不符合网格交易的规则，这一点记住就行。前面挂的这些买单和卖单，我们称为主单。现在假设价格下跌了，跌到了D1的位置，则D1那个位置挂的买单，就会被成交。这时，我们就在D1上方的格子，也就是入场价格15.0那条价格线上，挂一个卖单，这个我们称为副单。等这个副单成交，那我们就净赚0.2，而原始的 DOT 和 USDT的数量没有变。</p>
+<p>接下来，假设价格继续上涨，涨到了U2 15.4处的价格，这时，我们之前挂的那个主单卖单，就会被成交，一旦这个主单被成交，就立刻在它下面那条价格线上，也就是 U1 15.2的价格线上，挂一个买单的副单，等价格下跌这个副单成交时，我们就会净赚0.2。</p>
+<p>简单来说，每一条能挂单的价格线上，都对应一个主单，主单成交，就在其反方向的第一个价格线上，挂对应的副单，副单成交，即盈利。要注意的是，副单未成交的时候，对应的主单不可再次挂单。</p>
+<p>所有的价格线上都可以挂副单。入场价格和U1不能挂任何主单，D1 到 D5 只能挂买单的主单，U2 到 U5 只能挂卖单的主单。</p>
+<p>入场价格，网格数量，网格之间的价格间隔，要根据不同的交易对象来设定，网格数量不只可以设定5个，还可以设定更多。网格之间的差额，也可根据实际情况来设定，不一定是等差或等比，也可以根据自己想要的价格设定。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>iMoeGirl</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://imoegirl.com/2021/07/01/grid-trading/">https://imoegirl.com/2021/07/01/grid-trading/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+                <p class="copyright-item">
+                    任何技术问题，欢迎在下面留言，或者直接Email我，或者加我微信: ifloop
+                </p>
+
+                <p><strong>也可以请我喝一杯咖啡</strong></p>
+                <p><a target="_blank" rel="noopener" href="https://www.buymeacoffee.com/imoegirl"><img src="https://i.loli.net/2021/04/25/IV4gjwGKrHMy7Bp.png"/ style="width: 128px;"></a></p>
+
+                <p class="copyright-item" style="margin-top: 10px;">
+                    <div style="display: flex">
+                        <div style="flex: 33%;">
+                            <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                            <br>
+                            <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px; border:1px solid #34495e"/>
+                        </div>
+
+                        <!-- <div style="flex: 33%; border: 2px solid yellow">
+                        <span style="font-weight: bold;">接受咖啡捐赠</span>
+                        </div>
+                        
+                        <div style="flex: 33%; border: 2px solid yellow">
+                            333
+                        </div> -->
+                        
+                    </div>
+
+
+                    <!-- <p style="border: 1px solid yellow;">
+                        <span style="font-weight: bold;">微信公众号: 萌一小栈 </span>
+                        <br>
+                        <img src="https://ae01.alicdn.com/kf/Uc805e65600b74bae80aca39332361fe4u.jpg" style="width: 128px"/>
+                    </p> -->
+
+                    
+                </p>
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E7%8B%AC%E7%AB%8B%E5%BC%80%E5%8F%91%E8%80%85/"># 独立开发者</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2021/07/11/unlisted-lottery-project/">我做了一个无法上架的彩票App</a>
+            
+            
+            <a class="next" rel="next" href="/2021/06/18/apply-for-software-copyright/">自己动手申请软件著作权（软著）</a>
+            
+        </section>
+
+        <section class="post-talk">
+            
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '5b5aeaa767a06f6c23a4',
+          clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+          repo: 'imoegirl.github.io',
+          owner: 'imoegirl',
+          admin: ['imoegirl'],
+          id: location.pathname,
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')           
+       </script>
+  
+            <!-- <p>11111</p>
+            {{ window.location.pathname }} -->
+        </section>
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    
+    <div class="copyright">
+        <span>© iMoeGirl | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+        <div style="margin-top: -40px; font-size: 12px">
+            <!-- <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span> -->
+            <!-- <span id="busuanzi_container_site_pv">
+                <i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+    
+            <span id="busuanzi_container_site_uv">
+                |<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span> -->
+        </div>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
