@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    
+    
+        <link rel="mask-icon" href="/images/favicon.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>超简单的VPS购买和配置教程 | 萌一小栈</title>
+
+
+    <meta name="keywords" content="VPS">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="这篇博客将一步一步教大家学习VPS的购买和配置教程，只需要简单几步，就可以拥有自己的VPS，然后愉快玩耍。可以自己搭一个科学上网代理服务器啦，托管自己的博客啦，等等。 VPS服务商有很多种，这们我们选择相对比较稳定的 Vultr。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="超简单的VPS购买和配置教程">
+<meta property="og:url" content="http://imoegirl.com/2019/12/10/vps-buy-and-setup/index.html">
+<meta property="og:site_name" content="萌一小栈">
+<meta property="og:description" content="这篇博客将一步一步教大家学习VPS的购买和配置教程，只需要简单几步，就可以拥有自己的VPS，然后愉快玩耍。可以自己搭一个科学上网代理服务器啦，托管自己的博客啦，等等。 VPS服务商有很多种，这们我们选择相对比较稳定的 Vultr。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ued9cc4961f9445e1917ff2311a856180J.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ufae28c7c204448d99fd0f23b261ba0fcY.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Uf74cca36e7cd4afeb1980e7baaca34feL.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U6737d00d59d6403b8c94de3be7876b605.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U500198cb6f0340cda2f10656afd181c2H.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Uc18e21a6fba54c869f0bc97a603baa6am.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U64cc05f5143841b19ed897812e90a3e7j.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U6390af78ae7c4a699862ced6d6be4df3c.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ue124b55350f041d1a43bdfab3a7fa13ca.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Uf8cdc34fdaeb4a5e810ff64e98b15882P.png">
+<meta property="article:published_time" content="2019-12-10T07:02:30.000Z">
+<meta property="article:modified_time" content="2021-08-21T06:39:00.455Z">
+<meta property="article:author" content="iMoegirl">
+<meta property="article:tag" content="VPS">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/Ued9cc4961f9445e1917ff2311a856180J.png">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/atom-one-dark.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">萌一小栈</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        超简单的VPS购买和配置教程
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2019/12/" class="post-meta__date button">2019-12-10</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>这篇博客将一步一步教大家学习VPS的购买和配置教程，只需要简单几步，就可以拥有自己的VPS，然后愉快玩耍。可以自己搭一个科学上网代理服务器啦，托管自己的博客啦，等等。</p>
+<p>VPS服务商有很多种，这们我们选择相对比较稳定的 Vultr。</p>
+<span id="more"></span>
+
+<p>Vultr的收费模式是按时间累计收费的，首先需要往自己帐号里充值。当创建一个实例后，则计费开始。例如选择的是5美元每月的服务器，也就是大概每小时0.007美元，如果你只用了10个小时就把VPS实例删了，那就只会消费掉0.07美元。</p>
+<h2 id="1-首先点击这里，打开-Vultr-官网"><a href="#1-首先点击这里，打开-Vultr-官网" class="headerlink" title="1. 首先点击这里，打开 Vultr 官网"></a>1. <a target="_blank" rel="noopener" href="https://www.vultr.com/?ref=8288434">首先点击这里，打开 Vultr 官网</a></h2><p>然后点击右上角的 <strong>Sign up</strong> 进入注册页面，然后输入邮箱和密码以及验证码，注册一个 Vultr 账户</p>
+<p><img src="https://ae01.alicdn.com/kf/Ued9cc4961f9445e1917ff2311a856180J.png" alt="p001101_1"></p>
+<h2 id="2-充值"><a href="#2-充值" class="headerlink" title="2. 充值"></a>2. 充值</h2><p>注册完后，会自动登录，并跳转到账单页面，因为现在账户里还没有金额，所以需要先充一点。刚开始，可以先充最小金额，也就是10美元，一般都会有金额赠送，现在有<strong>充10美元</strong>，会额外<strong>赠送50美元</strong>的活动，但是这50美元有试用期限。这个活动在写本文的时候还有，不知道什么时候结束。</p>
+<p>可以使用信用卡，支付宝，微信等方式支付，还是很方便的。</p>
+<p><img src="https://ae01.alicdn.com/kf/Ufae28c7c204448d99fd0f23b261ba0fcY.png" alt="p001102_2"></p>
+<h2 id="3-创建-VPS-实例"><a href="#3-创建-VPS-实例" class="headerlink" title="3. 创建 VPS 实例"></a>3. 创建 VPS 实例</h2><ol>
+<li>第一张图，点击左边的<strong>Products</strong>，然后选择右边的 <strong>Cloud Compute</strong></li>
+<li>第二张图，选择VPS所属的机房，经过我的测试，感觉 <strong>Los Angeles</strong>(洛杉矶) 的相对来说比较稳定，所以这里就用洛杉矶机房的机器。</li>
+<li>第三张图，选择 <strong>操作系统</strong> 和  <strong>付费方案</strong>，操作系统这里试用 <strong>Ubuntu</strong>，版本使用 <strong>18.04</strong> 和 <strong>19.04</strong> 都可以。然后选择下面 <strong>$5/mo</strong> 的方案，然后点击 <strong>Deploy Now</strong> 就会开始创建VPS实例</li>
+<li>等待 <strong>Instaling</strong> 状态变为 <strong>Running</strong> 状态，则表示VPS已经创建好，正在运行中。</li>
+</ol>
+<p><img src="https://ae01.alicdn.com/kf/Uf74cca36e7cd4afeb1980e7baaca34feL.png" alt="p001103_3"></p>
+<p><img src="https://ae01.alicdn.com/kf/U6737d00d59d6403b8c94de3be7876b605.png" alt="p001104_4"></p>
+<p><img src="https://ae01.alicdn.com/kf/U500198cb6f0340cda2f10656afd181c2H.png" alt="p001105_5"></p>
+<p><img src="https://ae01.alicdn.com/kf/Uc18e21a6fba54c869f0bc97a603baa6am.png" alt="p001106_6"></p>
+<p><img src="https://ae01.alicdn.com/kf/U64cc05f5143841b19ed897812e90a3e7j.png" alt="p001107_7"></p>
+<h2 id="4-登录-VPS"><a href="#4-登录-VPS" class="headerlink" title="4. 登录 VPS"></a>4. 登录 VPS</h2><p>当 VPS实例变为 <strong>Running</strong> 状态后，点击左边的 <strong>Cloud Intance</strong>，即可进入当前实例的信息页面，如下图。接下来使用 <strong>SSH</strong> 登录VPS</p>
+<ol>
+<li>打开命令行，如果是Window，可以使用CMD，如果是Linux或者Mac，则使用对应的终端即可。</li>
+<li>复制IP，然后在命令行中输入命令 <code>ssh root@45.77.125.227</code>，这里的IP换成你的VPS实例IP。然后回车，因为是第一次登录，所以会询问是否确认连接，这里输入 <code>yes</code>，然后回车。</li>
+<li>接下来会要求输入密码，在当前实例信息页面，<strong>Password</strong> 后面就是密码，默认是隐藏的，可以点击那个 “眼睛” 的图标显示出来，也可以点击后面那个图标复制密码。</li>
+<li>复制密码后，在命令行中粘贴。如果你是在CMD中，只要聚焦在CMD窗口，按一下右键就可以粘贴上。注意，命令行中密码是不显示的。粘贴上后按回车，即可成功登录。</li>
+</ol>
+<p><img src="https://ae01.alicdn.com/kf/U6390af78ae7c4a699862ced6d6be4df3c.png" alt="p001108_8"></p>
+<p><img src="https://ae01.alicdn.com/kf/Ue124b55350f041d1a43bdfab3a7fa13ca.png" alt="p001109_9"></p>
+<h2 id="5-修改VPS密码"><a href="#5-修改VPS密码" class="headerlink" title="5. 修改VPS密码"></a>5. 修改VPS密码</h2><p>Vultr 的VPS实例默认生成的密码是随机的，不好记，所以我们在登录后，先去改个密码，改成自己容易记忆的密码。</p>
+<p>使用命令 <code>passwd root</code> 命令，回车，然后输入密码，再次输入密码，当看到 <strong>passwd: password updated successfully</strong> 的字样，则表示密码修改成功。下次登录时，就可以使用自己的密码登录了。</p>
+<p><img src="https://ae01.alicdn.com/kf/Uf8cdc34fdaeb4a5e810ff64e98b15882P.png" alt="p001110_10"></p>
+<p> 好了，VPS的购买及配置教程就结束了，只要跟着一步一步来，还是很简单的。如果有什么问题，欢迎在下面留言。</p>
+<p>VPS搭建好了，接下来就是使用VPS做一些事情，搭建个科学上网的梯子之类的，这个不太敢写，哈哈哈，不过你可以在下面留言，提供免费教程噢~</p>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>Author: </strong>iMoegirl
+        </p>
+        <p>
+            <strong>
+                Permalink: 
+            </strong>
+            <a href="http://imoegirl.com/2019/12/10/vps-buy-and-setup/">http://imoegirl.com/2019/12/10/vps-buy-and-setup/</a>
+        </p>
+        
+            <strong>
+                <p>任何技术问题，可加微信交流，微信: ifloop</p>
+
+            </strong>
+        
+            <strong>
+                <p>搜索并关注微信公众号 [ 萌一小栈 ] 可及时订阅最新技术文章</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>updated at 2021-08-21</p></div> 
+    <div class="post-entry__tags"><a href="/tags/VPS/" class="post-tags__link button"># VPS</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2019/12/11/data-structure-02-linkedlist/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            链表
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2019/12/10/data-structure-01-array/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            数组
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>Comments</h4>
+    
+    
+    
+    
+    
+    <div id="gitalk-container"></div>
+
+    
+    
+    
+    
+    
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">萌一小栈</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?ae464fe0e62cef297c26908427b0e7bd';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    <script>
+        function loadComment() {
+            let e, i;
+            (e = document.createElement("script")).src = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js',
+            document.body.appendChild(e);
+            e.onload = () => {
+                var gitalk = new Gitalk({
+                    clientID: '5b5aeaa767a06f6c23a4',
+                    clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+                    repo: 'imoegirl.github.io',
+                    owner: 'imoegirl',
+                    admin: 'imoegirl',
+                    id: window.location.pathname,
+                    distractionFreeMode: false
+                });
+                gitalk.render('gitalk-container');
+            };
+            (i = document.createElement("link")).rel = "stylesheet",
+            i.href = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css',
+            document.head.appendChild(i);
+        }
+    
+        var runningOnBrowser = typeof window !== "undefined";
+        var isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+        var supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    
+        setTimeout(function () {
+            if (!isBot && supportsIntersectionObserver) {
+                var comment_observer = new IntersectionObserver(function(entries) {
+                    if (entries[0].isIntersecting) {
+                        loadComment();
+                        comment_observer.disconnect();
+                    }
+                }, { threshold: [0] });
+                comment_observer.observe(document.getElementById('comment'));
+            } else {
+                loadComment();
+            }
+        }, 1);
+    </script>
+
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

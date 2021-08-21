@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    
+    
+        <link rel="mask-icon" href="/images/favicon.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>Letsencrypt Nginx HTTPS 配置 | 萌一小栈</title>
+
+
+    <meta name="keywords" content="Ubuntu, VPS, Nginx">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="买了一个域名，一个 VPS，安装好 Nginx，配置了一个博客，或者一个Web服务。在Chrome中访问后，地址栏 不安全 三个字，很是让人不舒服。今天这篇博客，就记录一下如何配置 Nginx 的 HTTPS 重定向。整个过程很简单，一共有三步，域名配置，HTTPS 证书申请，配置 Nginx，下面将详细说明。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Letsencrypt Nginx HTTPS 配置">
+<meta property="og:url" content="http://imoegirl.com/2020/07/11/nginx-https-config-and-redirect/index.html">
+<meta property="og:site_name" content="萌一小栈">
+<meta property="og:description" content="买了一个域名，一个 VPS，安装好 Nginx，配置了一个博客，或者一个Web服务。在Chrome中访问后，地址栏 不安全 三个字，很是让人不舒服。今天这篇博客，就记录一下如何配置 Nginx 的 HTTPS 重定向。整个过程很简单，一共有三步，域名配置，HTTPS 证书申请，配置 Nginx，下面将详细说明。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-07-11T04:36:46.000Z">
+<meta property="article:modified_time" content="2021-08-21T06:35:27.439Z">
+<meta property="article:author" content="iMoegirl">
+<meta property="article:tag" content="Ubuntu">
+<meta property="article:tag" content="VPS">
+<meta property="article:tag" content="Nginx">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/atom-one-dark.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">萌一小栈</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        Letsencrypt Nginx HTTPS 配置
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2020/07/" class="post-meta__date button">2020-07-11</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>买了一个域名，一个 VPS，安装好 Nginx，配置了一个博客，或者一个Web服务。在Chrome中访问后，地址栏 <code>不安全</code> 三个字，很是让人不舒服。今天这篇博客，就记录一下如何配置 Nginx 的 HTTPS 重定向。整个过程很简单，一共有三步，域名配置，HTTPS 证书申请，配置 Nginx，下面将详细说明。</p>
+<span id="more"></span>
+
+<h2 id="域名配置"><a href="#域名配置" class="headerlink" title="域名配置"></a>域名配置</h2><p>首先，将自己的域名配置A记录，指向自己的服务器。并且在服务器上装好 Nginx。<br>安装 Nginx 使用命令 <code>apt-get install nginx</code></p>
+<h2 id="HTTPS-证书申请"><a href="#HTTPS-证书申请" class="headerlink" title="HTTPS 证书申请"></a>HTTPS 证书申请</h2><ol>
+<li>Ping 一下自己的域名，确定域名已经被解析到自己的VPS。</li>
+<li>执行命令 <code>apt-get install letsencrypt</code> 安装 letsencrypt</li>
+<li>执行命令 <code>service nginx stop</code> 先将 Nginx 停掉</li>
+<li>执行命令 <code>letsencrypt certonly --standalone</code> 进行获取证书流程，根据提示，输入信息，域名，邮箱等</li>
+<li>获取证书流程结束后，会生成两个文件，在接下来的的 Nginx 配置中会用到<br><strong>/etc/letsencrypt/live/imoegirl.com/fullchain.pem</strong><br><strong>/etc/letsencrypt/live/imoegirl.com/privkey.pem</strong><br>上面的 imoegirl.com 只是举例，这里是你输入的域名</li>
+</ol>
+<h2 id="Nginx-配置"><a href="#Nginx-配置" class="headerlink" title="Nginx 配置"></a>Nginx 配置</h2><ol>
+<li>执行命令 <code>cd /etc/nginx/conf.d</code></li>
+<li>使用你喜欢的编辑器创建并编辑文件 <code>my.conf</code> (命名无所谓，只要扩展名是.conf)</li>
+<li>输入以下内容 <figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">listen</span> [::]:<span class="number">80</span>;</span><br><span class="line">    <span class="attribute">server_name</span> imoegirl.com;</span><br><span class="line">    <span class="attribute">return</span> <span class="number">301</span> https://imoegirl.com$request_uri;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">443</span> ssl http2;</span><br><span class="line">    <span class="attribute">server_name</span> imoegirl.com;</span><br><span class="line">    <span class="attribute">ssl_certificate</span> /etc/letsencrypt/live/imoegirl.com/cert.pem;</span><br><span class="line">    <span class="attribute">ssl_certificate_key</span> /etc/letsencrypt/live/imoegirl.com/privkey.pem;</span><br><span class="line">    <span class="attribute">ssl_session_cache</span> shared:SSL:<span class="number">1m</span>;</span><br><span class="line">    <span class="attribute">ssl_session_timeout</span> <span class="number">5m</span>;</span><br><span class="line">    <span class="attribute">keepalive_timeout</span> <span class="number">70</span>;</span><br><span class="line">    <span class="attribute">ssl_ciphers</span>     ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4; <span class="comment">#加密算法</span></span><br><span class="line">    <span class="attribute">ssl_protocols</span>   TLSv1 TLSv1.<span class="number">1</span> TLSv1.<span class="number">2</span>; <span class="comment">#SSL协议</span></span><br><span class="line">    </span><br><span class="line">    <span class="attribute">location</span> / &#123;</span><br><span class="line">        <span class="attribute">root</span> /var/www/blog; <span class="comment"># 这里是网站所在的目录，可以改成自己想要的</span></span><br><span class="line">        <span class="attribute">index</span> index.html index.htm;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>执行命令 <code>service nginx start</code> 启动 Nginx</li>
+</ol>
+<p>经过上面的配置，当我们访问 <a href="http://imoegirl.com/">http://imoegirl.com</a> 时，会自动被重定向到 <a href="https://imoegirl.com/">https://imoegirl.com</a></p>
+<blockquote>
+<p>注意：我们在 letsencrypt 申请的免费证书，是有有效期的，当证书过期时，重新来一遍申请流程即可</p>
+</blockquote>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>Author: </strong>iMoegirl
+        </p>
+        <p>
+            <strong>
+                Permalink: 
+            </strong>
+            <a href="http://imoegirl.com/2020/07/11/nginx-https-config-and-redirect/">http://imoegirl.com/2020/07/11/nginx-https-config-and-redirect/</a>
+        </p>
+        
+            <strong>
+                <p>任何技术问题，可加微信交流，微信: ifloop</p>
+
+            </strong>
+        
+            <strong>
+                <p>搜索并关注微信公众号 [ 萌一小栈 ] 可及时订阅最新技术文章</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>updated at 2021-08-21</p></div> 
+    <div class="post-entry__tags"><a href="/tags/Ubuntu/" class="post-tags__link button"># Ubuntu</a><a href="/tags/VPS/" class="post-tags__link button"># VPS</a><a href="/tags/Nginx/" class="post-tags__link button"># Nginx</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2020/07/11/simple-understanding-of-ray-tracing/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            简单理解光线追踪
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2020/04/26/compare-rust-and-python-resize-image/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            对比 Rust 和 Python 图片缩放速度
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>Comments</h4>
+    
+    
+    
+    
+    
+    <div id="gitalk-container"></div>
+
+    
+    
+    
+    
+    
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">萌一小栈</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?ae464fe0e62cef297c26908427b0e7bd';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    <script>
+        function loadComment() {
+            let e, i;
+            (e = document.createElement("script")).src = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js',
+            document.body.appendChild(e);
+            e.onload = () => {
+                var gitalk = new Gitalk({
+                    clientID: '5b5aeaa767a06f6c23a4',
+                    clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+                    repo: 'imoegirl.github.io',
+                    owner: 'imoegirl',
+                    admin: 'imoegirl',
+                    id: window.location.pathname,
+                    distractionFreeMode: false
+                });
+                gitalk.render('gitalk-container');
+            };
+            (i = document.createElement("link")).rel = "stylesheet",
+            i.href = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css',
+            document.head.appendChild(i);
+        }
+    
+        var runningOnBrowser = typeof window !== "undefined";
+        var isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+        var supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    
+        setTimeout(function () {
+            if (!isBot && supportsIntersectionObserver) {
+                var comment_observer = new IntersectionObserver(function(entries) {
+                    if (entries[0].isIntersecting) {
+                        loadComment();
+                        comment_observer.disconnect();
+                    }
+                }, { threshold: [0] });
+                comment_observer.observe(document.getElementById('comment'));
+            } else {
+                loadComment();
+            }
+        }, 1);
+    </script>
+
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

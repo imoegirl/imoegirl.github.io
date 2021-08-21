@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    
+    
+        <link rel="mask-icon" href="/images/favicon.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>nginx 配置 https 及重定向 | 萌一小栈</title>
+
+
+    <meta name="keywords" content="Ubuntu, VPS, Nginx">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="将博客放在自己的VPS上，免不了配置 nginx 及 https，如果不配置 https，浏览器上**不安全**那三个字，实在是太刺眼。所以这篇博客，将记录整个折腾过程。  nginx 的安装 https 的证书配置 http 重定向到 https www 重定向到非不带 www 的域名  接下来的操作，都是在 Ubuntu 18.04 版本上进行的。 域名解析的配置首先要先自己的域名解析到自己的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nginx 配置 https 及重定向">
+<meta property="og:url" content="http://imoegirl.com/2020/04/12/configure-nginx-https-and-redirect/index.html">
+<meta property="og:site_name" content="萌一小栈">
+<meta property="og:description" content="将博客放在自己的VPS上，免不了配置 nginx 及 https，如果不配置 https，浏览器上**不安全**那三个字，实在是太刺眼。所以这篇博客，将记录整个折腾过程。  nginx 的安装 https 的证书配置 http 重定向到 https www 重定向到非不带 www 的域名  接下来的操作，都是在 Ubuntu 18.04 版本上进行的。 域名解析的配置首先要先自己的域名解析到自己的">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-04-12T10:49:38.000Z">
+<meta property="article:modified_time" content="2021-08-21T06:33:54.312Z">
+<meta property="article:author" content="iMoegirl">
+<meta property="article:tag" content="Ubuntu">
+<meta property="article:tag" content="VPS">
+<meta property="article:tag" content="Nginx">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/atom-one-dark.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">萌一小栈</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        nginx 配置 https 及重定向
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2020/04/" class="post-meta__date button">2020-04-12</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>将博客放在自己的VPS上，免不了配置 nginx 及 https，如果不配置 https，浏览器上**<code>不安全</code>**那三个字，实在是太刺眼。所以这篇博客，将记录整个折腾过程。</p>
+<ul>
+<li>nginx 的安装</li>
+<li>https 的证书配置</li>
+<li>http 重定向到 https</li>
+<li>www 重定向到非不带 www 的域名</li>
+</ul>
+<p>接下来的操作，都是在 Ubuntu 18.04 版本上进行的。</p>
+<h2 id="域名解析的配置"><a href="#域名解析的配置" class="headerlink" title="域名解析的配置"></a>域名解析的配置</h2><p>首先要先自己的域名解析到自己的 VPS，需要配置两条A记录，一条是 @，一条是 www，都是指向自己的 VPS IP。</p>
+<h2 id="安装-nginx"><a href="#安装-nginx" class="headerlink" title="安装 nginx"></a>安装 nginx</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">apt install nginx</span><br></pre></td></tr></table></figure>
+
+<h2 id="申请-ssl-证书"><a href="#申请-ssl-证书" class="headerlink" title="申请 ssl 证书"></a>申请 ssl 证书</h2><p>这里，我们使用腾讯云免费的证书，访问 <a target="_blank" rel="noopener" href="https://console.qcloud.com/ssl">https://console.qcloud.com/ssl</a>，然后点击页面上的 <strong>申请免费证书</strong>，然后填写信息，注意在域名身份认证时，选择 <strong>手动DNS验证</strong>，然后点击确认申请，根据给出的提示，在自己的域名上配置TXT解析，等待一段时间，解析成功后，下载证书。</p>
+<p>下载下来的是一个压缩包，里面有一个 <strong>Nginx</strong> 目录，这个目录里有两个文件，<strong>xxx.crt</strong> 和 <strong>xxx.key</strong>。需要将这两个文件上传到自己的 VPS。放在 /etc/nginx/ssl 这个目录下，如果 ssl 这个目录不存在，就使用命令 <code>mkdir /etc/nginx/ssl</code> 创建目录。</p>
+<h2 id="创建网站资源目录"><a href="#创建网站资源目录" class="headerlink" title="创建网站资源目录"></a>创建网站资源目录</h2><p>首先创建我们的网站资源目录，假设我们放在 /var/www/imoegirl.com 这个目录下。注意 imoegirl.com 是一个目录，如果不存在，就先使用 mkdir 创建。imoegirl.com 可以换其他名字。</p>
+<p>为了测试，我们在 imoegirl.com 这个目录下新建一个 index.html，内容如下</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello iMoegirl<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="配置-nginx"><a href="#配置-nginx" class="headerlink" title="配置 nginx"></a>配置 nginx</h2><p>接下来就是配置 nginx，按下面的步骤进行</p>
+<ol>
+<li>删除默认的配置文件<br> <code>rm /etc/nginx/sites-enabled/default</code></li>
+<li>创建我们自己的配置文件，imoegirl.com 可以换成自己的名字，但是必须以 .conf 结尾<br> <code>vim /etc/nginx/conf.d/imoegirl.com.conf</code></li>
+<li>imoegirl.com.conf 的内容如下，注意将代码中 <a href="https://imoegirl.com/">https://imoegirl.com</a> 换成自己的域名</li>
+</ol>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下面这段，是将 http 重定向到 https，不管带不带 www</span></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">80</span> default_server;</span><br><span class="line">    <span class="attribute">listen</span> [::]:<span class="number">80</span> default_server;</span><br><span class="line">    <span class="attribute">server_name</span> _;</span><br><span class="line">    <span class="attribute">return</span> <span class="number">301</span> https://imoegirl.com$request_uri;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下面这一段，是处理带 www 的域名</span></span><br><span class="line"><span class="comment"># 最后会重定向到 不带 www 域名</span></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">443</span> ssl http2;</span><br><span class="line">    <span class="attribute">server_name</span> www.imoegirl.com;</span><br><span class="line">    <span class="attribute">ssl_certificate</span> /etc/nginx/ssl/imoegirl.com.crt;</span><br><span class="line">    <span class="attribute">ssl_certificate_key</span> /etc/nginx/ssl/imoegirl.com.key;</span><br><span class="line">    <span class="attribute">ssl_session_cache</span> shared:SSL:<span class="number">1m</span>;</span><br><span class="line">    <span class="attribute">ssl_session_timeout</span> <span class="number">5m</span>;</span><br><span class="line">    <span class="attribute">keepalive_timeout</span> <span class="number">70</span>;</span><br><span class="line">    <span class="attribute">root</span> /var/www/imoegirl.com;</span><br><span class="line">    <span class="attribute">index</span> index.html index.htm index.nginx-debian.html;</span><br><span class="line">    <span class="attribute">location</span> / &#123;</span><br><span class="line">        <span class="comment"># First attempt to serve request as file, then</span></span><br><span class="line">        <span class="comment"># as directory, then fall back to displaying a 404.</span></span><br><span class="line">        <span class="attribute">try_files</span> $uri $uri/ =<span class="number">404</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="attribute">return</span> <span class="number">301</span> https://imoegirl.com$request_uri;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下面这一段，是处理不带 www 的域名，也就是最终我们想要的</span></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">443</span> ssl http2;</span><br><span class="line">    <span class="attribute">server_name</span> imoegirl.com;</span><br><span class="line">    <span class="attribute">ssl_certificate</span> /etc/nginx/ssl/imoegirl.com.crt;</span><br><span class="line">    <span class="attribute">ssl_certificate_key</span> /etc/nginx/ssl/imoegirl.com.key;</span><br><span class="line">    <span class="attribute">ssl_session_cache</span> shared:SSL:<span class="number">1m</span>;</span><br><span class="line">    <span class="attribute">ssl_session_timeout</span> <span class="number">5m</span>;</span><br><span class="line">    <span class="attribute">keepalive_timeout</span> <span class="number">70</span>;</span><br><span class="line">    <span class="attribute">root</span> /var/www/imoegirl.com;</span><br><span class="line">    <span class="attribute">index</span> index.html index.htm index.nginx-debian.html;</span><br><span class="line">    <span class="attribute">location</span> / &#123;</span><br><span class="line">        <span class="comment"># First attempt to serve request as file, then</span></span><br><span class="line">        <span class="comment"># as directory, then fall back to displaying a 404.</span></span><br><span class="line">        <span class="attribute">try_files</span> $uri $uri/ =<span class="number">404</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码，注意几个地方</p>
+<ol start="0">
+<li>imoegirl.com 都需要换成自己的域名</li>
+<li>ssl_certificate 换成自己的证书文件路径</li>
+<li>ssl_certificate_key 换成自己的 key 文件路径</li>
+<li>root 后面跟的是自己的网站资源路径</li>
+</ol>
+<h2 id="重启-nginx"><a href="#重启-nginx" class="headerlink" title="重启 nginx"></a>重启 nginx</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">service nginx restart</span><br></pre></td></tr></table></figure>
+
+<p>所有配置结束，可以访问自己的域名测试一下。</p>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>Author: </strong>iMoegirl
+        </p>
+        <p>
+            <strong>
+                Permalink: 
+            </strong>
+            <a href="http://imoegirl.com/2020/04/12/configure-nginx-https-and-redirect/">http://imoegirl.com/2020/04/12/configure-nginx-https-and-redirect/</a>
+        </p>
+        
+            <strong>
+                <p>任何技术问题，可加微信交流，微信: ifloop</p>
+
+            </strong>
+        
+            <strong>
+                <p>搜索并关注微信公众号 [ 萌一小栈 ] 可及时订阅最新技术文章</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>updated at 2021-08-21</p></div> 
+    <div class="post-entry__tags"><a href="/tags/Ubuntu/" class="post-tags__link button"># Ubuntu</a><a href="/tags/VPS/" class="post-tags__link button"># VPS</a><a href="/tags/Nginx/" class="post-tags__link button"># Nginx</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2020/04/12/rust-syntax-summary-06/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            Rust 基础 | 常用集合数据类型
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2020/04/05/rust-syntax-summary-05/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            Rust 基础 | 枚举、匹配
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>Comments</h4>
+    
+    
+    
+    
+    
+    <div id="gitalk-container"></div>
+
+    
+    
+    
+    
+    
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">萌一小栈</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?ae464fe0e62cef297c26908427b0e7bd';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    <script>
+        function loadComment() {
+            let e, i;
+            (e = document.createElement("script")).src = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js',
+            document.body.appendChild(e);
+            e.onload = () => {
+                var gitalk = new Gitalk({
+                    clientID: '5b5aeaa767a06f6c23a4',
+                    clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+                    repo: 'imoegirl.github.io',
+                    owner: 'imoegirl',
+                    admin: 'imoegirl',
+                    id: window.location.pathname,
+                    distractionFreeMode: false
+                });
+                gitalk.render('gitalk-container');
+            };
+            (i = document.createElement("link")).rel = "stylesheet",
+            i.href = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css',
+            document.head.appendChild(i);
+        }
+    
+        var runningOnBrowser = typeof window !== "undefined";
+        var isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+        var supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    
+        setTimeout(function () {
+            if (!isBot && supportsIntersectionObserver) {
+                var comment_observer = new IntersectionObserver(function(entries) {
+                    if (entries[0].isIntersecting) {
+                        loadComment();
+                        comment_observer.disconnect();
+                    }
+                }, { threshold: [0] });
+                comment_observer.observe(document.getElementById('comment'));
+            } else {
+                loadComment();
+            }
+        }, 1);
+    </script>
+
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

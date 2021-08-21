@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    
+    
+        <link rel="mask-icon" href="/images/favicon.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>使用 Unity 实现漂亮的数学曲面(下) | 萌一小栈</title>
+
+
+    <meta name="keywords" content="游戏开发">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="上一篇博客我们实现了一些简单的数学曲面，这一节我们将继续更复杂的数学曲面展示，所有资源完全承接上一篇内容。 2.5 创建一个涟漪效果先来看一下最终要实现的效果图  我们一步一步来实现这个效果。首先，要创建一个基于到原点距离正弦波。而这个距离，我们使用毕达哥拉斯定理也就是勾股定理 $a^2 + b^2 &#x3D; c^2$ 。对于这个效果来说，我们是基于XZ坐标来求Y坐标的，所以也就是 $\sqrt{x^2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 Unity 实现漂亮的数学曲面(下)">
+<meta property="og:url" content="http://imoegirl.com/2020/01/16/unity-basis-03-math-curve2/index.html">
+<meta property="og:site_name" content="萌一小栈">
+<meta property="og:description" content="上一篇博客我们实现了一些简单的数学曲面，这一节我们将继续更复杂的数学曲面展示，所有资源完全承接上一篇内容。 2.5 创建一个涟漪效果先来看一下最终要实现的效果图  我们一步一步来实现这个效果。首先，要创建一个基于到原点距离正弦波。而这个距离，我们使用毕达哥拉斯定理也就是勾股定理 $a^2 + b^2 &#x3D; c^2$ 。对于这个效果来说，我们是基于XZ坐标来求Y坐标的，所以也就是 $\sqrt{x^2">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U027cfe0c0e5e4540a12c83d6bff5366cT.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Uca685f44a3ad46eb9a3e47edcc1c436cw.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U97179cfbd49247758335da893ef237e8B.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U5ff00642307c45ff9ba6d6efc8d0cf61T.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U9dd6ca8a87da4c1aa9f927bc884de036O.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U9abcfba4406f4464a7fedc7962c367b0T.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U3c402091ff1746e59766bda4f3495cafL.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U4f22a4c0d9524f54bf624e371d06f9bcl.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U26d2eeacacbd42db96291aef7b8b8348A.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U27b077a4b0a24085b7f6af246441082c7.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Uc6a0934342ea4116af2c42a35dd44d51k.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U6d1a5e763dc1449299b5b9eb52a977ceC.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U779a1323d1764f01a2f69746bc9a3237l.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U53cba3b664354e46a31fc38e95c8ed2di.png">
+<meta property="article:published_time" content="2020-01-16T07:51:00.000Z">
+<meta property="article:modified_time" content="2021-08-21T06:57:36.981Z">
+<meta property="article:author" content="iMoegirl">
+<meta property="article:tag" content="游戏开发">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/U027cfe0c0e5e4540a12c83d6bff5366cT.png">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/atom-one-dark.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">萌一小栈</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        使用 Unity 实现漂亮的数学曲面(下)
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2020/01/" class="post-meta__date button">2020-01-16</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p><a href="https://imoegirl.com/2020/01/10/unity-basis-03-math-curve1/">上一篇博客</a>我们实现了一些简单的数学曲面，这一节我们将继续更复杂的数学曲面展示，所有资源完全承接上一篇内容。</p>
+<h2 id="2-5-创建一个涟漪效果"><a href="#2-5-创建一个涟漪效果" class="headerlink" title="2.5 创建一个涟漪效果"></a>2.5 创建一个涟漪效果</h2><p>先来看一下最终要实现的效果图</p>
+<p><video controls loop id="video-kindlypersonalharrierhawk" alt="Ripple GIF" height="140" width="200" autoplay="true" playsinline="" preload="auto" poster="https://thumbs.gfycat.com/KindlyPersonalHarrierhawk-mobile.jpg" tabindex="-1"><source src="https://thumbs.gfycat.com/KindlyPersonalHarrierhawk-mobile.mp4" type="video/mp4"><source src="https://giant.gfycat.com/KindlyPersonalHarrierhawk.webm" type="video/webm"><source src="https://giant.gfycat.com/KindlyPersonalHarrierhawk.mp4" type="video/mp4"><source src="https://thumbs.gfycat.com/KindlyPersonalHarrierhawk-mobile.mp4" type="video/mp4"></video></p>
+<p>我们一步一步来实现这个效果。首先，要创建一个基于到原点距离正弦波。而这个距离，我们使用毕达哥拉斯定理也就是勾股定理 $a^2 + b^2 = c^2$ 。对于这个效果来说，我们是基于XZ坐标来求Y坐标的，所以也就是 $\sqrt{x^2 + z^2}$ 。</p>
+<span id="more"></span>
+
+<p>在 Graph.cs 中添加一个新函数 <code>Ripple</code>，然后使用 <code>Mathf.Sqrt</code> 来计算距离。</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">float</span> <span class="title">Ripple</span>(<span class="params"><span class="built_in">float</span> x, <span class="built_in">float</span> z, <span class="built_in">float</span> t</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">float</span> d = Mathf.Sqrt(x * x + z * z);</span><br><span class="line">    <span class="built_in">float</span> y = d;</span><br><span class="line">    <span class="keyword">return</span> y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后别忘记将函数添加到数组中，名字添加到枚举中</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> GraphFunction[] functions =</span><br><span class="line">&#123;</span><br><span class="line">    SineFunction, </span><br><span class="line">    MultiSineFunction, </span><br><span class="line">    Sine2DFunction, </span><br><span class="line">    MultiSine2DFunction,</span><br><span class="line">    Ripple,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="built_in">enum</span> GraphFunctionName</span><br><span class="line">&#123;</span><br><span class="line">    Sine,</span><br><span class="line">    MultiSine,</span><br><span class="line">    Sine2D,</span><br><span class="line">    MultiSine2D,</span><br><span class="line">    Ripple,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当前运行后效果图如下</p>
+<p><img src="https://ae01.alicdn.com/kf/U027cfe0c0e5e4540a12c83d6bff5366cT.png" alt="p002401_distance"></p>
+<p>现在我们拥有了一个静态的圆锥体形状，要创建波纹，我们要使用 $f(x,z,t) = sin(πD)$，这里的 D 就是距离。</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">float</span> d = Mathf.Sqrt(x * x + z * z);</span><br><span class="line"><span class="built_in">float</span> y = Mathf.Sin(pi * d);</span><br><span class="line"><span class="keyword">return</span> y;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://ae01.alicdn.com/kf/Uca685f44a3ad46eb9a3e47edcc1c436cw.png" alt="p002402_sin-d"></p>
+<p>目前的结果并没有显示出太多的波形，所以我们提高频率</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">float</span> y = Mathf.Sin(<span class="number">4f</span> * pi * d);</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://ae01.alicdn.com/kf/U97179cfbd49247758335da893ef237e8B.png" alt="p002403_sin-d-higher-frequency"></p>
+<p>现在的形状已经开始接近最终目标效果，但是波动的幅度有点太极端了。我们要以通过降低振幅来调整图形的形状，但是由于我们的波形是依赖于距离的，所以我们直接调整距离即可。例如使用 $\frac{1}{10D}$，为了避免因为距离为0而导致的除0错误，我们使用 $\frac{1}{1 + 10D}$</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">float</span> <span class="title">Ripple</span>(<span class="params"><span class="built_in">float</span> x, <span class="built_in">float</span> z, <span class="built_in">float</span> t</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">float</span> d = Mathf.Sqrt(x * x + z * z);</span><br><span class="line">    <span class="built_in">float</span> y = Mathf.Sin(<span class="number">4f</span> * pi * d);</span><br><span class="line">    y /= <span class="number">1f</span> + <span class="number">10f</span> * d;</span><br><span class="line">    <span class="keyword">return</span> y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://ae01.alicdn.com/kf/U5ff00642307c45ff9ba6d6efc8d0cf61T.png" alt="p002404_sin-d-scaled"></p>
+<p>现在的效果已经和最终的效果很像了对不对，接下来只需要将时间变量加上即可拥有动画效果。</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">float</span> <span class="title">Ripple</span>(<span class="params"><span class="built_in">float</span> x, <span class="built_in">float</span> z, <span class="built_in">float</span> t</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">float</span> d = Mathf.Sqrt(x * x + z * z);</span><br><span class="line">    <span class="built_in">float</span> y = Mathf.Sin(pi * (<span class="number">4f</span> * d - t));</span><br><span class="line">    y /= <span class="number">1f</span> + <span class="number">10f</span> * d;</span><br><span class="line">    <span class="keyword">return</span> y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行看效果。</p>
+<p><video controls loop id="video-kindlypersonalharrierhawk" alt="Ripple GIF" height="140" width="200" autoplay="true" playsinline="" preload="auto" poster="https://thumbs.gfycat.com/KindlyPersonalHarrierhawk-mobile.jpg" tabindex="-1"><source src="https://thumbs.gfycat.com/KindlyPersonalHarrierhawk-mobile.mp4" type="video/mp4"><source src="https://giant.gfycat.com/KindlyPersonalHarrierhawk.webm" type="video/webm"><source src="https://giant.gfycat.com/KindlyPersonalHarrierhawk.mp4" type="video/mp4"><source src="https://thumbs.gfycat.com/KindlyPersonalHarrierhawk-mobile.mp4" type="video/mp4"></video></p>
+<h2 id="3-从一维到三维"><a href="#3-从一维到三维" class="headerlink" title="3 从一维到三维"></a>3 从一维到三维</h2><p>在此之前的代码中，我们都是通过X和Z去定义Y，这样可以表现出很多效果，但是，限制太大。所以我们接下来要修改之前的函数，使输出单一的 <code>float</code> 变为输出 <code>Vector3</code>。</p>
+<h2 id="3-1-三维函数"><a href="#3-1-三维函数" class="headerlink" title="3.1 三维函数"></a>3.1 三维函数</h2><p>如果我们的函数改为输出 <code>Vector3</code>，这将允许我们创建任意的曲面。</p>
+<p>例如，函数 $f(x,z) = \begin{bmatrix} x \\ 0 \\ z \end{bmatrix}$ 用来描述XZ平面。而函数 $f(x,z) = \begin{bmatrix} x \\ z \\ 0 \end{bmatrix}$ 用来描述XY平面。</p>
+<p>由于参数的输入值，并不一定是 X 和 Z，所以这里用用 x 和 z 来作为参数名就不太合适了，所以我们改为使用 u 和 v。函数就像 $f(u,v) = \begin{bmatrix} u + v \\ uv \\ \frac{u}{v} \end{bmatrix}$ 这样。</p>
+<p>接下来统一修改一下我们之前的代码。</p>
+<p>首先修改 GraphFunction 的委托定义代码，将返回值类型改为 <code>Vector3</code>，形参名改为 u v。</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">delegate</span> Vector3 <span class="title">GraphFunction</span>(<span class="params"><span class="built_in">float</span> u, <span class="built_in">float</span> v, <span class="built_in">float</span> t</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>接下来修改各个函数，对于Sine函数来说，它所要表现的公式已经变为 $f(u,v,t) = \begin{bmatrix} u \\ sin(π(u + t)) \\ v \end{bmatrix}$。</p>
+<p>修改我们已有的函数代码如下</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Vector3 <span class="title">SineFunction</span>(<span class="params"><span class="built_in">float</span> x, <span class="built_in">float</span> z, <span class="built_in">float</span> t</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">float</span> y = Mathf.Sin(pi * (x + t));</span><br><span class="line">    Vector3 p = <span class="keyword">new</span> Vector3(x, y, z);</span><br><span class="line">    <span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Vector3 <span class="title">MultiSineFunction</span>(<span class="params"><span class="built_in">float</span> x, <span class="built_in">float</span> z, <span class="built_in">float</span> t</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">float</span> y = Mathf.Sin(pi * (x + t));</span><br><span class="line">    y += Mathf.Sin(<span class="number">2f</span> * pi * (x + <span class="number">2f</span> * t)) / <span class="number">2f</span>;</span><br><span class="line">    y *= <span class="number">2f</span> / <span class="number">3f</span>;</span><br><span class="line">    Vector3 p = <span class="keyword">new</span> Vector3(x, y, z);</span><br><span class="line">    <span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Vector3 <span class="title">Sine2DFunction</span>(<span class="params"><span class="built_in">float</span> x, <span class="built_in">float</span> z, <span class="built_in">float</span> t</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">float</span> y = Mathf.Sin(pi * (x + t));</span><br><span class="line">    y += Mathf.Sin(pi * (z + t));</span><br><span class="line">    y *= <span class="number">0.5f</span>;</span><br><span class="line">    Vector3 p = <span class="keyword">new</span> Vector3(x, y, z);</span><br><span class="line">    <span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Vector3 <span class="title">MultiSine2DFunction</span>(<span class="params"><span class="built_in">float</span> x, <span class="built_in">float</span> z, <span class="built_in">float</span> t</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">float</span> y = <span class="number">4f</span> * Mathf.Sin(pi * x + z + t * <span class="number">0.5f</span>);</span><br><span class="line">    y += Mathf.Sin(pi * (x + t));</span><br><span class="line">    y += Mathf.Sin(<span class="number">2f</span> * pi * (z + <span class="number">2f</span> * t)) * <span class="number">0.5f</span>;</span><br><span class="line">    y *= <span class="number">1f</span> / <span class="number">5.5f</span>;</span><br><span class="line">    Vector3 p = <span class="keyword">new</span> Vector3(x, y, z);</span><br><span class="line">    <span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Vector3 <span class="title">Ripple</span>(<span class="params"><span class="built_in">float</span> x, <span class="built_in">float</span> z, <span class="built_in">float</span> t</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">float</span> d = Mathf.Sqrt(x * x + z * z);</span><br><span class="line">    <span class="built_in">float</span> y = Mathf.Sin(pi * (<span class="number">4f</span> * d - t));</span><br><span class="line">    y /= <span class="number">1f</span> + <span class="number">10f</span> * d;</span><br><span class="line">    Vector3 p = <span class="keyword">new</span> Vector3(x, y, z);</span><br><span class="line">    <span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>修改 <code>Update</code> 函数的代码如下</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Update</span>(<span class="params"></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">float</span> t = Time.time;</span><br><span class="line">    GraphFunction f = functions[(<span class="built_in">int</span>)function];</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">float</span> step = <span class="number">2f</span> / resolution;</span><br><span class="line">    <span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span>, z = <span class="number">0</span>; z &lt; resolution; ++z)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">float</span> v = (z + <span class="number">0.5f</span>) * step - <span class="number">1f</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="built_in">int</span> x = <span class="number">0</span>; x &lt; resolution; ++x, ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">float</span> u = (x + <span class="number">0.5f</span>) * step - <span class="number">1f</span>;</span><br><span class="line">            points[i].localPosition = f(u, v, t);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在初始化的时候，其实并不需要关心每一个点的位置，因为会在 Update 时重新计算，所以可以简化 <code>Awake</code> 函数，代码如下</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Awake</span>(<span class="params"></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">float</span> step = <span class="number">2f</span> / resolution;</span><br><span class="line">    Vector3 scale = Vector3.one * step;</span><br><span class="line">    points = <span class="keyword">new</span> Transform[resolution * resolution];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; points.Length; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        Transform point = Instantiate(pointPrefab);</span><br><span class="line">        point.localScale = scale;</span><br><span class="line">        point.SetParent(transform, <span class="literal">false</span>);</span><br><span class="line">        points[i] = point;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-2-创建一个圆柱体"><a href="#3-2-创建一个圆柱体" class="headerlink" title="3.2 创建一个圆柱体"></a>3.2 创建一个圆柱体</h2><p>为了证明我们已经可以不限于点的(X,Z)坐标，所以接下来我们创建一个圆柱体，以及动画。</p>
+<p>还是老路子，先添加一个函数 <code>Cylinder</code>，不要忘记加到函数数组以及枚举中。</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Vector3 <span class="title">Cylinder</span> (<span class="params"><span class="built_in">float</span> u, <span class="built_in">float</span> v, <span class="built_in">float</span> t</span>)</span> </span><br><span class="line">&#123;</span><br><span class="line">    Vector3 p;</span><br><span class="line">    p.x = <span class="number">0f</span>;</span><br><span class="line">    p.y = <span class="number">0f</span>;</span><br><span class="line">    p.z = <span class="number">0f</span>;</span><br><span class="line">    <span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一个圆柱体，首先得是一个圆形的，对于一个圆来说，所有的点可以被定义为 $\begin{bmatrix} sin(θ) \\ cos(θ) \end{bmatrix}$，而θ的值是从0到2π。我们这里使用 u 来代替 θ。所以，在我们的例子中，创建一个XZ平面的圆，公式就变为了 $f(u) = \begin{bmatrix} sin(πu) \\ 0 \\ cos(πu) \end{bmatrix}$。代码如下</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Vector3 <span class="title">Cylinder</span> (<span class="params"><span class="built_in">float</span> u, <span class="built_in">float</span> v, <span class="built_in">float</span> t</span>)</span> </span><br><span class="line">&#123;</span><br><span class="line">    Vector3 p;</span><br><span class="line">    p.x = Mathf.Sin(pi * u);</span><br><span class="line">    p.y = <span class="number">0f</span>;</span><br><span class="line">    p.z = Mathf.Cos(pi * u);</span><br><span class="line">    <span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当前的运行效果如下</p>
+<p><img src="https://ae01.alicdn.com/kf/U9dd6ca8a87da4c1aa9f927bc884de036O.png" alt="p002405_circle"></p>
+<p>接下来，使y值等于v，这样我们就可以通过向上堆叠平面圆，而创造出一个圆柱</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Vector3 <span class="title">Cylinder</span> (<span class="params"><span class="built_in">float</span> u, <span class="built_in">float</span> v, <span class="built_in">float</span> t</span>)</span> </span><br><span class="line">&#123;</span><br><span class="line">    Vector3 p;</span><br><span class="line">    p.x = Mathf.Sin(pi * u);</span><br><span class="line">    p.y = v;</span><br><span class="line">    p.z = Mathf.Cos(pi * u);</span><br><span class="line">    <span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://ae01.alicdn.com/kf/U9abcfba4406f4464a7fedc7962c367b0T.png" alt="p002406_cylinder"></p>
+<p>在此之前，我们是以单位圆为基础，来创造圆柱的。其实可以通过一个权值R，来修改圆柱的直径，也就是x和z的值，来达到更多的效果，所以函数就变为了 $f(u,v) = \begin{bmatrix} Rsin(πu) \\ v \\ Rcos(πu) \end{bmatrix}$</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Vector3 <span class="title">Cylinder</span> (<span class="params"><span class="built_in">float</span> u, <span class="built_in">float</span> v, <span class="built_in">float</span> t</span>)</span> </span><br><span class="line">&#123;</span><br><span class="line">    Vector3 p;</span><br><span class="line">    <span class="built_in">float</span> r = <span class="number">1f</span>;</span><br><span class="line">    p.x = r * Mathf.Sin(pi * u);</span><br><span class="line">    p.y = v;</span><br><span class="line">    p.z = r * Mathf.Cos(pi * u);</span><br><span class="line">    <span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过修改 R 值，可以造成不同的效果，例如 $R = 1 + \frac{sin(6πu)}{5}$</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">float</span> r = <span class="number">1f</span> + Mathf.Sin(<span class="number">6f</span> * pi * u) * <span class="number">0.2f</span>;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://ae01.alicdn.com/kf/U3c402091ff1746e59766bda4f3495cafL.png" alt="p002407_wobbly-u-cylinder"></p>
+<p>我们也可以让 R 值 依赖说 v，例如 $R = 1 + \frac{sin(2πv)}{5}$</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">float</span> r = <span class="number">1f</span> + Mathf.Sin(<span class="number">2f</span> * pi * v) * <span class="number">0.2f</span>;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://ae01.alicdn.com/kf/U4f22a4c0d9524f54bf624e371d06f9bcl.png" alt="p002408_wobbly-v-cylinder"></p>
+<p>也可以同时使用 u 和 v 来创建一个倾斜的波浪，同时加上时间参数t，就可以有动画效果。</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">float</span> r = <span class="number">0.8f</span> + Mathf.Sin(pi * (<span class="number">6f</span> * u + <span class="number">2f</span> * v + t)) * <span class="number">0.2f</span>;</span><br></pre></td></tr></table></figure>
+
+<p><video controls loop id="video-artisticshimmeringarchaeopteryx" alt="Twisted Cylinder GIF" height="200" width="180" autoplay="true" playsinline="" preload="auto" poster="https://thumbs.gfycat.com/ArtisticShimmeringArchaeopteryx-mobile.jpg" tabindex="-1"><source src="https://thumbs.gfycat.com/ArtisticShimmeringArchaeopteryx-mobile.mp4" type="video/mp4"><source src="https://giant.gfycat.com/ArtisticShimmeringArchaeopteryx.webm" type="video/webm"><source src="https://giant.gfycat.com/ArtisticShimmeringArchaeopteryx.mp4" type="video/mp4"><source src="https://thumbs.gfycat.com/ArtisticShimmeringArchaeopteryx-mobile.mp4" type="video/mp4"></video></p>
+<h2 id="3-3-创建一个球体"><a href="#3-3-创建一个球体" class="headerlink" title="3.3 创建一个球体"></a>3.3 创建一个球体</h2><p>前面创建了圆柱体，接下来我们来创造一个球体。首先复制<code>Cylinder</code>函数，然后重命名为<code>Sphere</code>。我们可以通过将圆柱体的两级上的点挤压到一起，达到创造一个球体的目的。使用公式 $R = cos(\frac{πv}{2})$</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Vector3 <span class="title">Sphere</span> (<span class="params"><span class="built_in">float</span> u, <span class="built_in">float</span> v, <span class="built_in">float</span> t</span>)</span> &#123;</span><br><span class="line">    Vector3 p;</span><br><span class="line">    <span class="built_in">float</span> r = Mathf.Cos(pi * <span class="number">0.5f</span> * v);</span><br><span class="line">    p.x = r * Mathf.Sin(pi * u);</span><br><span class="line">    p.y = v;</span><br><span class="line">    p.z = r * Mathf.Cos(pi * u);</span><br><span class="line">    <span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://ae01.alicdn.com/kf/U26d2eeacacbd42db96291aef7b8b8348A.png" alt="p002409_sphere-almost"></p>
+<p>有点接近了，但还不是个正常的球。这是因为，一个圆，需要同时使用sine和cosine，而我们目前只使用了cosine，也就是上面 r 的值。所以，还需要在Y上使用sine。也就是 $sin(\frac{πv}{2})$</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line">p.y = Mathf.Sin(pi * <span class="number">0.5f</span> * v);</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://ae01.alicdn.com/kf/U27b077a4b0a24085b7f6af246441082c7.png" alt="p002410_sphere"></p>
+<p>上面的球体其实是不均匀的，因为我们是通过堆叠不同半径的圆而构造出来的。</p>
+<p>为了控制球体的半径，进而方便改变形状，我们将修改公式，使用 $f(u,v) = \begin{bmatrix} Ssin(πu)\\Rsin(\frac{πv}{2})\\Scos(πu)\end{bmatrix}$。而 $S = Rcos(\frac{πv}{2})$，R 是半径。</p>
+<p>为了使用动画控制球体的半径，这次我们将对u和v分开使用sine函数。 $R = \frac{4}{5} + \frac{sin(π(6u + t))}{10} + \frac{sin(π(4v + t))}{10}$</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">float</span> r = <span class="number">0.8f</span> + Mathf.Sin(pi * (<span class="number">6f</span> * u + t)) * <span class="number">0.1f</span>;</span><br><span class="line">r += Mathf.Sin(pi * (<span class="number">4f</span> * v + t)) * <span class="number">0.1f</span>;</span><br><span class="line"><span class="built_in">float</span> s = r * Mathf.Cos(pi * <span class="number">0.5f</span> * v);</span><br><span class="line">p.x = s * Mathf.Sin(pi * u);</span><br><span class="line">p.y = r * Mathf.Sin(pi * <span class="number">0.5f</span> * v);</span><br><span class="line">p.z = s * Mathf.Cos(pi * u);</span><br></pre></td></tr></table></figure>
+
+<p><video controls loop id="video-waryunrulybrocketdeer" alt="Sphere GIF" height="200" width="200" autoplay="true" playsinline="" preload="auto" poster="https://thumbs.gfycat.com/WaryUnrulyBrocketdeer-mobile.jpg" tabindex="-1"><source src="https://thumbs.gfycat.com/WaryUnrulyBrocketdeer-mobile.mp4" type="video/mp4"><source src="https://giant.gfycat.com/WaryUnrulyBrocketdeer.webm" type="video/webm"><source src="https://giant.gfycat.com/WaryUnrulyBrocketdeer.mp4" type="video/mp4"><source src="https://thumbs.gfycat.com/WaryUnrulyBrocketdeer-mobile.mp4" type="video/mp4"></video></p>
+<h2 id="3-4-创建一个环面"><a href="#3-4-创建一个环面" class="headerlink" title="3.4 创建一个环面"></a>3.4 创建一个环面</h2><p>首先，复制 <code>Sphere</code> 函数，然后改名为 <code>Torus</code></p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Vector3 <span class="title">Torus</span> (<span class="params"><span class="built_in">float</span> u, <span class="built_in">float</span> v, <span class="built_in">float</span> t</span>)</span> &#123;</span><br><span class="line">    Vector3 p;</span><br><span class="line">    <span class="built_in">float</span> s = Mathf.Cos(pi * <span class="number">0.5f</span> * v);</span><br><span class="line">    p.x = s * Mathf.Sin(pi * u);</span><br><span class="line">    p.y = Mathf.Sin(pi * <span class="number">0.5f</span> * v);</span><br><span class="line">    p.z = s * Mathf.Cos(pi * u);</span><br><span class="line">    <span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>首先，给s添加一个常数，例如 0.5</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">float</span> s = Mathf.Cos(pi * <span class="number">0.5f</span> * v) + <span class="number">0.5f</span>;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://ae01.alicdn.com/kf/Uc6a0934342ea4116af2c42a35dd44d51k.png" alt="p002411_pulling-apart-sphere"></p>
+<p>现在，我们得到了半个环面，接下来，我们需要使用v来描述整个圆。</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">float</span> s = Mathf.Cos(pi * v) + <span class="number">0.5f</span>;</span><br><span class="line">p.x = s * Mathf.Sin(pi * u);</span><br><span class="line">p.y = Mathf.Sin(pi * v);</span><br><span class="line">p.z = s * Mathf.Cos(pi * u);</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://ae01.alicdn.com/kf/U6d1a5e763dc1449299b5b9eb52a977ceC.png" alt="p002412_torus-spindle"></p>
+<p>接下来，我们需要将公式变为，$f(u,v) = \begin{bmatrix}Ssin(πu)\\sin(πv)\\Scos(πu)\end{bmatrix}$，而 $S = cos(πv) + R_1$</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">float</span> r1 = <span class="number">1f</span>;</span><br><span class="line"><span class="built_in">float</span> s = Mathf.Cos(pi * v) + r1;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://ae01.alicdn.com/kf/U779a1323d1764f01a2f69746bc9a3237l.png" alt="p002413_torus-horn"></p>
+<p>使$R_1$大于等于1，将在环面的中间打开一个洞，也就是说会形成一个圆环。我们再添加一个值，$R_2$用于控制圆环半径。$f(u,v) = \begin{bmatrix}Ssin(πu)\\R_2sin(πv)\\Scos(πu)\end{bmatrix}$，而$S=R_2cos(πv) + R_1$</p>
+<p>我们将$R_1$设为1，$R_2$设为0.5</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">float</span> r1 = <span class="number">1f</span>;</span><br><span class="line"><span class="built_in">float</span> r2 = <span class="number">0.5f</span>;</span><br><span class="line"><span class="built_in">float</span> s = r2 * Mathf.Cos(pi * v) + r1;</span><br><span class="line">p.x = s * Mathf.Sin(pi * u);</span><br><span class="line">p.y = r2 * Mathf.Sin(pi * v);</span><br><span class="line">p.z = s * Mathf.Cos(pi * u);</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://ae01.alicdn.com/kf/U53cba3b664354e46a31fc38e95c8ed2di.png" alt="p002414_torus-ring"></p>
+<p>接下来就是添加动画，要注意一点是，需要确保环面在[-1,1]之间</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">float</span> r1 = <span class="number">0.65f</span> + Mathf.Sin(pi * (<span class="number">6f</span> * u + t)) * <span class="number">0.1f</span>;</span><br><span class="line"><span class="built_in">float</span> r2 = <span class="number">0.2f</span> + Mathf.Sin(pi * (<span class="number">4f</span> * v + t)) * <span class="number">0.05f</span>;</span><br></pre></td></tr></table></figure>
+
+<p><video controls loop id="video-improbablegleefuldungbeetle" alt="Torus GIF" height="220" width="320" autoplay="true" playsinline="" preload="auto" poster="https://thumbs.gfycat.com/ImprobableGleefulDungbeetle-poster.jpg" tabindex="-1"><source src="https://giant.gfycat.com/ImprobableGleefulDungbeetle.webm" type="video/webm"><source src="https://giant.gfycat.com/ImprobableGleefulDungbeetle.mp4" type="video/mp4"><source src="https://thumbs.gfycat.com/ImprobableGleefulDungbeetle-mobile.mp4" type="video/mp4"></video></p>
+<p>到此，使用Unity实现漂亮的数学曲面结束。</p>
+<blockquote>
+<p>原文翻译自 <a target="_blank" rel="noopener" href="https://catlikecoding.com/unity/tutorials/basics/mathematical-surfaces/">Mathematical Surfaces Sculpting with Numbers</a><br>Github 代码下载 <a target="_blank" rel="noopener" href="https://catlikecoding.com/unity/tutorials/basics/mathematical-surfaces/leaving-the-grid/leaving-the-grid.unitypackage">leaving-the-grid</a></p>
+</blockquote>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>Author: </strong>iMoegirl
+        </p>
+        <p>
+            <strong>
+                Permalink: 
+            </strong>
+            <a href="http://imoegirl.com/2020/01/16/unity-basis-03-math-curve2/">http://imoegirl.com/2020/01/16/unity-basis-03-math-curve2/</a>
+        </p>
+        
+            <strong>
+                <p>任何技术问题，可加微信交流，微信: ifloop</p>
+
+            </strong>
+        
+            <strong>
+                <p>搜索并关注微信公众号 [ 萌一小栈 ] 可及时订阅最新技术文章</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>updated at 2021-08-21</p></div> 
+    <div class="post-entry__tags"><a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/" class="post-tags__link button"># 游戏开发</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2020/02/09/ligin-google-vps/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            使用外部工具登录Google VPS
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2020/01/10/unity-basis-03-math-curve1/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            使用 Unity 实现漂亮的数学曲面(上)
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>Comments</h4>
+    
+    
+    
+    
+    
+    <div id="gitalk-container"></div>
+
+    
+    
+    
+    
+    
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">萌一小栈</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?ae464fe0e62cef297c26908427b0e7bd';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+
+    <script>
+        if (typeof MathJax === 'undefined') {
+            window.MathJax = {
+                loader: {
+                    source: {
+                        '[tex]/amsCd': '[tex]/amscd',
+                        '[tex]/AMScd': '[tex]/amscd'
+                    }
+                },
+                tex: {
+                    inlineMath: {'[+]': [['$', '$']]},
+                    tags: 'ams'
+                },
+                options: {
+                    renderActions: {
+                        findScript: [10, doc => {
+                            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                                const display = !!node.type.match(/; *mode=display/);
+                                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                                const text = document.createTextNode('');
+                                node.parentNode.replaceChild(text, node);
+                                math.start = {node: text, delim: '', n: 0};
+                                math.end = {node: text, delim: '', n: 0};
+                                doc.math.push(math);
+                            });
+                        }, '', false],
+                        insertedScript: [200, () => {
+                            document.querySelectorAll('mjx-container').forEach(node => {
+                                let target = node.parentNode;
+                                if (target.nodeName.toLowerCase() === 'li') {
+                                    target.parentNode.classList.add('has-jax');
+                                }
+                            });
+                        }, '', false]
+                    }
+                }
+            };
+            (function () {
+                var script = document.createElement('script');
+                script.src = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js";
+                script.defer = true;
+                document.head.appendChild(script);
+            })();
+        } else {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    <script>
+        function loadComment() {
+            let e, i;
+            (e = document.createElement("script")).src = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js',
+            document.body.appendChild(e);
+            e.onload = () => {
+                var gitalk = new Gitalk({
+                    clientID: '5b5aeaa767a06f6c23a4',
+                    clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+                    repo: 'imoegirl.github.io',
+                    owner: 'imoegirl',
+                    admin: 'imoegirl',
+                    id: window.location.pathname,
+                    distractionFreeMode: false
+                });
+                gitalk.render('gitalk-container');
+            };
+            (i = document.createElement("link")).rel = "stylesheet",
+            i.href = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css',
+            document.head.appendChild(i);
+        }
+    
+        var runningOnBrowser = typeof window !== "undefined";
+        var isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+        var supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    
+        setTimeout(function () {
+            if (!isBot && supportsIntersectionObserver) {
+                var comment_observer = new IntersectionObserver(function(entries) {
+                    if (entries[0].isIntersecting) {
+                        loadComment();
+                        comment_observer.disconnect();
+                    }
+                }, { threshold: [0] });
+                comment_observer.observe(document.getElementById('comment'));
+            } else {
+                loadComment();
+            }
+        }, 1);
+    </script>
+
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

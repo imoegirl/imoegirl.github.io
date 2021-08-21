@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    
+    
+        <link rel="mask-icon" href="/images/favicon.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>我做了一个无法上架的彩票App | 萌一小栈</title>
+
+
+    <meta name="keywords" content="独立开发者">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="前两个月做了一个项目，彩票玩家，但是因为政策问题，无法上架。那就从技术的角度来聊一下这个产品。彩票玩家的规划是一个可以查看开奖信息，可以管理自己想要的彩票号码，可以查看历史开奖信息的App。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我做了一个无法上架的彩票App">
+<meta property="og:url" content="http://imoegirl.com/2021/07/11/unlisted-lottery-project/index.html">
+<meta property="og:site_name" content="萌一小栈">
+<meta property="og:description" content="前两个月做了一个项目，彩票玩家，但是因为政策问题，无法上架。那就从技术的角度来聊一下这个产品。彩票玩家的规划是一个可以查看开奖信息，可以管理自己想要的彩票号码，可以查看历史开奖信息的App。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://imoegirl.com/2021/07/11/unlisted-lottery-project/lottery_fans.png">
+<meta property="article:published_time" content="2021-07-11T14:33:28.000Z">
+<meta property="article:modified_time" content="2021-08-21T06:48:31.041Z">
+<meta property="article:author" content="iMoegirl">
+<meta property="article:tag" content="独立开发者">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://imoegirl.com/2021/07/11/unlisted-lottery-project/lottery_fans.png">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/atom-one-dark.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">萌一小栈</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        我做了一个无法上架的彩票App
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2021/07/" class="post-meta__date button">2021-07-11</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>前两个月做了一个项目，彩票玩家，但是因为政策问题，无法上架。那就从技术的角度来聊一下这个产品。彩票玩家的规划是一个可以查看开奖信息，可以管理自己想要的彩票号码，可以查看历史开奖信息的App。</p>
+<span id="more"></span>
+
+<p><img src="lottery_fans.png"></p>
+<p>这个项目目前的状态是，只上架了 Google Play，但这和没有上架区别不大。</p>
+<p>AppStore审核通不过，第一次拒绝原因是关于数据版权问题。修改Apple Store Connect产品信息页的一些配置，改了一点Bug，又提交了一次，还是被拒绝，但这次似乎不是因为产品了，收到苹果的删号警告，说违反了苹果的开发者协议，也不知道为什么，然后提交了申诉，现在也还没有收到答复。</p>
+<p>软件著作权的申请被要求提交彩票中心授权或合作开发的文件，无解。目前关于上架相关的情况就是这样，从产品的角度出发，死透。</p>
+<p>接下来就只能聊一下技术实现方面。</p>
+<h2 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h2><p>客户端这一块，还是用Unity做的。至于为什么不用原生，主要因为是我不会。其次，用Unity实现，也并没有什么不妥（对于这个App来说）。无论从开发效率，还是跨平台，还是产品的表现效果，都还不错。再加上之前的能用模块代码的积累，对于我来说使用 Unity 开发这个 App 是最优的选择。我觉得从产品的角度出发，一个产品到达用户手中，只要各方面好用，那用什么技术做出来的，对于用户来说就不是那么重要了。</p>
+<p>客户端有一个更新模块，启动后会拉取版本配置信息，对比版本号，如果远程配置的版本号比较大，就会弹出强制或非强制更新弹窗，点击更新后会跳转到AppStore。是的，这个模块只对iOS有效。对于国内Android来说，由于没有统一的市场，因为成本问题我也不想购买第三方存储服务，所以就直接在Android上关掉了这个功能。</p>
+<p>产品本身已经内置了彩票的大部分开奖数据，从上架那天之前的。由于彩票的开奖时间基本上是固定的，所以客户端会有一个协程，每隔1分钟判断系统时间是否大于配置的开奖时间，如果大于，并且当前缺少本期的开奖数据，就会向服务器请求。这样做，对于服务器的压力也比较小。</p>
+<p>客户端向服务器的请求内容，使用了 aes 加密，一定程度上防止了请求内容被破解。</p>
+<p>广告方面，使用了 Unity 的广告，经过测试，现在的填充还可以。</p>
+<p>推送方面，Android 没有加，因为太麻烦了，国内Android手机各个厂商都不统一，Google的firebase在国内又用不了。国内有第三方的推送服务，要收费，也不太想用。iOS版本使用了OneSignal插件，当然也需要在他们后台配置苹果的证书相关的东西。</p>
+<p>对于界面的设计，谈不上什么设计。就是找其他看起来设计不错的App，进行参考，很少有某个App的设计是可以完全拿来抄的，基本只能从形上参考一下，然后多找几个综合来考虑。先把布局确定好，然后颜色上因为是App，也不用太多的色彩。</p>
+<p>产品的具体逻辑就没什么好说的了，对于Unity来说就是UI的管理，以及UI的搭建。</p>
+<h2 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h2><p>服务器方面，使用了 Rust 来写的，终于把 Rust 用在了项目上。即使写的很烂，但是能跑，能满足需求，目前来说足够了。</p>
+<p>服务器主要就是两方面，一个是官网获取开奖数据，然后存入数据库。另一方面就是处理客户端的数据请求。从官网获取开奖数据使用了 reqwest。处理客户端请求使用了 actix-web。</p>
+<p>数据库方面使用了 diesel 和 PostgreSQL，这一块也折腾了好久，基本上现学现用。因为能满足最开始的需求，就没有上 Redis。</p>
+<p>客户端和服务器之间通信的请求数据使用了 aes 加密，服务器收到请求后，会先解密请求内容，如果解密不了，就直接抛弃。经过压力测试，在不加密的情况下，我那一年108块的垃圾服务器可以处理 70 req/s，但是加上加密，就只能处理 40 req/s 了，其实也还好，够用，毕竟已经死透了，即使没有死透，前期也够用。</p>
+<h2 id="然而"><a href="#然而" class="headerlink" title="然而"></a>然而</h2><p>项目虽然死透了，但是服务器方面学习到的东西，也用在下一个项目上。这个项目在做的时候也考虑过可能上不了架，但是没有想太多，就直接做了，客户端部分投入的时间和精力基本上算是浪费了，服务器方面的积累是有用的。</p>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>Author: </strong>iMoegirl
+        </p>
+        <p>
+            <strong>
+                Permalink: 
+            </strong>
+            <a href="http://imoegirl.com/2021/07/11/unlisted-lottery-project/">http://imoegirl.com/2021/07/11/unlisted-lottery-project/</a>
+        </p>
+        
+            <strong>
+                <p>任何技术问题，可加微信交流，微信: ifloop</p>
+
+            </strong>
+        
+            <strong>
+                <p>搜索并关注微信公众号 [ 萌一小栈 ] 可及时订阅最新技术文章</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>updated at 2021-08-21</p></div> 
+    <div class="post-entry__tags"><a href="/tags/%E7%8B%AC%E7%AB%8B%E5%BC%80%E5%8F%91%E8%80%85/" class="post-tags__link button"># 独立开发者</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2021/07/18/this-week-in-moeif-4/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            This Week In Moeif 4
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2021/07/11/this-week-in-moeif-3/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            This Week In Moeif 3
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>Comments</h4>
+    
+    
+    
+    
+    
+    <div id="gitalk-container"></div>
+
+    
+    
+    
+    
+    
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">萌一小栈</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?ae464fe0e62cef297c26908427b0e7bd';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    <script>
+        function loadComment() {
+            let e, i;
+            (e = document.createElement("script")).src = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js',
+            document.body.appendChild(e);
+            e.onload = () => {
+                var gitalk = new Gitalk({
+                    clientID: '5b5aeaa767a06f6c23a4',
+                    clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+                    repo: 'imoegirl.github.io',
+                    owner: 'imoegirl',
+                    admin: 'imoegirl',
+                    id: window.location.pathname,
+                    distractionFreeMode: false
+                });
+                gitalk.render('gitalk-container');
+            };
+            (i = document.createElement("link")).rel = "stylesheet",
+            i.href = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css',
+            document.head.appendChild(i);
+        }
+    
+        var runningOnBrowser = typeof window !== "undefined";
+        var isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+        var supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    
+        setTimeout(function () {
+            if (!isBot && supportsIntersectionObserver) {
+                var comment_observer = new IntersectionObserver(function(entries) {
+                    if (entries[0].isIntersecting) {
+                        loadComment();
+                        comment_observer.disconnect();
+                    }
+                }, { threshold: [0] });
+                comment_observer.observe(document.getElementById('comment'));
+            } else {
+                loadComment();
+            }
+        }, 1);
+    </script>
+
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

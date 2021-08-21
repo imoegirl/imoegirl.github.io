@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    
+    
+        <link rel="mask-icon" href="/images/favicon.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>制作一个会动的时钟 | 萌一小栈</title>
+
+
+    <meta name="keywords" content="游戏开发">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="这是 Unity 基础系列教程的第一篇博客。我们将由浅入深，一步一步学习Unity及游戏开发相关的东西。整个系列教程所使用的Unity版本为 2018.4 及以上就可以，如果要使用特殊版本，则会在文中指出。 今天要做的是一个能够实时显示当前时间的时钟，就是下面这个东东。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="制作一个会动的时钟">
+<meta property="og:url" content="http://imoegirl.com/2020/01/06/unity-basis-01-clock/index.html">
+<meta property="og:site_name" content="萌一小栈">
+<meta property="og:description" content="这是 Unity 基础系列教程的第一篇博客。我们将由浅入深，一步一步学习Unity及游戏开发相关的东西。整个系列教程所使用的Unity版本为 2018.4 及以上就可以，如果要使用特殊版本，则会在文中指出。 今天要做的是一个能够实时显示当前时间的时钟，就是下面这个东东。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U93310f53935245659d219f8bab5dde58b.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ua005fe3deabb46b39c39b16428a4253eQ.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ua364665b006a4ee58ec2a904a27787aeq.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U2c7aaaff6a8f4947a41fb5da2e3ac52ff.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ub964f23478bf41dfba9d0ff729713b38r.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Uca5aaa0c0c8f47de87a05cff99f6a500a.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U20f194d82c254c25bd57462d413c979ef.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U29d2010a2b8540daa1ddb76d0abf69726.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U692ab8ab24d74d479279f6da97368224v.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ucf61173f582a41689c79433501fbe6dbR.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U0796a25bc358443abdbcd49e4f464cb9k.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U02e48b6ded1947aa8dd9ce84309e0e758.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ue3b2a1a6b0604c2a9c8a9fa8cae518eeJ.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Uf9509e79afdb4be5b867836ac4919002O.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ud60e2c2ae6474d3fbda89413d0128a1a1.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ua4b348fa34de43628f0689712a9c7d4f6.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U753239003c10452b8f71b692c27df1cc2.png">
+<meta property="article:published_time" content="2020-01-06T03:02:32.000Z">
+<meta property="article:modified_time" content="2021-08-21T06:49:51.758Z">
+<meta property="article:author" content="iMoegirl">
+<meta property="article:tag" content="游戏开发">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/U93310f53935245659d219f8bab5dde58b.jpg">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/atom-one-dark.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">萌一小栈</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        制作一个会动的时钟
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2020/01/" class="post-meta__date button">2020-01-06</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>这是 Unity 基础系列教程的第一篇博客。我们将由浅入深，一步一步学习Unity及游戏开发相关的东西。整个系列教程所使用的Unity版本为 2018.4 及以上就可以，如果要使用特殊版本，则会在文中指出。</p>
+<p>今天要做的是一个能够实时显示当前时间的时钟，就是下面这个东东。</p>
+<p><img src="https://ae01.alicdn.com/kf/U93310f53935245659d219f8bab5dde58b.jpg" alt="p002001_Unity-001-1"></p>
+<span id="more"></span>
+
+<h2 id="1-首先建立一个新工程"><a href="#1-首先建立一个新工程" class="headerlink" title="1 首先建立一个新工程"></a>1 首先建立一个新工程</h2><p>首先打开Unity，创建一个新工程，名字自己定，例如 Clock 就可以。默认打开后，Unity 默认布局是下面图的样子。</p>
+<p><img src="https://ae01.alicdn.com/kf/Ua005fe3deabb46b39c39b16428a4253eQ.png" alt="p002002_Unity-001-2"></p>
+<p>你也可以更新布局，例如换成同时显示View和Game视图的布局，只需要点击编辑器最右上角的那个按钮，然后选择 <strong>2 by 3</strong> 即可成为下面图的样子。</p>
+<p><img src="https://ae01.alicdn.com/kf/Ua364665b006a4ee58ec2a904a27787aeq.png" alt="p002003_Unity-001-3"></p>
+<p>下面是分辨率的设置，一般游戏开发中，会使用一个基准分辨率，很多游戏采用的是 16:9 的模式。这个在 Game 视图中设置，看下面的图，选择 16:9 即可</p>
+<p><img src="https://ae01.alicdn.com/kf/U2c7aaaff6a8f4947a41fb5da2e3ac52ff.png" alt="p002004_Unity-001-4"></p>
+<h2 id="1-1-创建一个-GameObject"><a href="#1-1-创建一个-GameObject" class="headerlink" title="1.1 创建一个 GameObject"></a>1.1 创建一个 GameObject</h2><p>默认的场景中，会包含两个 GameObject，一个是主相机 MainCamera， 一个是灯光 Directional Light。这两个东西保持默认就好，现在我们创建一个新的物体，在 Hierarchy 面板右键，然后 Create Empty，或者通过菜单栏 GameObject/Create Empty都可以，这样就会在Hierarchy 面板上看到我们新建的物体，然后对这个物体重命名为 <strong>Clock</strong>，并且把它的位置置为 (0,0,0)。看下面的图</p>
+<p><img src="https://ae01.alicdn.com/kf/Ub964f23478bf41dfba9d0ff729713b38r.png" alt="p002005_Unity-001-5"></p>
+<p><img src="https://ae01.alicdn.com/kf/Uca5aaa0c0c8f47de87a05cff99f6a500a.png" alt="p002006_Unity-001-6"></p>
+<h2 id="1-2-创建时钟的表盘"><a href="#1-2-创建时钟的表盘" class="headerlink" title="1.2 创建时钟的表盘"></a>1.2 创建时钟的表盘</h2><p>创建表盘，我们使用 Unity 默认的物体 Cylinder，然后改变它的大小，使其成为我们的表盘。首先，通过右键 Hierarchy 空白处，或者通过菜单栏 GameObject 中的 3D Object/Cylinder 选项，来创建一个 Cylinder，就是一个圆柱体。</p>
+<p><img src="https://ae01.alicdn.com/kf/U20f194d82c254c25bd57462d413c979ef.png" alt="p002007_Unity-001-7"></p>
+<p>Cylinder 默认已经有了很多组件，Mesh Filter、Capsule Collider、MeshRenderer。默认我们不需要物理模拟方面的东西，所以我们先把 Capsule Collider 这个碰撞器给删掉，通过右键这个组件，Remove Component 即可。</p>
+<p>然后我们改变园柱体的大小，因为表盘是一个圆盘形状的东西，所以我们把圆柱体压平，也就是改变y轴的大小始可。把圆柱体 Scale 设置为 (10, 0.1, 10)，如下图。</p>
+<p><img src="https://ae01.alicdn.com/kf/U29d2010a2b8540daa1ddb76d0abf69726.png" alt="p002008_Unity-001-8"></p>
+<p>接下来要做的，就是把 Cylinder 重命名为 Face，然后把这个物体拖到我们一开始建立的 Clock 物体下面，作为它的子物体，并且把坐标归为 (0, 0, 0)，如下图。</p>
+<p><img src="https://ae01.alicdn.com/kf/U692ab8ab24d74d479279f6da97368224v.png" alt="p002009_Unity-001-9"></p>
+<h2 id="1-3-创建时钟刻度"><a href="#1-3-创建时钟刻度" class="headerlink" title="1.3 创建时钟刻度"></a>1.3 创建时钟刻度</h2><p>表盘是 360 度，有 12 个小时，所以每个小时间隔的角度是 356 / 12 = 30 度。也就是说，我们需要每隔 30 度创建一个小时刻度。最终效果如下</p>
+<p><img src="https://ae01.alicdn.com/kf/Ucf61173f582a41689c79433501fbe6dbR.png" alt="p002010_Unity-001-10"></p>
+<p>接下来我们一步一步来创建刻度。</p>
+<p>首先创建一个 Cube，将它的 Scale 设置为 (0.5, 0.2, 1)，然后设置它的位置为 (0, 0.2, 4)。如果没错的话，它现在应该处于 12 点位置。</p>
+<p>但是有一个问题，因为它默认是白色的，看不清，所以我们创建一个材质，命名为 Clock Dark，然后设置 Albedo 颜色值为 (73 73 73 255)，然后把这个材质拖到Cube上，现在应该是下图中的样子。</p>
+<p><img src="https://ae01.alicdn.com/kf/U0796a25bc358443abdbcd49e4f464cb9k.png" alt="p002011_Unity-001-11"></p>
+<p>接下来我们继续创建其他刻度，但是有一个问题，我们怎样才能精确地设置每一个刻度的位置呢？其实很简单，只需要旋转30度即可，但是，不是旋转刻度本身，而是要建立一个新的 GameObject。</p>
+<p>新建一个新的空 GameObject，坐标置为 (0, 0, 0)，然后将刚才创建的 Cube 拖动到新建立的 GameObject 下面，作为子物体，将 Cube 重命名为 Hour Indicator。如下图这样</p>
+<p><img src="https://ae01.alicdn.com/kf/U02e48b6ded1947aa8dd9ce84309e0e758.png" alt="p002012_Unity-001-12"></p>
+<p>下面我们创建 1 点时的刻度，只需要复制上面的 “GameObject”，注意，不是复制 Hour Indicator，而是复制它的父物体，然后将复制后的物体 y 轴旋转 30 度即可。那 2 点的位置，就是再复制一个 GameObject，这只旋转为 60 度即可。其他的时间刻度也同样，只需要依次增加旋转角度。</p>
+<p>当所有刻度创建完毕后，我们将所有的 Hour Indicator 拖动到之前创建的 Clock 下面，然后删除掉为了旋转而临时创建的 “GameObject”，到此，刻度创建完毕。如下图</p>
+<p><img src="https://ae01.alicdn.com/kf/Ue3b2a1a6b0604c2a9c8a9fa8cae518eeJ.png" alt="p002013_Unity-001-13"></p>
+<h2 id="1-4-创建时钟指针"><a href="#1-4-创建时钟指针" class="headerlink" title="1.4 创建时钟指针"></a>1.4 创建时钟指针</h2><p>创建指针，与上面创建刻度类似。首先新建一个 Cube，命名为 Arm，设置 Scale 为 (0.3, 0.2, 2.5)，设置坐标 (0, 0.2, 0.75)。然后将上面创建的材质 Clock Drak 也赋予我们刚建立的 Arm。现在状态如下</p>
+<p><img src="https://ae01.alicdn.com/kf/Uf9509e79afdb4be5b867836ac4919002O.png" alt="p002014_Unity-001-14"></p>
+<p>为了后面旋转，我们还要创建一个空的GameObject，命名为 Hours Arm，然后将 Hours Arm 坐标设置为 (0, 0, 0)。然后将之前创建的 Arm 拖动到 Hours Arm 下面，作为其子物体。然后再将 Hours Arm 拖动到 Clock 下面。现在的层级如下</p>
+<p><img src="https://ae01.alicdn.com/kf/Ud60e2c2ae6474d3fbda89413d0128a1a1.png" alt="p002015_Unity-001-15"></p>
+<p>接下来我们再创建分针和秒针，和上面创建时针基本类似。选中之前创建的 Hours Arm，然后按 Ctrl+D (如果是Mac，则是Command + D) 两次，复制两份 Hours Arm，重命名为 Minutes Arm 和 Seconds Arm，作为分针和秒针。</p>
+<p>设置 Minutes Arm 下面的 Arm 缩放和坐标，Scale 为 (0.2, 0.15, 4)，Position 为 (0, 0.375, 1)</p>
+<p>设置 Seconds Arm 下面的 Arm 绽放和坐标，Scale 为 (0.1, 0.1, 5)，Position 为 (0, 0.5, 1.25)</p>
+<p>为了使秒针更明显，我们创建一个新的材质，命名为 Clock Red，然后设置颜色值为 (197, 0, 0, 255)，然后将材质拖到 Seconds Arm 下面的 Arm 物体上。目前应该是下面的样子</p>
+<p><img src="https://ae01.alicdn.com/kf/Ua4b348fa34de43628f0689712a9c7d4f6.png" alt="p002016_Unity-001-16"></p>
+<h2 id="2-实时显示当前时间"><a href="#2-实时显示当前时间" class="headerlink" title="2 实时显示当前时间"></a>2 实时显示当前时间</h2><p>接下来就是写代码的时间，我们先看代码，然后对代码作解释。代码中我们实现了两种指针行走的方式，一种是逐步方式，一步是持续方式。注意看代码中的注释</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Clock</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 定义时针、分针、秒针步伐角度</span></span><br><span class="line">    <span class="keyword">const</span> <span class="built_in">float</span> degreesPerHour = <span class="number">30f</span>;</span><br><span class="line">    <span class="keyword">const</span> <span class="built_in">float</span> degreesPerMinute = <span class="number">6f</span>;</span><br><span class="line">    <span class="keyword">const</span> <span class="built_in">float</span> degreesPerSecond = <span class="number">6f</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 时针、分针、秒针的旋转体 Transform</span></span><br><span class="line">    <span class="keyword">public</span> Transform hoursTransform;</span><br><span class="line">    <span class="keyword">public</span> Transform minutesTransform;</span><br><span class="line">    <span class="keyword">public</span> Transform secondsTransform;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 指针行走模式</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">bool</span> continuous = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">Awake</span>(<span class="params"></span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        UpdateDiscrete();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">Update</span>(<span class="params"></span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (continuous)</span><br><span class="line">        &#123;</span><br><span class="line">            UpdateContinuous();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            UpdateDiscrete();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 逐步方式更新当前时间</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">UpdateDiscrete</span>(<span class="params"></span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        DateTime time = DateTime.Now;</span><br><span class="line">        hoursTransform.localRotation = </span><br><span class="line">            Quaternion.Euler(<span class="number">0f</span>, time.Hour * degreesPerHour, <span class="number">0f</span>);</span><br><span class="line"></span><br><span class="line">        minutesTransform.localRotation = </span><br><span class="line">            Quaternion.Euler(<span class="number">0f</span>, time.Minute * degreesPerMinute, <span class="number">0f</span>);</span><br><span class="line"></span><br><span class="line">        secondsTransform.localRotation =</span><br><span class="line">            Quaternion.Euler(<span class="number">0f</span>, time.Second * degreesPerSecond, <span class="number">0f</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 持续方式更新当前时间</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">UpdateContinuous</span>(<span class="params"></span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        TimeSpan time = DateTime.Now.TimeOfDay;</span><br><span class="line">        hoursTransform.localRotation =</span><br><span class="line">            Quaternion.Euler(<span class="number">0f</span>, (<span class="built_in">float</span>)time.TotalHours * degreesPerHour, <span class="number">0f</span>);</span><br><span class="line"></span><br><span class="line">        minutesTransform.localRotation =</span><br><span class="line">            Quaternion.Euler(<span class="number">0f</span>, (<span class="built_in">float</span>)time.TotalMinutes * degreesPerMinute, <span class="number">0f</span>);</span><br><span class="line"></span><br><span class="line">        secondsTransform.localRotation =</span><br><span class="line">            Quaternion.Euler(<span class="number">0f</span>, (<span class="built_in">float</span>)time.TotalSeconds * degreesPerSecond, <span class="number">0f</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，首先我们定义了各指针每一步行走的角度，然后定义了三个变量，用于引用三个指针旋转体的Transform，最后写了两种方式的更新指针位置，通过 continuous 变量控制使用哪种方式更新指针。</p>
+<p>将脚本拖动到我们之前建立的 Clock 物体上面，然后将三个指针的旋转体 Transform 拖到脚本对应的变量区域，如下图所示</p>
+<p><img src="https://ae01.alicdn.com/kf/U753239003c10452b8f71b692c27df1cc2.png" alt="p002017_Unity-001-17"></p>
+<p>接下来，运行即可看到效果</p>
+<p>下面是未勾选 continuous 的运行效果<br><video controls loop style="display: inline" alt="Continuous Clock GIF" height="188" width="250" autoplay="true" playsinline="" preload="auto" poster="/uploads/Unity系列教程/Unity-001-18-poster.jpg" tabindex="-1"><source src="/uploads/Unity系列教程/Unity-001-18.mp4" type="video/mp4"><source src="/uploads/Unity基础-001制作一个会动的时钟/Unity-001-18.webm" type="video/webm"></video></p>
+<p>下面是勾选了 continuous 的运行效果</p>
+<p><video controls loop style="display: inline" alt="Continuous Clock GIF" height="188" width="250" autoplay="true" playsinline="" preload="auto" poster="/uploads/Unity基础-001制作一个会动的时钟/Unity-001-18-poster.jpg" tabindex="-1"><source src="/uploads/Unity基础-001制作一个会动的时钟/Unity-001-19.mp4" type="video/mp4"><source src="/uploads/Unity基础-001制作一个会动的时钟/Unity-001-19.webm" type="video/webm"></video></p>
+<p>好了，这次的教程到这里就结束了，如果有什么问题，欢迎在下面留言~</p>
+<blockquote>
+<p>原文翻译自 <a target="_blank" rel="noopener" href="https://catlikecoding.com/unity/tutorials/basics/game-objects-and-scripts/">Game Objects and Scripts Creating a Clock</a><br>Github 代码下载: <a target="_blank" rel="noopener" href="https://catlikecoding.com/unity/tutorials/basics/game-objects-and-scripts/animating-the-clock/animating-the-clock.unitypackage">animating-the-clock.unitypackage</a></p>
+</blockquote>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>Author: </strong>iMoegirl
+        </p>
+        <p>
+            <strong>
+                Permalink: 
+            </strong>
+            <a href="http://imoegirl.com/2020/01/06/unity-basis-01-clock/">http://imoegirl.com/2020/01/06/unity-basis-01-clock/</a>
+        </p>
+        
+            <strong>
+                <p>任何技术问题，可加微信交流，微信: ifloop</p>
+
+            </strong>
+        
+            <strong>
+                <p>搜索并关注微信公众号 [ 萌一小栈 ] 可及时订阅最新技术文章</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>updated at 2021-08-21</p></div> 
+    <div class="post-entry__tags"><a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/" class="post-tags__link button"># 游戏开发</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2020/01/06/unity-sine-visualization/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            使用Unity3D展示Sin函数动画
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2019/12/30/data-structure-07-binary-heap/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            二叉堆
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>Comments</h4>
+    
+    
+    
+    
+    
+    <div id="gitalk-container"></div>
+
+    
+    
+    
+    
+    
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">萌一小栈</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?ae464fe0e62cef297c26908427b0e7bd';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    <script>
+        function loadComment() {
+            let e, i;
+            (e = document.createElement("script")).src = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js',
+            document.body.appendChild(e);
+            e.onload = () => {
+                var gitalk = new Gitalk({
+                    clientID: '5b5aeaa767a06f6c23a4',
+                    clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+                    repo: 'imoegirl.github.io',
+                    owner: 'imoegirl',
+                    admin: 'imoegirl',
+                    id: window.location.pathname,
+                    distractionFreeMode: false
+                });
+                gitalk.render('gitalk-container');
+            };
+            (i = document.createElement("link")).rel = "stylesheet",
+            i.href = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css',
+            document.head.appendChild(i);
+        }
+    
+        var runningOnBrowser = typeof window !== "undefined";
+        var isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+        var supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    
+        setTimeout(function () {
+            if (!isBot && supportsIntersectionObserver) {
+                var comment_observer = new IntersectionObserver(function(entries) {
+                    if (entries[0].isIntersecting) {
+                        loadComment();
+                        comment_observer.disconnect();
+                    }
+                }, { threshold: [0] });
+                comment_observer.observe(document.getElementById('comment'));
+            } else {
+                loadComment();
+            }
+        }, 1);
+    </script>
+
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

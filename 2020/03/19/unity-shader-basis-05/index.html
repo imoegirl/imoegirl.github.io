@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    
+    
+        <link rel="mask-icon" href="/images/favicon.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>Unity Shader | 半兰伯特、高光反射、BlinnPhone | 萌一小栈</title>
+
+
+    <meta name="keywords" content="游戏开发, Shader">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="写 Shader，到底是在做什么？Shader 就像一个拥有魔法的黑箱，我们最终从它那里得到的，是像素的颜色。而得到的是什么样的像素颜色，则取决于我们丢进黑箱里的是什么东西，以及使用的魔法咒语是什么。丢进同样的东西，使用不同的魔法咒语，得到的像素颜色也是不一样的。输入顶点的坐标，光线方向，以及自定义的颜色，使用不同的计算方式，得到的像素颜色是不一样的。使用同样的计算方式，丢进一个纯色颜色值，和丢进">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unity Shader | 半兰伯特、高光反射、BlinnPhone">
+<meta property="og:url" content="http://imoegirl.com/2020/03/19/unity-shader-basis-05/index.html">
+<meta property="og:site_name" content="萌一小栈">
+<meta property="og:description" content="写 Shader，到底是在做什么？Shader 就像一个拥有魔法的黑箱，我们最终从它那里得到的，是像素的颜色。而得到的是什么样的像素颜色，则取决于我们丢进黑箱里的是什么东西，以及使用的魔法咒语是什么。丢进同样的东西，使用不同的魔法咒语，得到的像素颜色也是不一样的。输入顶点的坐标，光线方向，以及自定义的颜色，使用不同的计算方式，得到的像素颜色是不一样的。使用同样的计算方式，丢进一个纯色颜色值，和丢进">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U7b82267ece2f4010913e5e828dbed4dek.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Uc54df2028bed417dacb6656a0f9093378.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U591c5797f20e45bd8e784c43cbd995d55.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U5b603169256b4a93bd3ab427b697dee4s.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U72a494bb3acc4b5b9df7f6e05552cf8bM.png">
+<meta property="article:published_time" content="2020-03-19T13:50:16.000Z">
+<meta property="article:modified_time" content="2021-08-21T06:38:17.344Z">
+<meta property="article:author" content="iMoegirl">
+<meta property="article:tag" content="游戏开发">
+<meta property="article:tag" content="Shader">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/U7b82267ece2f4010913e5e828dbed4dek.png">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/atom-one-dark.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">萌一小栈</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        Unity Shader | 半兰伯特、高光反射、BlinnPhone
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2020/03/" class="post-meta__date button">2020-03-19</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>写 Shader，到底是在做什么？Shader 就像一个拥有魔法的黑箱，我们最终从它那里得到的，是像素的颜色。而得到的是什么样的像素颜色，则取决于我们丢进黑箱里的是什么东西，以及使用的魔法咒语是什么。丢进同样的东西，使用不同的魔法咒语，得到的像素颜色也是不一样的。输入顶点的坐标，光线方向，以及自定义的颜色，使用不同的计算方式，得到的像素颜色是不一样的。使用同样的计算方式，丢进一个纯色颜色值，和丢进一张纹理，得到的像素，也是不一样的。</p>
+<p>如果把整个 Shader 比作一个函数，那么顶点位置，自定义的颜色值，纹理，灯光等这些就相当于函数的输入参数，而 Shader 中写的各种计算，用的各种算法，都是对输入的那些参数进行操作，而最终生成的，就是颜色值，也就是相当于函数的返回值。把 Shader 想的简单一点，就是输入需要的东西，进行计算，得到像素值。</p>
+<p>这篇博客，还是关于光照模型的，接下来我们首先总结一下常用的光照模型。</p>
+<span id="more"></span>
+
+<h2 id="Lambert-兰伯特-光照模型"><a href="#Lambert-兰伯特-光照模型" class="headerlink" title="Lambert (兰伯特) 光照模型"></a>Lambert (兰伯特) 光照模型</h2><p>在之前的博客中说了漫反射的实现，实现漫反射用到的模型，叫做 Lambert (兰伯特) 光照模型。Lambert 实现出来的效果，一旦入射光向量与材质表面的角度大于90度，那么得到的漫反射颜色就会全部变为黑色，没有任何明暗变化效果。</p>
+<p>Lambert 光照模型公式:<br>最终颜色 = 直射光颜色 * 漫反射颜色 * max(0, dot(光源方向, 法线方向))</p>
+<p>其中，直射光颜色，漫反射颜色，都是我们自定义的变量。</p>
+<h2 id="Half-Lambert-半兰伯特-光照模型"><a href="#Half-Lambert-半兰伯特-光照模型" class="headerlink" title="Half Lambert (半兰伯特) 光照模型"></a>Half Lambert (半兰伯特) 光照模型</h2><p>Half Lambert 是在 Lambert 模型的基础上，做了微调，也就是将光源方向与法线方向的点乘结果，从原来[-1, 1]，映射为 [0, 1]，这样原来背光面，也会有明暗效果。</p>
+<p>Half Lambert 光照模型公式:<br>最终颜色 = 直射光颜色 * 漫反射颜色 * (dot(光源方向, 法线方向) * 0.5 + 0.5)</p>
+<h2 id="Specular-高光反射"><a href="#Specular-高光反射" class="headerlink" title="Specular (高光反射)"></a>Specular (高光反射)</h2><p>这里的高光反射使用了 Phone 模型，的原理很简单，想象一束光射向某个点，然后反射出去，我们的眼睛同样看向那个点，当我们的眼睛看向那个点的方向，与光线反射的方向，越接近时，进入我们眼睛的反射光则越多，也就是更亮。看下面的图</p>
+<p><img src="https://ae01.alicdn.com/kf/U7b82267ece2f4010913e5e828dbed4dek.png" alt="p002901_specular-1"></p>
+<p>很明显，当视野方向与光的反射方向夹角越小时，也就是说进入眼睛的光越多，所以那个点也就会越亮，这就是高光反射的原理。所以高光反射，实现起来也就很简单了，只要拿到视野方向，拿到直射光的反射方向，就可以求出最终的颜色值。</p>
+<p>Specular 光照模型公式:<br>最终颜色 = 直射光颜色 * 反射光颜色 * pow(max(0, dot(反射光方向, 视野方向)), 光泽度(gloss)) + 漫反射颜色 + 环境光颜色</p>
+<p>其中，光泽度用于控制高光区域的亮点大小，gloss 值越大，亮点越小.</p>
+<h2 id="Blinn-Phone-光照模型"><a href="#Blinn-Phone-光照模型" class="headerlink" title="Blinn-Phone 光照模型"></a>Blinn-Phone 光照模型</h2><p>Phone 模型有一些缺点，所以后来出现了改进的模型，Blinn-Phone，对 Phone 模型进行了微调。Phone 模型的高光强度，是由光线的反射方向与视野方向的夹角决定的。而 Blinn-Phone 的模型，只是把反射方向和视野方向换成，法线方向，和视野与光线方向的中间向量之间的夹角。看下面的图</p>
+<p>Blinn-Phone 高光反射公式：<br>最终颜色 = 直射光颜色 * 反射光颜色 * pow(max(0, dot(法线方向, 视野与光线中间向量)), 光泽度(gloss)) + 漫反射颜色 + 环境光颜色</p>
+<p>关于 Phone 和 Blinn-Phone 更详细的一篇文章，learnopengl-cn 上的，推荐大家阅读 <a target="_blank" rel="noopener" href="https://learnopengl-cn.readthedocs.io/zh/latest/05%20Advanced%20Lighting/01%20Advanced%20Lighting/">♣点这里</a></p>
+<p><img src="https://ae01.alicdn.com/kf/Uc54df2028bed417dacb6656a0f9093378.png" alt="p002902_blinn-phone"></p>
+<h2 id="实现上面的四种光照模型"><a href="#实现上面的四种光照模型" class="headerlink" title="实现上面的四种光照模型"></a>实现上面的四种光照模型</h2><p>接下来的实现，都是在片元函数中实现。当然，也可以放到顶点函数中实现，只是放到片元函数中效果会更平滑一些，但是相比放在顶点函数中做计算，耗费的性能也会更多一点。</p>
+<p>先看一下四种实现的效果对比</p>
+<p>从正面看<br><img src="https://ae01.alicdn.com/kf/U591c5797f20e45bd8e784c43cbd995d55.png" alt="p002903_lightmodel-front"></p>
+<p>从背面看<br><img src="https://ae01.alicdn.com/kf/U5b603169256b4a93bd3ab427b697dee4s.png" alt="p002904_lightmodel-back"></p>
+<p>从下面看<br><img src="https://ae01.alicdn.com/kf/U72a494bb3acc4b5b9df7f6e05552cf8bM.png" alt="p002905_lightmodel-down"></p>
+<p><strong>Lambert:</strong><br>最终颜色 = 直射光颜色 * 漫反射颜色 * max(0, dot(光源方向, 法线方向))</p>
+<figure class="highlight glsl"><table><tr><td class="code"><pre><span class="line">Shader &quot;iMoeGirl/Lambert&quot; &#123;</span><br><span class="line"></span><br><span class="line">    Properties &#123;</span><br><span class="line">        _Diffuse(&quot;Diffuse Color&quot;, Color) = (<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    SubShader&#123;</span><br><span class="line">        Pass&#123;</span><br><span class="line">            Tags &#123; &quot;LightMode&quot; = &quot;ForwardBase&quot; &#125;</span><br><span class="line"></span><br><span class="line">            CGPROGRAM</span><br><span class="line">            <span class="meta">#include &quot;Lighting.cginc&quot;</span></span><br><span class="line">            <span class="meta">#pragma vertex vert</span></span><br><span class="line">            <span class="meta">#pragma fragment frag</span></span><br><span class="line"></span><br><span class="line">            fixed4 _Diffuse;</span><br><span class="line"></span><br><span class="line">            struct a2v &#123;</span><br><span class="line">                float3 vertex : POSITION;</span><br><span class="line">                float3 normal: NORMAL;</span><br><span class="line">            &#125;;</span><br><span class="line"></span><br><span class="line">            struct v2f &#123;</span><br><span class="line">                float4 svPos: SV_POSITION;      <span class="comment">// 这个是必须的，否则显示不出来</span></span><br><span class="line">                fixed3 normalizedWorldNormal : COLOR;</span><br><span class="line">            &#125;;</span><br><span class="line"></span><br><span class="line">            v2f vert(a2v v) &#123;</span><br><span class="line">                v2f f;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 将模型空间的顶点坐标转换到裁剪空间</span></span><br><span class="line">                f.svPos = UnityObjectToClipPos(v.vertex);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 将模型空间的法线转换到世界空间，然后标准化，</span></span><br><span class="line">                <span class="comment">//（转换到世界空间是为了后面和灯光做计算）</span></span><br><span class="line">                f.normalizedWorldNormal = <span class="built_in">normalize</span>(UnityObjectToWorldNormal(v.normal));</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> f;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            fixed4 frag(v2f f) : SV_TARGET &#123;</span><br><span class="line">                </span><br><span class="line">                <span class="comment">// 取得灯光方向，然后标准化</span></span><br><span class="line">                float3 normalizedLightDir = <span class="built_in">normalize</span>(_WorldSpaceLightPos0.xyz);</span><br><span class="line"></span><br><span class="line">                fixed dotValue = <span class="built_in">max</span>(<span class="number">0</span>, <span class="built_in">dot</span>(normalizedLightDir, f.normalizedWorldNormal));</span><br><span class="line"></span><br><span class="line">                fixed3 diffuse = _LightColor0.rgb * _Diffuse * dotValue;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> fixed4(diffuse, <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            ENDCG</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Fallback &quot;VertexLit&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Half Lambert:</strong><br>最终颜色 = 直射光颜色 * 漫反射颜色 * (dot(光源方向, 法线方向) * 0.5 + 0.5)</p>
+<figure class="highlight glsl"><table><tr><td class="code"><pre><span class="line">Shader &quot;iMoeGirl/Half-Lambert&quot; &#123;</span><br><span class="line">    Properties &#123;</span><br><span class="line">        _Diffuse(&quot;Diffuse Color&quot;, Color) = (<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    SubShader&#123;</span><br><span class="line">        Pass&#123;</span><br><span class="line">            Tags &#123; &quot;LightMode&quot; = &quot;ForwardBase&quot; &#125;</span><br><span class="line"></span><br><span class="line">            CGPROGRAM</span><br><span class="line">            <span class="meta">#include &quot;Lighting.cginc&quot;</span></span><br><span class="line">            <span class="meta">#pragma vertex vert</span></span><br><span class="line">            <span class="meta">#pragma fragment frag</span></span><br><span class="line"></span><br><span class="line">            fixed4 _Diffuse;</span><br><span class="line"></span><br><span class="line">            struct a2v &#123;</span><br><span class="line">                float3 vertex : POSITION;</span><br><span class="line">                float3 normal: NORMAL;</span><br><span class="line">            &#125;;</span><br><span class="line"></span><br><span class="line">            struct v2f &#123;</span><br><span class="line">                float4 svPos: SV_POSITION;      <span class="comment">// 这个是必须的，否则显示不出来</span></span><br><span class="line">                fixed3 normalizedWorldNormal : COLOR;</span><br><span class="line">            &#125;;</span><br><span class="line"></span><br><span class="line">            v2f vert(a2v v) &#123;</span><br><span class="line">                v2f f;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 将模型空间的顶点坐标转换到裁剪空间</span></span><br><span class="line">                f.svPos = UnityObjectToClipPos(v.vertex);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 将模型空间的法线转换到世界空间，然后标准化，</span></span><br><span class="line">                <span class="comment">//（转换到世界空间是为了后面和灯光做计算）</span></span><br><span class="line">                f.normalizedWorldNormal = <span class="built_in">normalize</span>(UnityObjectToWorldNormal(v.normal));</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> f;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            fixed4 frag(v2f f) : SV_TARGET &#123;</span><br><span class="line">                </span><br><span class="line">                <span class="comment">// 取得灯光方向，然后标准化</span></span><br><span class="line">                float3 normalizedLightDir = <span class="built_in">normalize</span>(_WorldSpaceLightPos0.xyz);</span><br><span class="line"></span><br><span class="line">                fixed dotValue = <span class="built_in">dot</span>(normalizedLightDir, f.normalizedWorldNormal) * <span class="number">0.5</span> + <span class="number">0.5</span>;</span><br><span class="line"></span><br><span class="line">                fixed3 diffuse = _LightColor0.rgb * _Diffuse * dotValue;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> fixed4(diffuse, <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            ENDCG</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Fallback &quot;VertexLit&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Phone:</strong><br>最终颜色 = 直射光颜色 * 反射光颜色 * max(0, dot(反射光方向, 视野方向)) * 光泽度(gloss) + 漫反射颜色 + 环境光颜色</p>
+<figure class="highlight glsl"><table><tr><td class="code"><pre><span class="line">Shader &quot;iMoeGirl/Phone&quot; &#123;</span><br><span class="line">    Properties &#123;</span><br><span class="line">        _Diffuse(&quot;Diffuse Color&quot;, Color) = (<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">        _Specular(&quot;Specular Color&quot;, Color) = (<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">        _Gloss(&quot;Gloss&quot;, Range(<span class="number">10</span>, <span class="number">200</span>)) = <span class="number">20</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    SubShader&#123;</span><br><span class="line">        Pass&#123;</span><br><span class="line">            Tags &#123; &quot;LightMode&quot; = &quot;ForwardBase&quot; &#125;</span><br><span class="line"></span><br><span class="line">            CGPROGRAM</span><br><span class="line">            <span class="meta">#include &quot;Lighting.cginc&quot;</span></span><br><span class="line">            <span class="meta">#pragma vertex vert</span></span><br><span class="line">            <span class="meta">#pragma fragment frag</span></span><br><span class="line"></span><br><span class="line">            fixed4 _Diffuse;</span><br><span class="line">            fixed4 _Specular;</span><br><span class="line">            <span class="type">float</span> _Gloss;</span><br><span class="line"></span><br><span class="line">            struct a2v &#123;</span><br><span class="line">                float3 vertex : POSITION;</span><br><span class="line">                float3 normal: NORMAL;</span><br><span class="line">            &#125;;</span><br><span class="line"></span><br><span class="line">            struct v2f &#123;</span><br><span class="line">                float4 svPos: SV_POSITION;      <span class="comment">// 这个是必须的，否则显示不出来</span></span><br><span class="line">                fixed3 normalizedWorldNormal : COLOR;</span><br><span class="line">                float3 worldPos: TEXCOORD0;     <span class="comment">// 顶点世界坐标</span></span><br><span class="line">            &#125;;</span><br><span class="line"></span><br><span class="line">            v2f vert(a2v v) &#123;</span><br><span class="line">                v2f f;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 将模型空间的顶点坐标转换到裁剪空间</span></span><br><span class="line">                f.svPos = UnityObjectToClipPos(v.vertex);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 将模型空间的法线转换到世界空间，然后标准化，</span></span><br><span class="line">                <span class="comment">//（转换到世界空间是为了后面和灯光做计算）</span></span><br><span class="line">                f.normalizedWorldNormal = <span class="built_in">normalize</span>(UnityObjectToWorldNormal(v.normal));</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> f;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            fixed4 frag(v2f f) : SV_TARGET &#123;</span><br><span class="line">                <span class="comment">// 下面先计算漫反射</span></span><br><span class="line">                <span class="comment">// 取得灯光方向，然后标准化</span></span><br><span class="line">                float3 normalizedLightDir = <span class="built_in">normalize</span>(_WorldSpaceLightPos0.xyz);</span><br><span class="line">                fixed dotValue = <span class="built_in">dot</span>(normalizedLightDir, f.normalizedWorldNormal) * <span class="number">0.5</span> + <span class="number">0.5</span>;</span><br><span class="line">                fixed3 diffuse = _LightColor0.rgb * _Diffuse * dotValue;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 再计算高光反射</span></span><br><span class="line">                <span class="comment">// 取得反射光方向</span></span><br><span class="line">                fixed3 reflectDir = <span class="built_in">normalize</span>(<span class="built_in">reflect</span>(-normalizedLightDir, f.normalizedWorldNormal));</span><br><span class="line">                fixed3 viewDir = <span class="built_in">normalize</span>(_WorldSpaceCameraPos.xyz - f.worldPos);</span><br><span class="line">                </span><br><span class="line">                <span class="type">float</span> specularValue = <span class="built_in">pow</span>(<span class="built_in">max</span>(<span class="built_in">dot</span>(reflectDir, viewDir), <span class="number">0</span>), _Gloss);</span><br><span class="line">                fixed3 specular = _LightColor0.rgb * _Specular * specularValue;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 取得环境光</span></span><br><span class="line">                fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.rgb;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 最终颜色</span></span><br><span class="line">                fixed3 color = specular + diffuse + ambient;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> fixed4(color, <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            ENDCG</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Fallback &quot;VertexLit&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Blinn-Phone:</strong><br>最终颜色 = 直射光颜色 * 反射光颜色 * pow(max(0, dot(法线方向, 视野与光线中间向量)), 光泽度(gloss)) + 漫反射颜色 + 环境光颜色</p>
+<figure class="highlight glsl"><table><tr><td class="code"><pre><span class="line">Shader &quot;iMoeGirl/Blinn-Phone&quot; &#123;</span><br><span class="line">    Properties &#123;</span><br><span class="line">        _Diffuse(&quot;Diffuse Color&quot;, Color) = (<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">        _Specular(&quot;Specular Color&quot;, Color) = (<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">        _Gloss(&quot;Gloss&quot;, Range(<span class="number">10</span>, <span class="number">200</span>)) = <span class="number">20</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    SubShader&#123;</span><br><span class="line">        Pass&#123;</span><br><span class="line">            Tags &#123; &quot;LightMode&quot; = &quot;ForwardBase&quot; &#125;</span><br><span class="line"></span><br><span class="line">            CGPROGRAM</span><br><span class="line">            <span class="meta">#include &quot;Lighting.cginc&quot;</span></span><br><span class="line">            <span class="meta">#pragma vertex vert</span></span><br><span class="line">            <span class="meta">#pragma fragment frag</span></span><br><span class="line"></span><br><span class="line">            fixed4 _Diffuse;</span><br><span class="line">            fixed4 _Specular;</span><br><span class="line">            <span class="type">float</span> _Gloss;</span><br><span class="line"></span><br><span class="line">            struct a2v &#123;</span><br><span class="line">                float3 vertex : POSITION;</span><br><span class="line">                float3 normal: NORMAL;</span><br><span class="line">            &#125;;</span><br><span class="line"></span><br><span class="line">            struct v2f &#123;</span><br><span class="line">                float4 svPos: SV_POSITION;      <span class="comment">// 这个是必须的，否则显示不出来</span></span><br><span class="line">                fixed3 normalizedWorldNormal : COLOR;</span><br><span class="line">                float3 worldPos: TEXCOORD0;     <span class="comment">// 顶点世界坐标</span></span><br><span class="line">            &#125;;</span><br><span class="line"></span><br><span class="line">            v2f vert(a2v v) &#123;</span><br><span class="line">                v2f f;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 将模型空间的顶点坐标转换到裁剪空间</span></span><br><span class="line">                f.svPos = UnityObjectToClipPos(v.vertex);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 将模型空间的法线转换到世界空间，然后标准化，</span></span><br><span class="line">                <span class="comment">//（转换到世界空间是为了后面和灯光做计算）</span></span><br><span class="line">                f.normalizedWorldNormal = <span class="built_in">normalize</span>(UnityObjectToWorldNormal(v.normal));</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> f;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            fixed4 frag(v2f f) : SV_TARGET &#123;</span><br><span class="line">                <span class="comment">// 下面先计算漫反射</span></span><br><span class="line">                <span class="comment">// 取得灯光方向，然后标准化</span></span><br><span class="line">                float3 normalizedLightDir = <span class="built_in">normalize</span>(_WorldSpaceLightPos0.xyz);</span><br><span class="line">                fixed dotValue = <span class="built_in">dot</span>(normalizedLightDir, f.normalizedWorldNormal) * <span class="number">0.5</span> + <span class="number">0.5</span>;</span><br><span class="line">                fixed3 diffuse = _LightColor0.rgb * _Diffuse * dotValue;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 再计算高光反射</span></span><br><span class="line">                fixed3 viewDir = <span class="built_in">normalize</span>(_WorldSpaceCameraPos.xyz - f.worldPos);</span><br><span class="line">                fixed3 halfDir = <span class="built_in">normalize</span>(viewDir + normalizedLightDir);</span><br><span class="line"></span><br><span class="line">                <span class="type">float</span> specularValue = <span class="built_in">pow</span>(<span class="built_in">max</span>(<span class="built_in">dot</span>(f.normalizedWorldNormal, halfDir), <span class="number">0</span>), _Gloss);</span><br><span class="line">                fixed3 specular = _LightColor0.rgb * _Specular * specularValue;</span><br><span class="line">                </span><br><span class="line">                <span class="comment">// 取得环境光</span></span><br><span class="line">                fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.rgb;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 最终颜色</span></span><br><span class="line">                fixed3 color = specular + diffuse + ambient;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> fixed4(color, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            ENDCG</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Fallback &quot;VertexLit&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>Author: </strong>iMoegirl
+        </p>
+        <p>
+            <strong>
+                Permalink: 
+            </strong>
+            <a href="http://imoegirl.com/2020/03/19/unity-shader-basis-05/">http://imoegirl.com/2020/03/19/unity-shader-basis-05/</a>
+        </p>
+        
+            <strong>
+                <p>任何技术问题，可加微信交流，微信: ifloop</p>
+
+            </strong>
+        
+            <strong>
+                <p>搜索并关注微信公众号 [ 萌一小栈 ] 可及时订阅最新技术文章</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>updated at 2021-08-21</p></div> 
+    <div class="post-entry__tags"><a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/" class="post-tags__link button"># 游戏开发</a><a href="/tags/Shader/" class="post-tags__link button"># Shader</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2020/03/28/rust-syntax-summary-01/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            Rust 基础 | 基本语法
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2020/03/15/unity-shader-basis-04/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            Unity Shader | 光照模型和漫反射
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>Comments</h4>
+    
+    
+    
+    
+    
+    <div id="gitalk-container"></div>
+
+    
+    
+    
+    
+    
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">萌一小栈</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?ae464fe0e62cef297c26908427b0e7bd';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    <script>
+        function loadComment() {
+            let e, i;
+            (e = document.createElement("script")).src = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js',
+            document.body.appendChild(e);
+            e.onload = () => {
+                var gitalk = new Gitalk({
+                    clientID: '5b5aeaa767a06f6c23a4',
+                    clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+                    repo: 'imoegirl.github.io',
+                    owner: 'imoegirl',
+                    admin: 'imoegirl',
+                    id: window.location.pathname,
+                    distractionFreeMode: false
+                });
+                gitalk.render('gitalk-container');
+            };
+            (i = document.createElement("link")).rel = "stylesheet",
+            i.href = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css',
+            document.head.appendChild(i);
+        }
+    
+        var runningOnBrowser = typeof window !== "undefined";
+        var isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+        var supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    
+        setTimeout(function () {
+            if (!isBot && supportsIntersectionObserver) {
+                var comment_observer = new IntersectionObserver(function(entries) {
+                    if (entries[0].isIntersecting) {
+                        loadComment();
+                        comment_observer.disconnect();
+                    }
+                }, { threshold: [0] });
+                comment_observer.observe(document.getElementById('comment'));
+            } else {
+                loadComment();
+            }
+        }, 1);
+    </script>
+
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

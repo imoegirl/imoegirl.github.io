@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    
+    
+        <link rel="mask-icon" href="/images/favicon.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>Rust 基础 | 枚举、匹配 | 萌一小栈</title>
+
+
+    <meta name="keywords" content="Rust">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="这篇博客涉及到的知识点有 枚举的定义、Option 枚举、match 语法、if let 语法。 枚举的定义Rust 中定义一个枚举，使用关键字 enum，看下面的代码 &#x2F;&#x2F; 定义一个NPC类型枚举enum NPCType &amp;#123;    TalkNPC,    WalkNPC,    BattleNPC,    TaskNPC,&amp;#125;enum GameState &amp;#123;    O">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rust 基础 | 枚举、匹配">
+<meta property="og:url" content="http://imoegirl.com/2020/04/05/rust-syntax-summary-05/index.html">
+<meta property="og:site_name" content="萌一小栈">
+<meta property="og:description" content="这篇博客涉及到的知识点有 枚举的定义、Option 枚举、match 语法、if let 语法。 枚举的定义Rust 中定义一个枚举，使用关键字 enum，看下面的代码 &#x2F;&#x2F; 定义一个NPC类型枚举enum NPCType &amp;#123;    TalkNPC,    WalkNPC,    BattleNPC,    TaskNPC,&amp;#125;enum GameState &amp;#123;    O">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-04-05T14:29:14.000Z">
+<meta property="article:modified_time" content="2021-08-21T06:36:34.892Z">
+<meta property="article:author" content="iMoegirl">
+<meta property="article:tag" content="Rust">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/atom-one-dark.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">萌一小栈</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        Rust 基础 | 枚举、匹配
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2020/04/" class="post-meta__date button">2020-04-05</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>这篇博客涉及到的知识点有 <strong>枚举的定义</strong>、<strong>Option 枚举</strong>、<strong>match 语法</strong>、<strong>if let 语法</strong>。</p>
+<h2 id="枚举的定义"><a href="#枚举的定义" class="headerlink" title="枚举的定义"></a>枚举的定义</h2><p>Rust 中定义一个枚举，使用关键字 <code>enum</code>，看下面的代码</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 定义一个NPC类型枚举</span></span><br><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">NPCType</span></span> &#123;</span><br><span class="line">    TalkNPC,</span><br><span class="line">    WalkNPC,</span><br><span class="line">    BattleNPC,</span><br><span class="line">    TaskNPC,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">GameState</span></span> &#123;</span><br><span class="line">    OnLogin = <span class="number">1</span>,</span><br><span class="line">    OnHall = <span class="number">2</span>,</span><br><span class="line">    OnWorld,</span><br><span class="line">    OnBattle,</span><br><span class="line">    OnLogOut,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<p>但是 Rust 的枚举是可以关联数据的，看下面的代码</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">CommandType</span></span> &#123;</span><br><span class="line">    Move(<span class="built_in">i32</span>, <span class="built_in">i32</span>, <span class="built_in">i32</span>),</span><br><span class="line">    Jump(<span class="built_in">u32</span>),</span><br><span class="line">    ChangeColor(<span class="built_in">u8</span>, <span class="built_in">u8</span>, <span class="built_in">u8</span>, <span class="built_in">u8</span>),</span><br><span class="line">    Smile,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> move_command = CommandType::Move(<span class="number">10</span>, -<span class="number">5</span>, <span class="number">3</span>);</span><br><span class="line">    <span class="keyword">let</span> jump_command = CommandType::Jump(<span class="number">2</span>);</span><br><span class="line">    <span class="keyword">let</span> change_color_command = CommandType::ChangeColor(<span class="number">110</span>,<span class="number">128</span>,<span class="number">55</span>,<span class="number">255</span>);</span><br><span class="line">    <span class="keyword">let</span> smile_command = CommandType::Smile;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>上面的代码中，可以给枚举中的字段关联数据，例如，Move 关联了3个i32类型的数据。我们可以关联任何类型的数据，也可以是自己定义的结构体，或者另一个枚举，都是可以的。</p>
+<h2 id="Option-枚举"><a href="#Option-枚举" class="headerlink" title="Option 枚举"></a>Option 枚举</h2><p>Rust 没有空值(Null)，但是可以使用 Option 枚举，来表示有和没有的概念。Option 枚举有两个字段，一个是 Some, 一个是 None，而 Option 是泛型的，就是说它可以面向任何类型的值 <code>Option&lt;T&gt;</code>，用于表示任何类型的值，有值，或者没有值。Some(T) 表示有值，而 None 表示没有值，以 i32 为例子，看下面的代码</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> has_value: <span class="built_in">Option</span>&lt;<span class="built_in">i32</span>&gt; = <span class="literal">Some</span>(<span class="number">200</span>);</span><br><span class="line">    <span class="keyword">let</span> none_value: <span class="built_in">Option</span>&lt;<span class="built_in">i32</span>&gt; = <span class="literal">None</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;has_value: &#123;:?&#125;&quot;</span>, has_value);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;none_value: &#123;:?&#125;&quot;</span>, none_value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Option 可以理解为盒子，Some(T) 表示有盒子，如果有盒子，那盒子里一定装了某种东西，也就是某种类型的值。而 None 表示没有盒子。上面的代码中，直接使用了 <code>Some(200)</code>，而不是 <code>Option::Some(200)</code>，是因为太常用，而被 Rust 包含在了 preload 中，所以我们可以省略前缀 <code>Option::</code>。在 Rust 的学习过程中，会经常遇到 Option。特别是函数的返回值。</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> girl_age = get_girl_age(<span class="literal">true</span>);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;girl_age: &#123;:?&#125;&quot;</span>, girl_age);   <span class="comment">// Some(18)</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> boy_age = get_girl_age(<span class="literal">false</span>);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;boy_age: &#123;:?&#125;&quot;</span>, boy_age);     <span class="comment">// None</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">get_girl_age</span></span>(is_girl: <span class="built_in">bool</span>) -&gt; <span class="built_in">Option</span>&lt;<span class="built_in">u32</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> is_girl &#123;</span><br><span class="line">        <span class="literal">Some</span>(<span class="number">18</span>)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="literal">None</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="match-语法"><a href="#match-语法" class="headerlink" title="match 语法"></a>match 语法</h2><p>match 语法有点类型其他语言的 switch 语法，用于条件匹配。直接看代码</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">CommandType</span></span> &#123;</span><br><span class="line">    Move(<span class="built_in">i32</span>, <span class="built_in">i32</span>, <span class="built_in">i32</span>),</span><br><span class="line">    Jump(<span class="built_in">u32</span>),</span><br><span class="line">    ChangeColor(<span class="built_in">u8</span>, <span class="built_in">u8</span>, <span class="built_in">u8</span>, <span class="built_in">u8</span>),</span><br><span class="line">    Smile,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> move_command = CommandType::Move(<span class="number">10</span>, <span class="number">5</span>, <span class="number">2</span>);</span><br><span class="line">    process_command(&amp;move_command);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> change_color_command = CommandType::ChangeColor(<span class="number">154</span>,<span class="number">220</span>, <span class="number">14</span>, <span class="number">255</span>);</span><br><span class="line">    process_command(&amp;change_color_command);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">process_command</span></span>(command: &amp;CommandType) &#123;</span><br><span class="line">    <span class="keyword">match</span> command &#123;</span><br><span class="line">        CommandType::Move(x, y, z) =&gt; &#123;</span><br><span class="line">            <span class="built_in">println!</span>(<span class="string">&quot;Player Move, x: &#123;&#125;  y: &#123;&#125;  z: &#123;&#125;&quot;</span>, x, y, z);</span><br><span class="line">        &#125;,</span><br><span class="line">        CommandType::Jump(height) =&gt; &#123;</span><br><span class="line">            <span class="built_in">println!</span>(<span class="string">&quot;Player Jump to: &#123;&#125;&quot;</span>, height);</span><br><span class="line">        &#125;,</span><br><span class="line">        CommandType::ChangeColor(r, g, b, a) =&gt; &#123;</span><br><span class="line">            <span class="built_in">println!</span>(<span class="string">&quot;player change color: (&#123;&#125;, &#123;&#125;, &#123;&#125;, &#123;&#125;)&quot;</span>, r, g, b, a);</span><br><span class="line">        &#125;,</span><br><span class="line">        CommandType::Smile =&gt; &#123;</span><br><span class="line">            <span class="built_in">println!</span>(<span class="string">&quot;player smile&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码中，还是以 CommandType 枚举来举例。在 main 函数中定义了两个 CommandType 变量，分别使用不同的枚举，然后在 process_command 中，使用 match 语法匹配。在使用 match 匹配时， 一但类型匹配成功，就可以将其关联的值，绑定到某个变量上，然后在 match 逻辑中使用。例如上面代码中匹配上 CommandType::Move，Move 关联了三个 i32 类型的数据，所以在匹配时，就可以将关联的数据，绑定到 match 中的 x, y, z 三个变量上。</p>
+<p>Rust 的 match 匹配必须覆盖所有的类型，如果逻辑中只关心某些类型，则可以使用 <code>_</code> 忽略其他类型。</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">CommandType</span></span> &#123;</span><br><span class="line">    Move(<span class="built_in">i32</span>, <span class="built_in">i32</span>, <span class="built_in">i32</span>),</span><br><span class="line">    Jump(<span class="built_in">u32</span>),</span><br><span class="line">    ChangeColor(<span class="built_in">u8</span>, <span class="built_in">u8</span>, <span class="built_in">u8</span>, <span class="built_in">u8</span>),</span><br><span class="line">    Smile,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> command = CommandType::Smile;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">match</span> command &#123;</span><br><span class="line">        CommandType::Smile =&gt; &#123;</span><br><span class="line">            <span class="built_in">println!</span>(<span class="string">&quot;Smile Command&quot;</span>);</span><br><span class="line">        &#125;,</span><br><span class="line">        _ =&gt; &#123;</span><br><span class="line">            <span class="built_in">println!</span>(<span class="string">&quot;Other Command&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="if-let-语法"><a href="#if-let-语法" class="headerlink" title="if let 语法"></a>if let 语法</h2><p>相比于 match 匹配的繁琐，if let 语法让匹配更简洁一些</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">CommandType</span></span> &#123;</span><br><span class="line">    Move(<span class="built_in">i32</span>, <span class="built_in">i32</span>, <span class="built_in">i32</span>),</span><br><span class="line">    Jump(<span class="built_in">u32</span>),</span><br><span class="line">    ChangeColor(<span class="built_in">u8</span>, <span class="built_in">u8</span>, <span class="built_in">u8</span>, <span class="built_in">u8</span>),</span><br><span class="line">    Smile,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> move_command = CommandType::Move(<span class="number">10</span>, <span class="number">5</span>, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> CommandType::Move(x, y, z) = move_command &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;Player Move: x: &#123;&#125;, y: &#123;&#125;, z: &#123;&#125;&quot;</span>, x, y, z);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;is not move command&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码中，if let 可以理解为，将右边的 move_command 和左边的枚举类型匹配，如果能匹配上，则将 move_command中的数据绑定到 x, y, z 上，然后执行匹配成功的逻辑，也就是打印出 x, y, z 的值，如果类型匹配不上，则执行匹配不上的逻辑。</p>
+<p>为了更好的理解，下面再看一个例子</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> x = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> x == <span class="number">2</span> &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;x = 2&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;x != 2&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> <span class="number">2</span> = x &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;x = 2&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;x != 2&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中 if 语句 和 if let 语句执行的打印是一样的，似乎是一个正向匹配测试，一个反向匹配测试的感觉。</p>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>Author: </strong>iMoegirl
+        </p>
+        <p>
+            <strong>
+                Permalink: 
+            </strong>
+            <a href="http://imoegirl.com/2020/04/05/rust-syntax-summary-05/">http://imoegirl.com/2020/04/05/rust-syntax-summary-05/</a>
+        </p>
+        
+            <strong>
+                <p>任何技术问题，可加微信交流，微信: ifloop</p>
+
+            </strong>
+        
+            <strong>
+                <p>搜索并关注微信公众号 [ 萌一小栈 ] 可及时订阅最新技术文章</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>updated at 2021-08-21</p></div> 
+    <div class="post-entry__tags"><a href="/tags/Rust/" class="post-tags__link button"># Rust</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2020/04/12/configure-nginx-https-and-redirect/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            nginx 配置 https 及重定向
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2020/04/02/rust-syntax-summary-04/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            Rust 基础 | 结构体
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>Comments</h4>
+    
+    
+    
+    
+    
+    <div id="gitalk-container"></div>
+
+    
+    
+    
+    
+    
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">萌一小栈</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?ae464fe0e62cef297c26908427b0e7bd';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    <script>
+        function loadComment() {
+            let e, i;
+            (e = document.createElement("script")).src = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js',
+            document.body.appendChild(e);
+            e.onload = () => {
+                var gitalk = new Gitalk({
+                    clientID: '5b5aeaa767a06f6c23a4',
+                    clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+                    repo: 'imoegirl.github.io',
+                    owner: 'imoegirl',
+                    admin: 'imoegirl',
+                    id: window.location.pathname,
+                    distractionFreeMode: false
+                });
+                gitalk.render('gitalk-container');
+            };
+            (i = document.createElement("link")).rel = "stylesheet",
+            i.href = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css',
+            document.head.appendChild(i);
+        }
+    
+        var runningOnBrowser = typeof window !== "undefined";
+        var isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+        var supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    
+        setTimeout(function () {
+            if (!isBot && supportsIntersectionObserver) {
+                var comment_observer = new IntersectionObserver(function(entries) {
+                    if (entries[0].isIntersecting) {
+                        loadComment();
+                        comment_observer.disconnect();
+                    }
+                }, { threshold: [0] });
+                comment_observer.observe(document.getElementById('comment'));
+            } else {
+                loadComment();
+            }
+        }, 1);
+    </script>
+
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

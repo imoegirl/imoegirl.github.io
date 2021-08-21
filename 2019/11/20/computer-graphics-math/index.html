@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    
+    
+        <link rel="mask-icon" href="/images/favicon.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>图形学相关的基本数学 | 萌一小栈</title>
+
+
+    <meta name="keywords" content="计算机图形学">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="这一篇博客会比较长，目前还没写完，处于不断更新中…  这一节会用一些通俗的语言去解释一些数学上的概念，有一些解释可能并不是严谨，我们更多地是把焦点放在理解这些概念是什么，为后面的应用做铺垫。如果有一些点不能理解，也没关系，只要知道有这样一个东西就行，等真正用到的时候，有点印象，这样就会有解决问题的方向，再回来查相关的知识就可以。单纯记住一些知识是没有太多意义的，只有会应用了，才有意义。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图形学相关的基本数学">
+<meta property="og:url" content="http://imoegirl.com/2019/11/20/computer-graphics-math/index.html">
+<meta property="og:site_name" content="萌一小栈">
+<meta property="og:description" content="这一篇博客会比较长，目前还没写完，处于不断更新中…  这一节会用一些通俗的语言去解释一些数学上的概念，有一些解释可能并不是严谨，我们更多地是把焦点放在理解这些概念是什么，为后面的应用做铺垫。如果有一些点不能理解，也没关系，只要知道有这样一个东西就行，等真正用到的时候，有点印象，这样就会有解决问题的方向，再回来查相关的知识就可以。单纯记住一些知识是没有太多意义的，只有会应用了，才有意义。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U446ae05281884297845309e90de46732I.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Uc10efe8d591b4e708914659cac7e427an.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ud924c29d9a95416c9e4cf93d679d2aa5M.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U6359c32d2c794c8f835cc0bcd9183988k.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ue29d490f668345159a7dcb1439305bab2.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U6b69b4d5d88d4d8089e7de54313e7fc5Z.gif">
+<meta property="article:published_time" content="2019-11-20T04:56:25.000Z">
+<meta property="article:modified_time" content="2021-08-21T06:33:48.349Z">
+<meta property="article:author" content="iMoegirl">
+<meta property="article:tag" content="计算机图形学">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/U446ae05281884297845309e90de46732I.jpg">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/atom-one-dark.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">萌一小栈</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        图形学相关的基本数学
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2019/11/" class="post-meta__date button">2019-11-20</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <blockquote>
+<p>这一篇博客会比较长，目前还没写完，处于不断更新中…</p>
+</blockquote>
+<p>这一节会用一些通俗的语言去解释一些数学上的概念，有一些解释可能并不是严谨，我们更多地是把焦点放在理解这些概念是什么，为后面的应用做铺垫。如果有一些点不能理解，也没关系，只要知道有这样一个东西就行，等真正用到的时候，有点印象，这样就会有解决问题的方向，再回来查相关的知识就可以。单纯记住一些知识是没有太多意义的，只有会应用了，才有意义。</p>
+<span id="more"></span>
+
+<h2 id="集合-Sets"><a href="#集合-Sets" class="headerlink" title="集合 (Sets)"></a>集合 (Sets)</h2><p>一堆东西，就是一个集合。例如桌子上有一堆苹果，就可以说，这是一个苹果的集合。旁边放了一堆干果，就可以说，那是一个干果的集合。这里有100个数字，都是整数，那这就是一个整数集合。</p>
+<p><strong>下面是一些常用的集合</strong></p>
+<ul>
+<li><p><code>ℝ</code> 实数集合<br>实数包含有理数 和无理数，有理数包括整数和分数，无理数就是无限不循环小数</p>
+</li>
+<li><p><code>ℝ+</code> 非负实数集合<br>理解了实数集，这个非负实数集合就好理解了，就是把把负数去掉</p>
+</li>
+<li><p><code>ℝ2</code> 有序对，像二维的坐标，就属于一个有限对，(x,y)</p>
+</li>
+<li><p><code>ℝn</code> 在n维笛卡尔空间中的点</p>
+</li>
+<li><p><code>ℤ</code> 整数集合</p>
+</li>
+<li><p><code>S2</code> 在单位球面上的3D点</p>
+</li>
+</ul>
+<p>上面的这些常用的集合，大概了解一下就好了，不用详细的去探究，只要大概知道是什么，有这个名词的印象就OK，等用到的时候自然就了解了。</p>
+<h2 id="映射-Mappings"><a href="#映射-Mappings" class="headerlink" title="映射 (Mappings)"></a>映射 (Mappings)</h2><p>映射和编程上的函数很类似，输入参数，输出结果，或者说，给函数一个A，函数进行运算后，会返回给你一个B。而映射，类似，就是将一个东西从A变成B。</p>
+<p><code>f:ℝ↦ℤ</code> 这个东东，可以这样解释，有一个函数叫做f，这个函数呢，接收一个输入，这个输入是<code>ℝ</code>，也就是上面说到的实数类型的数，注意，这里是输入一个实数，而不是输入实数集合，这里的<code>ℝ</code>可以理解成编程函数中的数据类型。然后呢输出一个整数类型的数。基本上可以当作编程语言中的函数调用。</p>
+<p>映射，是将一个集合中的元素，映射成另一个集合中的元素。可以说，你从A集合中找一个元素，扔进映射函数里，那么映射函数会从B集合中找一个元素，再扔给你。</p>
+<h2 id="逆映射-Inverse-Mappings"><a href="#逆映射-Inverse-Mappings" class="headerlink" title="逆映射 (Inverse Mappings)"></a>逆映射 (Inverse Mappings)</h2><p>通俗来讲，逆映射就是映射反过来，你从B集后找一个元素扔进映射函数，映射函数会从A集合中根据映射规则找一个元素还给你。映射中，有一个名词，叫做 <code>双射</code>，就是说，对于A集合中的任何一个元素，都能在B集后中找到唯一一个与它一一对应的元素，并且，对于B集后中的任何一个元素，也都在能A集合找到唯一一个与它一一对应的元素。这种情况，就叫做双射。</p>
+<h2 id="区间-Intervals"><a href="#区间-Intervals" class="headerlink" title="区间 (Intervals)"></a>区间 (Intervals)</h2><p>区间可以理解为一个数值范围，这个范围内的元素放在一起，也就是我们前面学到的集合。例如一周有7天，数值范围就是从星期一到星期日，某幼儿园小朋友的身高范围是80cm到140cm之间的，这些都是区间。我们从整数集合上定义一个区间，例如[1, 15]，意思就是从1到15这15个数。用中括号<code>[]</code> 表示的区间叫做闭区间，用小括号<code>()</code>表示的区间叫做开区间，还可以混合使用，例如 <code>(]</code> 或者 <code>[)</code>，这种分别叫做半开区间和半闭区间。那它们有什么区别呢？中括号，表示区间范围包含起始或结束数值，小括号表示区间范围不包含起始或结束数值。</p>
+<ul>
+<li>[1, 10] 表示区间范围是从 1到10</li>
+<li>(1, 10) 表示区间范围是从 2到9</li>
+<li>(1, 10] 表示区间范围是从 2到10</li>
+<li>[1, 10) 表示区间范围是从 1到9</li>
+</ul>
+<p><code>并集</code>: 给定两个集合A，B，把他们所有的元素合并在一起组成的集合，叫做集合A与集合B的 <code>并集</code>，记作A∪B，读作A并B。</p>
+<p><code>交集</code>: 给定两个集合A，B，把所有即属于A，又属于B的元素拿出来，组成一个新的集合，这个集合，就叫做A与B的 <code>交集</code>，记作A∩B。</p>
+<p>区间可以做减法操作，A-B，表示的是，从区间A中，去掉属于属于区间B中的元素。</p>
+<h2 id="对数-Logarithms"><a href="#对数-Logarithms" class="headerlink" title="对数 (Logarithms)"></a>对数 (Logarithms)</h2><p>我们先来看一个简单的计算 $3^{4} = 3 * 3 * 3 * 3 = 81$ 这个是不是很简单？3的4次方就是4个3连续相乘，最后结果是81。这叫做幂运算。</p>
+<p>而对数呢，其实就是幂运算反过来，上面我们3的4次方，等于多少。而现在，我们要计算3的几次方等于81呢？用公式来表示，就是这样子的 $y = \log_381$ ，所以这里的 y 就是结果，也就是4。只要记住一句话，就很好地理解对数了，就是计算一个数的几次方等于另一个数。</p>
+<h2 id="二次方程-Quadratic-Equations"><a href="#二次方程-Quadratic-Equations" class="headerlink" title="二次方程 (Quadratic Equations)"></a>二次方程 (Quadratic Equations)</h2><p>二次方程就是我们熟悉的 $ax^{2} + bx + c = 0 $ 这种类型的。我们从几何的角度来考虑这个方程，$ y = ax^{2} + bx + c $，这个方程是一个抛物线，而方程的解，就是这条抛物线与x轴的交点。有可能是0次，1次，或2次，也就是说，最终的解可能有0个，1个或两个。就像下面的图像。</p>
+<p><img src="https://ae01.alicdn.com/kf/U446ae05281884297845309e90de46732I.jpg" alt="p000301_quadratic-equations"></p>
+<h2 id="角-Angles"><a href="#角-Angles" class="headerlink" title="角 (Angles)"></a>角 (Angles)</h2><p>一个角，是由两条射线从同一个原点，但是射向不同方向而构成的。这里，我们将角放到单位圆上来说。使用两个射线，从圆的原点出发，切割单位圆，看下面的图。</p>
+<p><img src="https://ae01.alicdn.com/kf/Uc10efe8d591b4e708914659cac7e427an.jpg" alt="p000302_unit-circle"></p>
+<p>这里，我们使用的单位是弧度。弧度是基于圆的半径的纯计量单位，也就是 “半径环绕圆周” 的概念。一个整圆的弧度是 <strong>2π</strong>，也就是360度。上图中我们用两条射线去切割圆，会产生两个区域，一个大的，一个小的。通常约定是使用<strong>小</strong>的弧形，来表示角。</p>
+<p>关于弧度和角度的换算。因为单位圆是 <strong>2π</strong> 弧度，**360 **度。所以 <strong>π</strong> 弧度就等于 <strong>180</strong> 度。所以 <strong>1弧度=180度/π</strong></p>
+<p><strong>将弧度转为角度：乘以 180，除以 π</strong></p>
+<p><strong>将角度转为弧度：乘以 π，除以 180</strong></p>
+<h2 id="三角函数-Trigonometric-Functions"><a href="#三角函数-Trigonometric-Functions" class="headerlink" title="三角函数 (Trigonometric Functions)"></a>三角函数 (Trigonometric Functions)</h2><p>三角函数最基本的就是我们初中学过的，正弦(sin)、余弦(cos)、正切(tan)，而这些三角函数，都是基于 <code>直角三角形</code> 而建立的。</p>
+<p>看下面一个直角三角形的图，我们先把三条边的的名字标注上</p>
+<p><img src="https://ae01.alicdn.com/kf/Ud924c29d9a95416c9e4cf93d679d2aa5M.png" alt="p000303_adjacent-opposite-hypotenuse"></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.shuxuele.com/sine-cosine-tangent.html">图片来自数学乐</a></p>
+</blockquote>
+<p>对于直角三角形中某一个角θ来说，</p>
+<ol>
+<li>对边，就是对面的边，</li>
+<li>邻边，就是旁边的边，</li>
+<li>斜边，就是整个三角形最长的边。</li>
+</ol>
+<p>而上面提到的三个基本的三角函数，就和这三条边有关。</p>
+<p>正弦 $sin(θ) = \frac{对边}{斜边}$</p>
+<p>余弦 $cos(θ) = \frac{邻边}{斜边}$</p>
+<p>正切 $tan(θ) = \frac{对边}{邻边}$</p>
+<p>其实就是用一条边的长度除以另一边的长度。<br>关于三角函数就暂时介绍这么多，其实里面还有很多内容，这个我想等在图形学中用到时，再详聊这方面的内容。</p>
+<h2 id="向量-Vector"><a href="#向量-Vector" class="headerlink" title="向量 (Vector)"></a>向量 (Vector)</h2><p>向量在图形学和游戏开发中有大量的应用 ，那么什么是向量呢？其实就是一个方向，或者说一个偏移！例如，用手指指向天空中某颗流星，这就是一个方向。有一个人问你，超市在什么地方，你说，从这里出发，向左走50米，然后向前走30米，这里就有了两个向量，一个指向左边，一个指向前面。</p>
+<p>向量是有大小的，上面说的向左走50米，这里的50就是可以理解为大小。</p>
+<p>两个向量，只要方向相同，大小相同，那就是一样的，和向量的起点无关。</p>
+<p>向量，与坐标系是息息相关的。现要只要记住，向量是偏移，是方向，就可以，不管怎样的数据结构去标识，不要把值理解成一个点就可以。</p>
+<h2 id="向量的操作-Vector-Operation"><a href="#向量的操作-Vector-Operation" class="headerlink" title="向量的操作 (Vector Operation)"></a>向量的操作 (Vector Operation)</h2><p>向量可以<code>相加</code>，<code>相减</code>，<code>相乘</code>。这里我们暂时只讨论加和减。</p>
+<p>两个方向相加，会得到什么呢？假设你站在A点，然后<code>向左</code>走了50米，到达B点，然后从B点又<code>向前</code>走了30米，到达C点。这里有两个向量一个是从A点到B点的向量，我们表示成，$\vec {AB}$。第二个向量是从B点到C点，我们表示成 $\vec {BC}$。那两个向量相加的结果呢，就是一个从A点指向C点的向量，我们表示成 $\vec {AC}$。</p>
+<p>向量相加，不管中间加了多少向量，最后的结果，都是从最初的起点指向最后的终点的一个向量。看下面的图</p>
+<p><img src="https://ae01.alicdn.com/kf/U6359c32d2c794c8f835cc0bcd9183988k.png" alt="p000304_vector-operation"></p>
+<p>两个向量相减，会得到一个从被减向量的头，指向减向量的头。例如有两个点，A和B，A-B，就会得到一个从B点指向A点的向量。这个是很有用的，例如在游戏中你要计算炮弹射向敌人的方向，只需要用敌人的位置，减去炮口的位置，然后将结构标准化，就会得到炮弹的发射方向。</p>
+<p><code>负向量</code>就是一个向量大小相同，方向相反的一个向量，例如你现在朝东，那负向量就是朝西。</p>
+<p>向量可以表示成行向量，或者列向量。</p>
+<p>这是一个列向量 $a = \begin{bmatrix} x_{a} \\ y_{a} \end{bmatrix}$</p>
+<p>这是一个行向量 $a = \begin{bmatrix} x_{a} &amp; y_{a} \end{bmatrix}$</p>
+<h2 id="向量的大小-模"><a href="#向量的大小-模" class="headerlink" title="向量的大小(模)"></a>向量的大小(模)</h2><p>向量的大小，也叫做向量的模，怎么计算呢？例如一个向量是这样的 $a = \begin{bmatrix} x_{a} &amp; y_{a} \end{bmatrix}$，向量的模，是一个标量，通俗点来讲就是一个数。向量的模用双竖线表示，直接看下面的计算公式</p>
+<p>$\lVert x \rVert = \sqrt{x_{a}^2 + y_{a}^2} $</p>
+<p>就是向量中的每一个元素平方和，然后开平方</p>
+<h2 id="向量的点积"><a href="#向量的点积" class="headerlink" title="向量的点积"></a>向量的点积</h2><p>向量的点积，是两个向量之间的关系，与两个向量的大小，以及它们之间的夹角有关。看下面有两 a, b 两个向量的一个图</p>
+<p><img src="https://ae01.alicdn.com/kf/Ue29d490f668345159a7dcb1439305bab2.png" alt="p000305_vector-dot"></p>
+<p>向量的点积公式就是图中的，点积的是由<code>两个向量的模以及两个向量之间夹角的 cos 值相乘</code>得到的。</p>
+<p>如果两个向量都是单位向量，那它们模就是1，最后会得到向量的点积，就是夹角的cos值。</p>
+<p>上面是向量点积的几何定义，还有一个代数定义的公式，用来计算点积的值。</p>
+<p>$a \cdot b = \sum_{i=1}^{n}a_{i}b_{i}$</p>
+<p>就是两个向量对应元素乘积的累加和。这个公式算出来的结构，和上面那个几何公式的结果是一样的。</p>
+<p>现在基本上游戏引擎中都有直接计算点积的API，或者数学库，不用自己手写公式。</p>
+<p>点积有什么用呢？主要有两方面的应用，一是可以大概判断两个向量的方向，是相同，垂直，还是相反。二是可以用来计算一个向量在另一个向量上的投影。这里只要大概有个印象就行，后面等用到了再细说。</p>
+<h2 id="向量的叉积"><a href="#向量的叉积" class="headerlink" title="向量的叉积"></a>向量的叉积</h2><p>这里引用<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%8F%89%E7%A7%AF">维基百科</a>上对于向量叉积的解释，我觉得这个解释很清晰，很易懂。</p>
+<p><strong>叉积（英语：Cross product）又称向量积（英语：Vector product），是对三维空间中的两个向量的二元运算，使用符号$\times$。与点积不同，它的运算结果是向量。</strong></p>
+<p>就是说向量的叉积是由两个向量进行叉乘运算得到的，结果也是一个向量，而这个向量呢，是垂直于那两个向量的。有一条很重要的规则是，如果两个向量方向相同或相反，亦或任意一个的长度为零，那么它们的叉积为零。看下面的图</p>
+<p><img src="https://ae01.alicdn.com/kf/U6b69b4d5d88d4d8089e7de54313e7fc5Z.gif" alt="p000306_Cross_product"><br>上图中叉积a × b（垂直方向、紫色）随着向量 a（蓝色）和 b（红色）的夹角变化。 叉积垂直于两个向量，模长在两者平行时为零、在两者垂直时达到最大值‖a‖‖b‖。</p>
+<p>如果两个向量a，b分别是指向x轴和z轴方向，则叉积向量会有两个方向，要么指向上方，要么指向下方，那这个是由什么决定的呢？</p>
+<p>将右手食指指向 a 的方向、中指指向 b 的方向，则此时拇指的方向是向上的。将右手食指指向 b 、中指指向 a ，那么拇指就必定指向相反方向，即翻转了叉积的符号。</p>
+<p><code>叉积可以用于计算法向量。</code></p>
+<p>计算公式:<br>$(x_1, y_1, z_1) \times (x_2, y_2, z_2) = (y_{1}z_{2} - z_{1}y_{2},z_{1}x_{2} - x_{1}z_{2},x_{1}y_{2} - y_{1}x_{2})$</p>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>Author: </strong>iMoegirl
+        </p>
+        <p>
+            <strong>
+                Permalink: 
+            </strong>
+            <a href="http://imoegirl.com/2019/11/20/computer-graphics-math/">http://imoegirl.com/2019/11/20/computer-graphics-math/</a>
+        </p>
+        
+            <strong>
+                <p>任何技术问题，可加微信交流，微信: ifloop</p>
+
+            </strong>
+        
+            <strong>
+                <p>搜索并关注微信公众号 [ 萌一小栈 ] 可及时订阅最新技术文章</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>updated at 2021-08-21</p></div> 
+    <div class="post-entry__tags"><a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/" class="post-tags__link button"># 计算机图形学</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2019/11/30/unity-criware/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            浅谈在Unity3D中使用CriWare播放声音
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2019/11/17/data-structure-00-introduction/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            数据结构概述
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>Comments</h4>
+    
+    
+    
+    
+    
+    <div id="gitalk-container"></div>
+
+    
+    
+    
+    
+    
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">萌一小栈</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?ae464fe0e62cef297c26908427b0e7bd';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    <script>
+        function loadComment() {
+            let e, i;
+            (e = document.createElement("script")).src = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js',
+            document.body.appendChild(e);
+            e.onload = () => {
+                var gitalk = new Gitalk({
+                    clientID: '5b5aeaa767a06f6c23a4',
+                    clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+                    repo: 'imoegirl.github.io',
+                    owner: 'imoegirl',
+                    admin: 'imoegirl',
+                    id: window.location.pathname,
+                    distractionFreeMode: false
+                });
+                gitalk.render('gitalk-container');
+            };
+            (i = document.createElement("link")).rel = "stylesheet",
+            i.href = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css',
+            document.head.appendChild(i);
+        }
+    
+        var runningOnBrowser = typeof window !== "undefined";
+        var isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+        var supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    
+        setTimeout(function () {
+            if (!isBot && supportsIntersectionObserver) {
+                var comment_observer = new IntersectionObserver(function(entries) {
+                    if (entries[0].isIntersecting) {
+                        loadComment();
+                        comment_observer.disconnect();
+                    }
+                }, { threshold: [0] });
+                comment_observer.observe(document.getElementById('comment'));
+            } else {
+                loadComment();
+            }
+        }, 1);
+    </script>
+
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

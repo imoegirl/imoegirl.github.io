@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    
+    
+        <link rel="mask-icon" href="/images/favicon.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>数据结构概述 | 萌一小栈</title>
+
+
+    <meta name="keywords" content="数据结构与算法">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="经常有小伙伴想系统地学习一下数据结构，但很难找到适合自己的教程。好吧，其实说的是我自己。那今天就来聊一聊这个问题。 我们先把一些常用的数据结构列表出，大概讲一下他们的结构及应用，后面分篇细细讲解。在分篇讲解时，我们的关注点是某个数据结构是什么，怎样用代码描述出来。而更多涉及到这个数据结构的一些算法，将在后面的算法系列中详细讲解。 这个系列的博客，是面向那些和我差不多，大概了解数一些数据结构(知道一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构概述">
+<meta property="og:url" content="http://imoegirl.com/2019/11/17/data-structure-00-introduction/index.html">
+<meta property="og:site_name" content="萌一小栈">
+<meta property="og:description" content="经常有小伙伴想系统地学习一下数据结构，但很难找到适合自己的教程。好吧，其实说的是我自己。那今天就来聊一聊这个问题。 我们先把一些常用的数据结构列表出，大概讲一下他们的结构及应用，后面分篇细细讲解。在分篇讲解时，我们的关注点是某个数据结构是什么，怎样用代码描述出来。而更多涉及到这个数据结构的一些算法，将在后面的算法系列中详细讲解。 这个系列的博客，是面向那些和我差不多，大概了解数一些数据结构(知道一">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ub8dd26f0b1144ed1bc3ca2480f69d1884.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U6863881e10024e7199f1849f307d08fb6.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U51634327f21a4e2584dc948b4a9d31d45.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U60e6623a45754f2fa9f9ea495eb4aed3l.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U36db14af079848f79d605f2a04a6389fF.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U0c41411f3f3144eabba2a2953cc3aa57s.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ue084981d3df24e949b9375974a107eb5v.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Uf4af3c0ffe5d458c823d13209a10f9a1U.png">
+<meta property="article:published_time" content="2019-11-17T05:15:27.000Z">
+<meta property="article:modified_time" content="2021-08-21T06:33:58.898Z">
+<meta property="article:author" content="iMoegirl">
+<meta property="article:tag" content="数据结构与算法">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/Ub8dd26f0b1144ed1bc3ca2480f69d1884.png">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/atom-one-dark.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">萌一小栈</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        数据结构概述
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2019/11/" class="post-meta__date button">2019-11-17</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>经常有小伙伴想系统地学习一下数据结构，但很难找到适合自己的教程。好吧，其实说的是我自己。那今天就来聊一聊这个问题。</p>
+<p>我们先把一些常用的数据结构列表出，大概讲一下他们的结构及应用，后面分篇细细讲解。在分篇讲解时，我们的关注点是某个数据结构是什么，怎样用代码描述出来。而更多涉及到这个数据结构的一些算法，将在后面的算法系列中详细讲解。</p>
+<p>这个系列的博客，是面向那些和我差不多，大概了解数一些数据结构(知道一些名字，不太了解内部详细实现)，又想系统地巩固一下，深入一下的小朋友们~</p>
+<p>快来一起学习吧 ^_^</p>
+<span id="more"></span>
+
+<h2 id="数组-Array"><a href="#数组-Array" class="headerlink" title="数组 [Array]"></a>数组 [Array]</h2><p>数组用于存储同种类型的数据，数据与数据之间在内存中是连续的(相邻的)，在使用数组前，要预先分配好指定的内存大小。</p>
+<p>应用:<br>例如我们想存储幼儿员小班所有小朋友有的名字，就可以用数组。<br>[第一个小朋友名字, 第二个小朋友名字, 第三个小朋友名字, …]</p>
+<h2 id="链表-Linked-List"><a href="#链表-Linked-List" class="headerlink" title="链表 [Linked List]"></a>链表 [Linked List]</h2><p>链表，是由一个个节点，相连而成。每一个节点，都是独立的元素，它们在内存中的位置也不一定是连续的。每一个节点，都拥有两个部分，数据部分，和一个指向下一个节点的引用。刚刚说的是单向链表。</p>
+<p>还有一种叫做双向链表，区别就是一个节点有三个部分，数据部分，一个指向下一个节点的引用，一个指向上一个节点的引用。</p>
+<p>还有一种叫做循环链表，区别就是尾部和头部会连起来。</p>
+<p>应用:<br>链表常应用于存储不能事先确认数据个数的情况，对于这种情况，使用链表不需像数组一样预先分配内存，当有新的数据要存储时，只需要新申请一个节点的内存空间，然后将这个节点添加到链表即可。</p>
+<h2 id="堆栈-Stack"><a href="#堆栈-Stack" class="headerlink" title="堆栈 [Stack]"></a>堆栈 [Stack]</h2><p>想象这样一个场景，往一个箱子里放书，先放进一本漫画书，再放进一本故事书，再放进一本数学书。现在最上面的是数学书，如果要把里面的书一本一本都拿出来，就要先拿出数学书，再拿出故事书，再拿出漫画书，正好与放下的顺序相反。这就叫先进后出，FILO (First in last out)。</p>
+<p>而堆栈就是这一种结构，堆栈通常拥有两个方法，Push 和 Pop，分别就是放入数据，和拿出数据。后放入的数据，总是在最上面，往外拿数据时，也像从箱子里拿书一样，要从最上面开始拿。是不是很形象~</p>
+<p>应用:<br>堆栈是一个很有用的东西，我们平常用的很多软件中，都能找到它的应用，例如文本编辑器的撤销功能，其实就是在特定时间将用户的操作Push入栈，然后撤销时，从栈中Pop出最近的一个操作。再例如浏览器的后退功能，也是依次将用户浏览的网址Push入栈，然后后退时，依次Pop出最近的浏览网址。</p>
+<h2 id="队列-Queue"><a href="#队列-Queue" class="headerlink" title="队列 [Queue]"></a>队列 [Queue]</h2><p>大家排队买冰激凌，就是一种队列结构，这个人买完冰激凌，然后下一个。在这个过程中，后面不断的有人在排队，队伍越来越长，服务员从前面一个一个处理顾客的需求。</p>
+<p>队列也是这样，先入列的，也会先出列，就像排队。先排队的，先拿到冰激凌，然后走人。所以队列通常有两个操作，入列(Enqueue) 和 出列 (Dequeue)。队列是先进先出，FIFO (First in first out)。</p>
+<p>还有一种队列叫做环形队列，会循环利用已经分配好的内存空间，而不是入列和出列时执行分配和销毁内存操作。</p>
+<p>应用: 需要依次处理的事情，都可以使用队列，例如网络通信数据包，当客户端收到消息时，就可以放入队列，而消息处理器，不断地尝试从队列中取消息，如果有，则处理。</p>
+<p>咦？刚才好像说到冰激凌了~</p>
+<h2 id="二叉树-Binary-Tree"><a href="#二叉树-Binary-Tree" class="headerlink" title="二叉树 [Binary Tree]"></a>二叉树 [Binary Tree]</h2><p>树，就像我们平时在公园里看到的那种树的结构，分叉。而二叉树呢，就是只能分两叉，一分为二，每一个分叉，又可以最多一分为二。就像下面的这种形状。</p>
+<p><img src="https://ae01.alicdn.com/kf/Ub8dd26f0b1144ed1bc3ca2480f69d1884.png" alt="p000101_Binary-Tree"></p>
+<p>二叉树的结构，也可以理解为由 “节点” 组成，就像链表那样的节点。对于二叉树来说，每一个节点有三个部分，数据部分，指向左边分叉节点的引用，指向右边分叉节点的引用。</p>
+<p>二叉树，每一个节点，最多能分两叉，也就是，每一个节点，最多拥有两个直接子节点，也可能有一个，也可能没有。其实，二叉树的实现，很多也是用链表来做的。这个后面的博客再详细介绍，嘿嘿~</p>
+<p>应用:<br>树型结构在计算机中也有很多应用，例如我们很熟悉的文件浏览器。一个目录下，可以有多个目录，子目录下，又可以有多个文件，然后还可以再分叉继续往下深入。不过，真正的文件系统并不一定用的是二叉树，也可能是n叉树，具体的我还不是很清楚，尴尬ing…</p>
+<h2 id="二叉查找树-Binary-Search-Tree"><a href="#二叉查找树-Binary-Search-Tree" class="headerlink" title="二叉查找树 [Binary Search Tree]"></a>二叉查找树 [Binary Search Tree]</h2><p>二叉查找树，简称 BST，是在二叉树的基础上，增加了额外的规则。首先，我们给每一个节点赋予一个权重，这个权重，可以用任何东西代替，例如小朋友的分数，例如冰激凌的价格等等。然后，每一个节点，满足下面的规则</p>
+<ul>
+<li>如果一个节点左子树不为空，则整个左子树上的所有节点，权重都要小于当前节点</li>
+<li>如果一个节点右子树不为空，则整个右子树上的所有节点，权重都要大于当前节点</li>
+<li>左右子树，也都是二叉查找树，也就是说，子树，也要满足上面也条规则</li>
+</ul>
+<p><img src="https://ae01.alicdn.com/kf/U6863881e10024e7199f1849f307d08fb6.png" alt="p000102_Binary-Search-Tree"></p>
+<p>应用:<br>二叉查找树常常应用一些需要数据保持有序状态，但是又经常需要插入和删除某些数据的场景。例如电商平台中的商品数据组织，可能就经常用到二叉查找树。</p>
+<h2 id="二叉堆-Binary-Heap"><a href="#二叉堆-Binary-Heap" class="headerlink" title="二叉堆 [Binary Heap]"></a>二叉堆 [Binary Heap]</h2><p>是不是已经有点混乱了？没关系，只要大概了解有这样一个东西就行，不用完全理解是什么，怎么用。哈~，现在来说继续说一下二叉堆。二叉堆也是树…</p>
+<p>要说二叉堆，就不得不说一下完全二叉树。因为<strong>二叉堆，首先得是一颗完全二叉树</strong>,什么是完全二叉树呢？就是一颗树除了最后一层节点外，其他层，必须拥有左右两个节点，不能左节点为空，或右节点为空。而对于最后一层的节点，也就是上面说的叶子节点，都要尽可能地靠左。这个尽可能地靠左有点抽象，我们看下图就会明白。</p>
+<p><img src="https://ae01.alicdn.com/kf/U51634327f21a4e2584dc948b4a9d31d45.png" alt="p000103_Complete-Tree"></p>
+<p>然后二叉堆，分为<strong>最大堆</strong>和<strong>最小堆</strong>。对于最大堆来说，任何一个节点的值，都要大于等于左右两个子节点。而最小堆，任何一个节点的值，都要小于等于左右两个子节点。下面上图，嘻嘻~</p>
+<p><img src="https://ae01.alicdn.com/kf/U60e6623a45754f2fa9f9ea495eb4aed3l.png" alt="p000104_Binary-Heap"></p>
+<p>应用:<br>二叉堆可以用于实现优先队列，而优先队列在操作系统中，可以用于处理任务的调度工作。</p>
+<p>终于说完树了，感觉自己已经丢失了萌，只剩下呆了,要不吃包薯片吧。我不胖！~</p>
+<h2 id="散列-哈希-Hashing"><a href="#散列-哈希-Hashing" class="headerlink" title="散列/哈希 [Hashing]"></a>散列/哈希 [Hashing]</h2><p>什么Hash呢？Hash可以理解为一个唯一标识，这个标识可以是一个字符串，或者一个数字，只要唯一，都可以。那什么是Hash函数呢？Hash函数就是用于产生Hash值的东西，你向这个函数输入一些数据，这个函数就会返回给你一个Hash值。就像榨汁机，丢进橙子去，出来的一定是橙汁，丢进桃子去，出来的一定是桃汁。这是一一对应的关系，这个函数，不管执行多少次，只要输入的数据相同，输出的Hash值一定相同。</p>
+<p>一些编程语言中，拥有字典的结构，就是一个Key，对应一个Value，其实就可以理解为是Hash表。那Hash表有什么用呢？可以通过Key快速地访问对应的数据，而不用像数组那样，需要去遍历。例如幼儿圆小朋友的身高，就可以以名字作为Key，以身高作为Value，存储在一个Hash表中，这样可以快速地查询某一个小朋友的身高数据。</p>
+<p>这里就有一个问题，万一小朋友有重名的怎么办？Hash函数也是存在这个问题的，就是输入两个不同的数据，但是产生的Hash值是一样的，这叫做碰撞。这个问题，有很多种解决方案，我知道的一个是，将所有碰撞的Value，以一个链表的形式存储起来。</p>
+<p>这个东东就先说到这里，有一些东西我也不太懂，等后面我学会了，就写篇专门讲解Hash的文章，嘻嘻~</p>
+<h2 id="图-Graph"><a href="#图-Graph" class="headerlink" title="图 [Graph]"></a>图 [Graph]</h2><p>现在来说一下图，这里的图，可不是我们平时理解的图片，而且是一种由点，和连接点的边而构成的一种数据结构。看下面的图</p>
+<p><img src="https://ae01.alicdn.com/kf/U36db14af079848f79d605f2a04a6389fF.png" alt="p000105_Graph"></p>
+<p>上面的图片，就是一种图的结构。图中的圆圈，就是图结构的节点，我们称为 node，而连接节点的线，就是边，我们称为 edge。有没有感觉，图结构，很像地图上的城市和道路？对的，其实图结构，在我们平常用的地图应用中，就用到了，可以用来计算两个点之间的最短距离。</p>
+<p>上面的图中，0这个点，连接着1和2，意思就是可以从0，到达1和2。而5这个点，和6，4相连，就是说可以从5这个点，到达6和4点。点与点之间的边，我们可以赋予权重，来表示一些信息。例如3与2这个点的边，我可以赋予一个表示距离的权重，假设是10，而3和6这两个点之间也赋予一个表示距离的权重，例如16，这样，就可以计算一些东西。</p>
+<p>那么，图在计算机中应该怎样去表示呢？有两种常用的结构，一种是矩阵，一种是邻接表。这个我们后面专门的文章再详细讲解。</p>
+<h2 id="前缀树-字典树-Trie"><a href="#前缀树-字典树-Trie" class="headerlink" title="前缀树/字典树 [Trie]"></a>前缀树/字典树 [Trie]</h2><p>这个东东，和树和相似。维基百科中的解释是，一个节点的所有子孙都有相同的前缀，也就是这个节点对应的字符串，而根节点对应空字符串。我们看一个图，就会大概明白一些。</p>
+<p><img src="https://ae01.alicdn.com/kf/U0c41411f3f3144eabba2a2953cc3aa57s.png" alt="p000106_Trie"></p>
+<p>Trie是一种很有效率的数据结构，用于在字典中查找指定的词，它的效率，比BST(二叉查找树)还快。Hash表结构也提供了相同速度的查找效率，但是Trie没有Hash碰撞的问题。用Trie还有一个好处是，我们可以以很快的速度找出所有以指定前缀开头的词，这个，Hash可是做不到。但是Trie也有缺点，就是需要很多额外的内存空间，相当于用空间换取了效率，不过，对于这个问题，也有很多优化方案，后面等我学会了再详细讲解。</p>
+<p>应用:<br>有一个我们很熟悉的应用，我们在浏览器中输入网址时，不用完全输完，就是弹出一些类似的历史网址，这个就可以用Trie实现。还有搜索框中搜索东西，我们输入一个字的时候，就会弹出好多以第一个字开头的东西，随着后面再输入内容，匹配的内容也会变化。</p>
+<h2 id="线段树-Segment-Tree"><a href="#线段树-Segment-Tree" class="headerlink" title="线段树 [Segment Tree]"></a>线段树 [Segment Tree]</h2><p>你知道二分法吗？就是把一堆糖果，先分为两份，然后将这两份，每一份再分为两份，然后再分为两份，然后… 就可以吃掉它了，嘿嘿~</p>
+<p>认真起来，将 0~10 这11个数，先分为两份(就是用数的个数除2，如果除不尽，就向下取整呗)，第0个到第五个为一份，第6个到第10个数为一份。然后再分，看下面的图。</p>
+<p><img src="https://ae01.alicdn.com/kf/Ue084981d3df24e949b9375974a107eb5v.png" alt="p000107_Binary-Split"></p>
+<p><strong>请注意:</strong> 上面说的 第几个第几个，是指所引，这里我们为了方便计算，才使用了0~10这个数，每一个数正好与索引相同。我们关注的是 <code>索引</code> 第0个数具体是什么，不重要，可以是 100 也可以是10000</p>
+<p>上图中的每一组数，可是不是感觉可以看成一个节点？然后连起来，就成了我们之前学过的树的结构了，对不对，没有记起来的话就看一下之前的内容，复习一下噢~</p>
+<p>下面开始说线段树了，将上面的每一组数作为一个节点，然后将每一个节点中的数加起来，作为节点的值，就像下面的图这样。这就是线段树。线段树，是一种特殊的二叉树，每一个节点不只代表一个数，而是代表一段区间。</p>
+<p><img src="https://ae01.alicdn.com/kf/Uf4af3c0ffe5d458c823d13209a10f9a1U.png" alt="p000108_Segment-Tree"></p>
+<p>对于线段数的解释，就到这里，只要知道线段树中的节点，表示的是一个区间就可以了，更详细和具体的内容，我们后面再详细学习。如果看不懂上面的概念解释，推荐另一个小朋友写的一篇不错的博客，解释的很清楚 <a target="_blank" rel="noopener" href="https://payphone-x.github.io/2019/01/24/Tree/">&gt; 点这里查看 :)</a></p>
+<h2 id="后缀树-Suffix-Tree"><a href="#后缀树-Suffix-Tree" class="headerlink" title="后缀树 [Suffix Tree]"></a>后缀树 [Suffix Tree]</h2><p>后缀树可以解决很多关于字符串的问题例如匹配和查询相关的问题，但是描述起来相对来说比较复杂，这里就不解释了，有文章总结的一句话是 <strong><a target="_blank" rel="noopener" href="https://yq.aliyun.com/articles/3553">一个给定的文本text的后缀树就是一个压缩的后缀字典树</a></strong></p>
+<p>后面我们使用专门的一篇文章去解释关于后缀树的内容。</p>
+<br>
+<hr>
+
+<p>到这里基本的数据结构概述就算结束了，当然，这里提到的结构并不能覆盖所有的数据结构，每一种数据结构，可能还可以分出很多变化模式来，例如字典树，在此基础上还有压缩字典树等等。</p>
+<p>学习不是一蹴而就的，要一步一步来，所以，我们接下来就一步一步来学习数据结构相关的东西 ^_^。</p>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>Author: </strong>iMoegirl
+        </p>
+        <p>
+            <strong>
+                Permalink: 
+            </strong>
+            <a href="http://imoegirl.com/2019/11/17/data-structure-00-introduction/">http://imoegirl.com/2019/11/17/data-structure-00-introduction/</a>
+        </p>
+        
+            <strong>
+                <p>任何技术问题，可加微信交流，微信: ifloop</p>
+
+            </strong>
+        
+            <strong>
+                <p>搜索并关注微信公众号 [ 萌一小栈 ] 可及时订阅最新技术文章</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>updated at 2021-08-21</p></div> 
+    <div class="post-entry__tags"><a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tags__link button"># 数据结构与算法</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2019/11/20/computer-graphics-math/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            图形学相关的基本数学
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>Comments</h4>
+    
+    
+    
+    
+    
+    <div id="gitalk-container"></div>
+
+    
+    
+    
+    
+    
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">萌一小栈</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?ae464fe0e62cef297c26908427b0e7bd';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    <script>
+        function loadComment() {
+            let e, i;
+            (e = document.createElement("script")).src = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js',
+            document.body.appendChild(e);
+            e.onload = () => {
+                var gitalk = new Gitalk({
+                    clientID: '5b5aeaa767a06f6c23a4',
+                    clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+                    repo: 'imoegirl.github.io',
+                    owner: 'imoegirl',
+                    admin: 'imoegirl',
+                    id: window.location.pathname,
+                    distractionFreeMode: false
+                });
+                gitalk.render('gitalk-container');
+            };
+            (i = document.createElement("link")).rel = "stylesheet",
+            i.href = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css',
+            document.head.appendChild(i);
+        }
+    
+        var runningOnBrowser = typeof window !== "undefined";
+        var isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+        var supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    
+        setTimeout(function () {
+            if (!isBot && supportsIntersectionObserver) {
+                var comment_observer = new IntersectionObserver(function(entries) {
+                    if (entries[0].isIntersecting) {
+                        loadComment();
+                        comment_observer.disconnect();
+                    }
+                }, { threshold: [0] });
+                comment_observer.observe(document.getElementById('comment'));
+            } else {
+                loadComment();
+            }
+        }, 1);
+    </script>
+
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

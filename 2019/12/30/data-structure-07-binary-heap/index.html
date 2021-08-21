@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    
+    
+        <link rel="mask-icon" href="/images/favicon.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>二叉堆 | 萌一小栈</title>
+
+
+    <meta name="keywords" content="数据结构与算法">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="今天我们来说一下二叉堆(BinaryHeap)。堆是很有用的数据结构，例如后面会学到的优先队列，堆排序等，都和堆有关。操作系统中很多调度，也和堆有关。 还记得我们之前学过的完全二叉树吗？如果不记得了，就需要先回去复习一下，因为二叉堆，首先是一棵完全二叉树，或者近似完全二叉树。 再来说一下二叉堆的特性。二叉堆分为最小堆和最大堆。如果是最小堆，那么父节点的值，总是小于或等于任何一个子节点的值，通俗点就">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二叉堆">
+<meta property="og:url" content="http://imoegirl.com/2019/12/30/data-structure-07-binary-heap/index.html">
+<meta property="og:site_name" content="萌一小栈">
+<meta property="og:description" content="今天我们来说一下二叉堆(BinaryHeap)。堆是很有用的数据结构，例如后面会学到的优先队列，堆排序等，都和堆有关。操作系统中很多调度，也和堆有关。 还记得我们之前学过的完全二叉树吗？如果不记得了，就需要先回去复习一下，因为二叉堆，首先是一棵完全二叉树，或者近似完全二叉树。 再来说一下二叉堆的特性。二叉堆分为最小堆和最大堆。如果是最小堆，那么父节点的值，总是小于或等于任何一个子节点的值，通俗点就">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Uaf57ff2ed5ae46c8a15a8e5a30205793g.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ue05fd0d4b48d4be3b0aeb8a553db5d08H.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U9f1def5816f14efeaa318779f58000b3m.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U84369ee5821542b3b18dee3ade6a181ca.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U23e249f056f94c8bad07c456b624d77e6.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ua19acb8a431a4486a073b6a3c56090dfG.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ucd6c0d0de79d4e90b3e54ce4cbe09aa5g.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U9e2d852ae39b4722920550a12eac9ed0z.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ubc207fab97b043c5a59fa266fcb594a1Y.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ub11b7535297f47bcb16a62020e9c8b05B.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U82de104b50ef48a5bb01cbabd87acf20D.png">
+<meta property="article:published_time" content="2019-12-30T10:01:45.000Z">
+<meta property="article:modified_time" content="2021-08-21T06:34:26.813Z">
+<meta property="article:author" content="iMoegirl">
+<meta property="article:tag" content="数据结构与算法">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/Uaf57ff2ed5ae46c8a15a8e5a30205793g.png">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/atom-one-dark.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">萌一小栈</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        二叉堆
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2019/12/" class="post-meta__date button">2019-12-30</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>今天我们来说一下二叉堆(BinaryHeap)。堆是很有用的数据结构，例如后面会学到的优先队列，堆排序等，都和堆有关。操作系统中很多调度，也和堆有关。</p>
+<p>还记得我们之前学过的<a href="https://imoegirl.com/2019/12/21/data-structure-05-binary-tree/#%E4%BB%80%E4%B9%88%E6%98%AF%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91">完全二叉树吗</a>？如果不记得了，就需要先回去复习一下，因为二叉堆，首先是一棵完全二叉树，或者近似完全二叉树。</p>
+<p>再来说一下二叉堆的特性。二叉堆分为最小堆和最大堆。如果是最小堆，那么父节点的值，总是小于或等于任何一个子节点的值，通俗点就是把一棵树从上往下看，值在变大，下面的大于等于上面的。如果是最大堆，则是反过来，父节点的值，总是大于或等于任何一个子节点的值。</p>
+<p>如果要简单点记忆，那就是这棵树上的值按层来看，如果是从小到大，那就是最小堆，如果是从大到小，那就是最大堆。</p>
+<p>接下来我们就开始说二叉堆的细节，插入节点，删除节点。</p>
+<span id="more"></span>
+
+<h2 id="插入节点"><a href="#插入节点" class="headerlink" title="插入节点"></a>插入节点</h2><p>插入节点，其实也就是构建二叉堆的过程，语言描述流程如下。</p>
+<ol>
+<li>找到要插入的位置，这个位置就是当前这棵完全二叉树，最后一个位置 (不太好理解)。如果用代码流程来描述的话，就是按层遍历当前的树，如果遇到一个节点，左子树为空，或者又子树为空，或者左右子树都为空，那么，这个点就是要插入节点的父节点，而要插入的节点，将作为这个节点的左子树或右子树。看下面的图</li>
+</ol>
+<p>  <img src="https://ae01.alicdn.com/kf/Uaf57ff2ed5ae46c8a15a8e5a30205793g.png" alt="p001901_Binary-Heap-1"></p>
+<p>  假设我们要在上面的堆中插入一个节点，按照上面代码流程中描述的，可以找到要插入节点的父节点，是11。</p>
+<ol start="2">
+<li>找到了要插入节点的父节点，还要判断这个父节点是左子树为空，还是右子树为空，还是都为空，如果左子树为空，则新点作为左子树，如果左子树不为空，则新点作为右子树。插入后的图如下(假设要插入的数值为3)</li>
+</ol>
+<p>  <img src="https://ae01.alicdn.com/kf/Ue05fd0d4b48d4be3b0aeb8a553db5d08H.png" alt="p001902_Binary-Heap-2"></p>
+<ol start="3">
+<li>节点插入后，当前的树并不满足二叉堆的规则，所以还需要将新插入的点向上浮动。如果当前节点值小于父节点的值，则交换当前节点和父节点的值。然后再次判断，直到当前值不再小于父节点值，或者父节点值为空了，则位置调整完毕，整个插入流程也就结束了。看下面的流程图</li>
+</ol>
+<p>  <img src="https://ae01.alicdn.com/kf/U9f1def5816f14efeaa318779f58000b3m.png" alt="p001903_Binary-Heap-3"></p>
+<p>  上图中，首先用 3 和 11 比较，因为 3 小于 11，所以交换两个节点的值</p>
+<p>  <img src="https://ae01.alicdn.com/kf/U84369ee5821542b3b18dee3ade6a181ca.png" alt="p001904_Binary-Heap-4"></p>
+<p>  上图中，再次用 3 和父节点 5 比较，因为 3 小于 5，所以再次交换两个节点的值</p>
+<p>  <img src="https://ae01.alicdn.com/kf/U23e249f056f94c8bad07c456b624d77e6.png" alt="p001905_Binary-Heap-5"></p>
+<p>  上图中，再次用 3 和父节点 1 比较，咦，3 不小于 1，所以不交换，节点调整结束。此时的树满足二叉堆的规则。</p>
+<p>以上就是整个插入节点的流程，下面我们用代码去实现一下。代码中的 <strong>TreeAlgo</strong> 类是我们为了方便写的一个帮助类，实现了层序打印和查找的一些方法。</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 定义节点的结构</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Node</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> data;</span><br><span class="line">    <span class="keyword">public</span> Node parent = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">public</span> Node left = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">public</span> Node right = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span>(<span class="params"><span class="built_in">int</span> data</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.data = data;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 定义二叉堆操作类</span></span><br><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">BinaryHeap</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> Node root;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Insert</span>(<span class="params"><span class="built_in">int</span> data</span>)</span>&#123;</span><br><span class="line">        Node lastParentNode = TreeAlgo.FindParentOfFartestLeftLocation(root);</span><br><span class="line">        <span class="keyword">if</span>(lastParentNode == <span class="literal">null</span>)&#123;</span><br><span class="line">            Console.WriteLine(<span class="string">&quot;Insert Root Node &quot;</span> + data);</span><br><span class="line">            root = <span class="keyword">new</span> Node(data);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            Node newNode = <span class="keyword">new</span> Node(data);</span><br><span class="line">            <span class="keyword">if</span>(lastParentNode.left == <span class="literal">null</span>)&#123; <span class="comment">// 如果左子树为空，则插入到左子树</span></span><br><span class="line">                lastParentNode.left = newNode;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span>(lastParentNode.right == <span class="literal">null</span>)&#123; <span class="comment">// 如果右子树为空，则插入到右子树</span></span><br><span class="line">                lastParentNode.right = newNode;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                Console.WriteLine(<span class="string">&quot;父节点错误，父节点左右子树都不为空，无法插入!&quot;</span>);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            newNode.parent = lastParentNode;</span><br><span class="line"></span><br><span class="line">            Node opt = newNode;</span><br><span class="line">            <span class="comment">// 以最小堆的方式插入节点，即父节点小于等于子节点</span></span><br><span class="line">            <span class="comment">// 如果是以最大堆的方式插入，则父节点要大于等于子节点 只要将 &lt;= 改为 &gt;= 即可</span></span><br><span class="line">            <span class="keyword">while</span>(opt != <span class="literal">null</span> &amp;&amp; opt.parent != <span class="literal">null</span> &amp;&amp; opt.data &lt;= opt.parent.data)&#123;</span><br><span class="line">                <span class="built_in">int</span> tmp = opt.data;</span><br><span class="line">                opt.data = opt.parent.data;</span><br><span class="line">                opt.parent.data = tmp;</span><br><span class="line">                opt = opt.parent;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 运行刚才写的代码</span></span><br><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        BinaryHeap bh = <span class="keyword">new</span> BinaryHeap();</span><br><span class="line">        bh.Insert(<span class="number">1</span>);</span><br><span class="line">        bh.Insert(<span class="number">9</span>);</span><br><span class="line">        bh.Insert(<span class="number">22</span>);</span><br><span class="line">        bh.Insert(<span class="number">17</span>);</span><br><span class="line">        bh.Insert(<span class="number">11</span>);</span><br><span class="line">        bh.Insert(<span class="number">33</span>);</span><br><span class="line">        bh.Insert(<span class="number">27</span>);</span><br><span class="line">        bh.Insert(<span class="number">21</span>);</span><br><span class="line">        bh.Insert(<span class="number">19</span>);</span><br><span class="line">        TreeAlgo.LevelOrderTraversal(bh.root);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// TreeAlgo 帮助类代码</span></span><br><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">TreeAlgo</span> &#123;</span><br><span class="line">    <span class="comment">// 层序遍历树，打印出的内容，括号里面是父节点的值</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">LevelOrderTraversal</span>(<span class="params">Node root</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Queue&lt;Node&gt; q = <span class="keyword">new</span> Queue&lt;Node&gt;();</span><br><span class="line">        q.Enqueue(root);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(q.Count &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            Node currNode = q.Dequeue();</span><br><span class="line">            <span class="built_in">string</span> msg =<span class="built_in">string</span>.Format(<span class="string">&quot;&#123;0&#125;(&#123;1&#125;) &quot;</span>, currNode.data, currNode.parent != <span class="literal">null</span>?currNode.parent.data.ToString():<span class="string">&quot;null&quot;</span>);</span><br><span class="line">            Console.WriteLine(msg);</span><br><span class="line">            <span class="keyword">if</span>(currNode.left != <span class="literal">null</span>)&#123;</span><br><span class="line">                q.Enqueue(currNode.left);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(currNode.right != <span class="literal">null</span>)&#123;</span><br><span class="line">                q.Enqueue(currNode.right);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 按层遍历，获取第 index 个节点</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">GetIndexOfNodeWithLevelOrder</span>(<span class="params">Node root, <span class="built_in">int</span> index</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Queue&lt;Node&gt; q = <span class="keyword">new</span> Queue&lt;Node&gt;();</span><br><span class="line">        q.Enqueue(root);</span><br><span class="line">        <span class="built_in">int</span> iIndex = <span class="number">0</span>;</span><br><span class="line">        Node targetNode = <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">while</span>(q.Count &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            Node currNode = q.Dequeue();</span><br><span class="line">            <span class="keyword">if</span>(iIndex == index)&#123;</span><br><span class="line">                targetNode = currNode;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(currNode.left != <span class="literal">null</span>)&#123;</span><br><span class="line">                q.Enqueue(currNode.left);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(currNode.right != <span class="literal">null</span>)&#123;</span><br><span class="line">                q.Enqueue(currNode.right);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            iIndex += <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> targetNode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取按层遍历时，最后一层的最后一个节点</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">GetLastNodeOfLevelOrder</span>(<span class="params">Node root</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Queue&lt;Node&gt; q = <span class="keyword">new</span> Queue&lt;Node&gt;();</span><br><span class="line">        q.Enqueue(root);</span><br><span class="line">        Node lastNode = <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">while</span>(q.Count &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            lastNode = q.Dequeue();</span><br><span class="line">            <span class="keyword">if</span>(lastNode.left != <span class="literal">null</span>)&#123;</span><br><span class="line">                q.Enqueue(lastNode.left);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(lastNode.right != <span class="literal">null</span>)&#123;</span><br><span class="line">                q.Enqueue(lastNode.right);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> lastNode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 按层序遍历，只要任何一个节点左子对为空，或右子树为空，则为要找的点（前提是这棵树必须为完全二叉树）</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">FindParentOfFartestLeftLocation</span>(<span class="params">Node root</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Queue&lt;Node&gt; q = <span class="keyword">new</span> Queue&lt;Node&gt;();</span><br><span class="line">        q.Enqueue(root);</span><br><span class="line">        Node targetNode = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(q.Count &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            targetNode = q.Dequeue();</span><br><span class="line">            <span class="keyword">if</span>(targetNode.left == <span class="literal">null</span> || targetNode.right == <span class="literal">null</span>)&#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            q.Enqueue(targetNode.left);</span><br><span class="line">            q.Enqueue(targetNode.right);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> targetNode;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码可以自己使用C#运行一下看结果。下面我们继续说删除节点的操作。</p>
+<h2 id="删除节点"><a href="#删除节点" class="headerlink" title="删除节点"></a>删除节点</h2><p>删除节点，稍微复杂一点点，但也不是特别复杂，按下面的流程来操作即可</p>
+<ol>
+<li>找到按层序遍历的最后一个节点，然后用最后一个节点的值，替换要删除节点的值。然后将最后一个节点值删除掉。看下面的图</li>
+</ol>
+<p>  <img src="https://ae01.alicdn.com/kf/Ua19acb8a431a4486a073b6a3c56090dfG.png" alt="p001906_Binary-Heap-6"></p>
+<p>  <img src="https://ae01.alicdn.com/kf/Ucd6c0d0de79d4e90b3e54ce4cbe09aa5g.png" alt="p001907_Binary-Heap-7"></p>
+<p>  <img src="https://ae01.alicdn.com/kf/U9e2d852ae39b4722920550a12eac9ed0z.png" alt="p001908_Binary-Heap-8"></p>
+<p>  上面的过程，我们已经将最后一个节点 21 替换到了要删除的节点 5 的位置，并且将原来 21 的节点从树中删除掉。但是现在的树不符合二叉堆的规则，所以我们需要浮动现在的 21 节点。</p>
+<ol start="2">
+<li>浮动节点，将树调整为正确的二叉堆。删除节点时，节点的浮动有可能需要往下浮动，也有可能需要往上浮动。我们当前所讲的，都是按最小堆来操作的。如果 21 节点比父节点小，则要往上浮动。如果 21 节点比父节点大，则要往下浮动。</li>
+</ol>
+<p>  往上浮动，只要循环判断是否比父节点小即可，就像插入节点那样。而往下浮动，可能面对着两个又节点，所以要选择和两个子节点中值小的那个节点进行数据交换。显然，现在的 21 节点需要往下浮动，浮动到没有子节点，或者没有比当前节点小的节点位置。</p>
+<p>  <img src="https://ae01.alicdn.com/kf/Ubc207fab97b043c5a59fa266fcb594a1Y.png" alt="p001909_Binary-Heap-9"></p>
+<p>  上图中，21 的子节点 9 和 11，需要和值更小的 9 进行交换</p>
+<p>  <img src="https://ae01.alicdn.com/kf/Ub11b7535297f47bcb16a62020e9c8b05B.png" alt="p001910_Binary-Heap-10"></p>
+<p>  上图中，21 换到了原来 9 的位置，发现还有子节点，所以继续判断。因为 17 比 21 小，所以需要继续交换。</p>
+<p>  <img src="https://ae01.alicdn.com/kf/U82de104b50ef48a5bb01cbabd87acf20D.png" alt="p001911_Binary-Heap-11"></p>
+<p>  到此，发现没有更小的节点了，浮动完毕，整棵树符合二叉堆规则。</p>
+<p>以上就是删除节点的流程，下面我们用代码去实现。下面是加入了删除函数的 <strong>BinaryHeap类</strong></p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">BinaryHeap</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> Node root;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Insert</span>(<span class="params"><span class="built_in">int</span> data</span>)</span>&#123;</span><br><span class="line">        Node lastParentNode = TreeAlgo.FindParentOfFartestLeftLocation(root);</span><br><span class="line">        <span class="keyword">if</span>(lastParentNode == <span class="literal">null</span>)&#123;</span><br><span class="line">            Console.WriteLine(<span class="string">&quot;Insert Root Node &quot;</span> + data);</span><br><span class="line">            root = <span class="keyword">new</span> Node(data);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            Node newNode = <span class="keyword">new</span> Node(data);</span><br><span class="line">            <span class="keyword">if</span>(lastParentNode.left == <span class="literal">null</span>)&#123; <span class="comment">// 如果左子树为空，则插入到左子树</span></span><br><span class="line">                lastParentNode.left = newNode;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span>(lastParentNode.right == <span class="literal">null</span>)&#123; <span class="comment">// 如果右子树为空，则插入到右子树</span></span><br><span class="line">                lastParentNode.right = newNode;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                Console.WriteLine(<span class="string">&quot;父节点错误，父节点左右子树都不为空，无法插入!&quot;</span>);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            newNode.parent = lastParentNode;</span><br><span class="line"></span><br><span class="line">            Node opt = newNode;</span><br><span class="line">            <span class="comment">// 以最小堆的方式插入节点，即父节点小于等于子节点</span></span><br><span class="line">            <span class="comment">// 如果是以最大堆的方式插入，则父节点要大于等于子节点 只要将 &lt;= 改为 &gt;= 即可</span></span><br><span class="line">            <span class="keyword">while</span>(opt != <span class="literal">null</span> &amp;&amp; opt.parent != <span class="literal">null</span> &amp;&amp; opt.data &lt;= opt.parent.data)&#123;</span><br><span class="line">                <span class="built_in">int</span> tmp = opt.data;</span><br><span class="line">                opt.data = opt.parent.data;</span><br><span class="line">                opt.parent.data = tmp;</span><br><span class="line">                opt = opt.parent;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Delete</span>(<span class="params"><span class="built_in">int</span> index</span>)</span>&#123;</span><br><span class="line">        <span class="comment">// 1. 找到要删除的节点</span></span><br><span class="line">        Node optNode = TreeAlgo.GetIndexOfNodeWithLevelOrder(root, index);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. 按层序遍历，找到最后一层最后一个节点</span></span><br><span class="line">        Node lastNode = TreeAlgo.GetLastNodeOfLevelOrder(root);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3. 使用最后一个节点的数据替换掉要删除节点的数据</span></span><br><span class="line">        optNode.data = lastNode.data;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 4. 把最后一层最后一个节点删除掉</span></span><br><span class="line">        <span class="keyword">if</span>(lastNode.parent.left == lastNode)&#123;</span><br><span class="line">            lastNode.parent.left = <span class="literal">null</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(lastNode.parent.right == lastNode)&#123;</span><br><span class="line">            lastNode.parent.right = <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 5. 要删除的节点数据已经被替换，现在需要根据数据浮动到正确的位置</span></span><br><span class="line">        <span class="comment">// 首先要判断是往下浮动还是往上浮动，因为我们是按最小堆操作的，</span></span><br><span class="line">        <span class="comment">// 所以要先判断当前节点是否比父节点 &quot;小&quot;，如果是，则要往上浮动，反之往下浮动</span></span><br><span class="line">        <span class="keyword">if</span>(optNode.parent != <span class="literal">null</span> &amp;&amp; optNode.data &lt; optNode.parent.data)&#123;</span><br><span class="line">            <span class="keyword">while</span>(optNode.parent != <span class="literal">null</span> &amp;&amp; optNode.data &lt; optNode.parent.data)&#123;</span><br><span class="line">                <span class="built_in">int</span> tmp = optNode.data;</span><br><span class="line">                optNode.data = optNode.parent.data;</span><br><span class="line">                optNode.parent.data = tmp;</span><br><span class="line"></span><br><span class="line">                optNode = optNode.parent;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="comment">// 尝试往下浮动</span></span><br><span class="line">            <span class="keyword">while</span>(optNode.left != <span class="literal">null</span> || optNode.right != <span class="literal">null</span>)&#123;</span><br><span class="line">                Node compareNode = <span class="literal">null</span>;</span><br><span class="line">                <span class="keyword">if</span>(optNode.left != <span class="literal">null</span> &amp;&amp; optNode.right != <span class="literal">null</span>)&#123;</span><br><span class="line">                    <span class="keyword">if</span>(optNode.left.data &lt; optNode.right.data)&#123;</span><br><span class="line">                        compareNode = optNode.left;</span><br><span class="line">                    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                        compareNode = optNode.right;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">if</span>(optNode.left != <span class="literal">null</span>)&#123;</span><br><span class="line">                        compareNode = optNode.left;</span><br><span class="line">                    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(optNode.right != <span class="literal">null</span>)&#123;</span><br><span class="line">                        compareNode = optNode.right;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 往下浮动，交换数据</span></span><br><span class="line">                <span class="keyword">if</span>(compareNode != <span class="literal">null</span> &amp;&amp; optNode.data &gt; compareNode.data)&#123;</span><br><span class="line">                    <span class="built_in">int</span> temp = optNode.data;</span><br><span class="line">                    optNode.data = compareNode.data;</span><br><span class="line">                    compareNode.data = temp;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                optNode = compareNode;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码中，删除函数的参数传的是第几个节点。当然，你也可以改成删除某个特定值的节点，删除逻辑都是一样的。</p>
+<p>下面是运行的代码</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        BinaryHeap bh = <span class="keyword">new</span> BinaryHeap();</span><br><span class="line">        bh.Insert(<span class="number">1</span>);</span><br><span class="line">        bh.Insert(<span class="number">5</span>);</span><br><span class="line">        bh.Insert(<span class="number">6</span>);</span><br><span class="line">        bh.Insert(<span class="number">9</span>);</span><br><span class="line">        bh.Insert(<span class="number">11</span>);</span><br><span class="line">        bh.Insert(<span class="number">8</span>);</span><br><span class="line">        bh.Insert(<span class="number">15</span>);</span><br><span class="line">        bh.Insert(<span class="number">17</span>);</span><br><span class="line">        bh.Insert(<span class="number">21</span>);</span><br><span class="line"></span><br><span class="line">        TreeAlgo.LevelOrderTraversal(bh.root);</span><br><span class="line"></span><br><span class="line">        bh.Delete(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        Console.WriteLine(<span class="string">&quot;------ Delete 1&quot;</span>);</span><br><span class="line">        TreeAlgo.LevelOrderTraversal(bh.root);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上就是二叉堆插入和删除的逻辑。</p>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>Author: </strong>iMoegirl
+        </p>
+        <p>
+            <strong>
+                Permalink: 
+            </strong>
+            <a href="http://imoegirl.com/2019/12/30/data-structure-07-binary-heap/">http://imoegirl.com/2019/12/30/data-structure-07-binary-heap/</a>
+        </p>
+        
+            <strong>
+                <p>任何技术问题，可加微信交流，微信: ifloop</p>
+
+            </strong>
+        
+            <strong>
+                <p>搜索并关注微信公众号 [ 萌一小栈 ] 可及时订阅最新技术文章</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>updated at 2021-08-21</p></div> 
+    <div class="post-entry__tags"><a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tags__link button"># 数据结构与算法</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2020/01/06/unity-basis-01-clock/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            制作一个会动的时钟
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2019/12/30/algo-knuth-shuffle/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            一个公平的洗牌算法 | Knuth-Shuffle
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>Comments</h4>
+    
+    
+    
+    
+    
+    <div id="gitalk-container"></div>
+
+    
+    
+    
+    
+    
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">萌一小栈</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?ae464fe0e62cef297c26908427b0e7bd';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    <script>
+        function loadComment() {
+            let e, i;
+            (e = document.createElement("script")).src = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js',
+            document.body.appendChild(e);
+            e.onload = () => {
+                var gitalk = new Gitalk({
+                    clientID: '5b5aeaa767a06f6c23a4',
+                    clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+                    repo: 'imoegirl.github.io',
+                    owner: 'imoegirl',
+                    admin: 'imoegirl',
+                    id: window.location.pathname,
+                    distractionFreeMode: false
+                });
+                gitalk.render('gitalk-container');
+            };
+            (i = document.createElement("link")).rel = "stylesheet",
+            i.href = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css',
+            document.head.appendChild(i);
+        }
+    
+        var runningOnBrowser = typeof window !== "undefined";
+        var isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+        var supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    
+        setTimeout(function () {
+            if (!isBot && supportsIntersectionObserver) {
+                var comment_observer = new IntersectionObserver(function(entries) {
+                    if (entries[0].isIntersecting) {
+                        loadComment();
+                        comment_observer.disconnect();
+                    }
+                }, { threshold: [0] });
+                comment_observer.observe(document.getElementById('comment'));
+            } else {
+                loadComment();
+            }
+        }, 1);
+    </script>
+
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

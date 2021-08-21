@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    
+    
+        <link rel="mask-icon" href="/images/favicon.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>Rust 基础 | 常用集合数据类型 | 萌一小栈</title>
+
+
+    <meta name="keywords" content="Rust">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="之前用到的 String 类型，并没有那么简单，接下来会聊一下关于 String 更多的一些应用。在说 String 前，需要先学习一下 Vec 这种数据类型，类似于一个动态的数组。然后是 HashMap，一个键对值的数据类型，与其他编程语言中的字典很类似。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rust 基础 | 常用集合数据类型">
+<meta property="og:url" content="http://imoegirl.com/2020/04/12/rust-syntax-summary-06/index.html">
+<meta property="og:site_name" content="萌一小栈">
+<meta property="og:description" content="之前用到的 String 类型，并没有那么简单，接下来会聊一下关于 String 更多的一些应用。在说 String 前，需要先学习一下 Vec 这种数据类型，类似于一个动态的数组。然后是 HashMap，一个键对值的数据类型，与其他编程语言中的字典很类似。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-04-12T15:51:23.000Z">
+<meta property="article:modified_time" content="2021-08-21T06:36:41.178Z">
+<meta property="article:author" content="iMoegirl">
+<meta property="article:tag" content="Rust">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/atom-one-dark.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">萌一小栈</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        Rust 基础 | 常用集合数据类型
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2020/04/" class="post-meta__date button">2020-04-12</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>之前用到的 String 类型，并没有那么简单，接下来会聊一下关于 String 更多的一些应用。在说 String 前，需要先学习一下 Vec 这种数据类型，类似于一个动态的数组。然后是 HashMap，一个键对值的数据类型，与其他编程语言中的字典很类似。</p>
+<span id="more"></span>
+
+<h2 id="Vec"><a href="#Vec" class="headerlink" title="Vec"></a>Vec</h2><p><strong><code>Vec&lt;T&gt;</code></strong> 和数组一样，用于存储一系列相同类型的值。但是 Vec 可以动态地插入，删除。首先，是创建一个 Vec，可以使用 <code>Vec::new()</code>，或者使用宏 <code>vec!</code>。要注意的是，只有使用 <code>mut</code>，才能使 Vec 可变，也就是可以插入和删除值。</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="comment">// 在定义时就标明数据类型为 i32 的 Vec</span></span><br><span class="line">    <span class="keyword">let</span> v1: <span class="built_in">Vec</span>&lt;<span class="built_in">i32</span>&gt; =  <span class="built_in">Vec</span>::new();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 在定义时不标明类型，而在首次插入值时，由Rust自动推断</span></span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> v2 = <span class="built_in">Vec</span>::new();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 这里插入了一个 i32 的值，所以Rust推断 v2 为存放 i32 的 Vec</span></span><br><span class="line">    v2.push(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> v3 = <span class="built_in">vec!</span>[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> v4 = <span class="built_in">vec!</span>[<span class="string">&quot;hello&quot;</span>, <span class="string">&quot;rust&quot;</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> v5: <span class="built_in">Vec</span>&lt;<span class="built_in">String</span>&gt; = <span class="built_in">vec!</span>[<span class="string">&quot;hello&quot;</span>.to_string(), <span class="string">&quot;rust&quot;</span>.to_string()];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>向 Vec 有两个操作函数，一个是 <code>push</code>，往里插入值，一个是 <code>pop</code>，往外弹出值，Pop返回的是最后插入的值。看下面的代码</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> v1 = <span class="built_in">Vec</span>::new();</span><br><span class="line">    v1.push(<span class="number">2</span>);</span><br><span class="line">    v1.push(<span class="number">3</span>);</span><br><span class="line">    v1.push(<span class="number">4</span>);</span><br><span class="line">    <span class="keyword">let</span> x = v1.pop();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, x);   <span class="comment">// Some(4);</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>为什么是 Some(4) 而不是 4呢，因为 pop 返回的是 <code>Option&lt;T&gt;</code> 类型的。我们也可以像访问数组一样，使用 [索引] 的形式来访问 Vec 中的值</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> v1 = <span class="built_in">Vec</span>::new();</span><br><span class="line">    v1.push(<span class="number">2</span>);</span><br><span class="line">    v1.push(<span class="number">3</span>);</span><br><span class="line">    v1.push(<span class="number">4</span>);</span><br><span class="line">    <span class="keyword">let</span> x = v1[<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, x);   <span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line">    v1[<span class="number">0</span>] = <span class="number">100</span>;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, v1);  <span class="comment">// [100, 3, 4]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看出，使用索引的形式访问 Vec，返回的就是里面的值，而不是 <code>Option&lt;T&gt;</code> 类型。但是，使用索引访问时，如果索引越界，将导致 panic。如果要更新直接 Vec 中的值，也可以直接使用索引的形式。</p>
+<p>接下来就是遍历，看下面的代码</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> v1 = <span class="built_in">Vec</span>::new();</span><br><span class="line">    v1.push(<span class="number">2</span>);</span><br><span class="line">    v1.push(<span class="number">3</span>);</span><br><span class="line">    v1.push(<span class="number">4</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> v1.iter() &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, x);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>遍历我们使用 iter() 这个函数，代码中的 x 是对 v1中每一个值的引用，<code>&amp;i32</code> 类型。以上就是 Vec 的常用内容，更详细的方法直接看<a target="_blank" rel="noopener" href="https://doc.rust-lang.org/std/vec/struct.Vec.html">官方文档</a>。</p>
+<h2 id="String"><a href="#String" class="headerlink" title="String"></a>String</h2><p>对于 String，在之前我们已经使用过</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="comment">// 下面两种形式创建一个 String</span></span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> s1 = <span class="built_in">String</span>::from(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> s2 = <span class="string">&quot;hello&quot;</span>.to_string();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// push_str 可以拼接一个字符串</span></span><br><span class="line">    s1.push_str(<span class="string">&quot; Rust&quot;</span>);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;s1: &#123;&#125;&quot;</span>, s1);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// push 可以拼接一个字符</span></span><br><span class="line">    s2.push(<span class="string">&#x27; &#x27;</span>);</span><br><span class="line">    s2.push(<span class="string">&#x27;A&#x27;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;s2: &#123;&#125;&quot;</span>, s2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们也可以使用下面的方式来拼接字符串</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> s1 = <span class="built_in">String</span>::from(<span class="string">&quot;Hello &quot;</span>);</span><br><span class="line">    <span class="keyword">let</span> s2 = s1 + <span class="string">&quot;Rust&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;s2: &#123;&#125;&quot;</span>, s2);</span><br><span class="line">    <span class="comment">// println!(&quot;s1: &#123;&#125;&quot;, s1); // 这里不能再使用 s1，因为 s1 的所有权已经移动</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>String 类型可以使用 <code>+</code> 操作，注意第一个参数，一定是一个 <code>String</code>，而后面的参数，都是 <code>&amp;str</code>，感觉内部对于 + 的实现，就是调用了，push_str。除此之外，还可以使用一个宏来拼接字符串</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> s1 = <span class="built_in">String</span>::from(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">    <span class="keyword">let</span> s2 = <span class="built_in">String</span>::from(<span class="string">&quot;Rust&quot;</span>);</span><br><span class="line">    <span class="keyword">let</span> s3 = <span class="built_in">format!</span>(<span class="string">&quot;&#123;&#125; &#123;&#125;&quot;</span>, s1, s2);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;s1: &#123;&#125;&quot;</span>, s1);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;s2: &#123;&#125;&quot;</span>, s2);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;s3: &#123;&#125;&quot;</span>, s3);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>format!</code> 这个宏并没有获取 s1，s2 的所有权。接下来我们看一个和其他编程语言中的字符串不一样的地方。</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> s1 = <span class="built_in">String</span>::from(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, s1.len());  <span class="comment">// 5</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> s2 = <span class="built_in">String</span>::from(<span class="string">&quot;你好&quot;</span>);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, s2.len());  <span class="comment">// 6</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码中，s2 的长度是 6，而不是2，这是为什么呢。这里因为，Rust 中的 String 是 UTF-8 编码的，它可以包含任何可以正确编码的数据，例如下面的代码</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> hello = <span class="built_in">String</span>::from(<span class="string">&quot;السلام عليكم&quot;</span>);</span><br><span class="line"><span class="keyword">let</span> hello = <span class="built_in">String</span>::from(<span class="string">&quot;Dobrý den&quot;</span>);</span><br><span class="line"><span class="keyword">let</span> hello = <span class="built_in">String</span>::from(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line"><span class="keyword">let</span> hello = <span class="built_in">String</span>::from(<span class="string">&quot;שָׁלוֹם&quot;</span>);</span><br><span class="line"><span class="keyword">let</span> hello = <span class="built_in">String</span>::from(<span class="string">&quot;नमस्ते&quot;</span>);</span><br><span class="line"><span class="keyword">let</span> hello = <span class="built_in">String</span>::from(<span class="string">&quot;こんにちは&quot;</span>);</span><br><span class="line"><span class="keyword">let</span> hello = <span class="built_in">String</span>::from(<span class="string">&quot;안녕하세요&quot;</span>);</span><br><span class="line"><span class="keyword">let</span> hello = <span class="built_in">String</span>::from(<span class="string">&quot;你好&quot;</span>);</span><br><span class="line"><span class="keyword">let</span> hello = <span class="built_in">String</span>::from(<span class="string">&quot;Olá&quot;</span>);</span><br><span class="line"><span class="keyword">let</span> hello = <span class="built_in">String</span>::from(<span class="string">&quot;Здравствуйте&quot;</span>);</span><br><span class="line"><span class="keyword">let</span> hello = <span class="built_in">String</span>::from(<span class="string">&quot;Hola&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>第一段代码中，”Hello” 是五个字母，每一个字母的 UTF-8 编码都占用一个字节，所以s1的长度是 5，对于 Rust 来说，<code>len()</code> 函数取的不是字符的长度，而是字节的长度，这一点与其他编程语言不太一样。而 “你好”，显然，每一个字被编码为三个 UTF-8 字节，所以长度为 6。</p>
+<p>对于 Rust 来说，关于字符串，有三个概念，<strong>字节</strong>，<strong>标量值</strong>，<strong>字形簇</strong>。例如 “नमस्ते”，从节字的角度来说，它是 **[224, 164, 168, 224, 164, 174, 224, 164, 184, 224, 165, 141, 224, 164, 164, 224, 165, 135]**。而从标量值(char)的角度来说，它是 **[‘न’, ‘म’, ‘स’, ‘्’, ‘त’, ‘े’]**。最后，如果从字形簇的角度来说，它就是原文中的样子 <strong>[“न”, “म”, “स्”, “ते”]<strong>。字形簇是最接近我们常用的</strong>字母</strong>的概念。</p>
+<p>字符串是不允许使用 [索引] 的形式访问单个字符的，也是因为 String 存储的是 UTF-8 编码的数据这种特性，因为如果允许使用索引，可能导致访问到字符一个字符的中间，就造成了无效索引。</p>
+<p>字符串的遍历，可以使用 chars() 这个函数，它会返回这个字符串的 Unicode 标题值。</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> s1 = <span class="built_in">String</span>::from(<span class="string">&quot;नमस्ते&quot;</span>);</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> s1.chars()&#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;x: &#123;&#125;&quot;</span>, x);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果要访问每一个 UTF-8 值，也可以使用 bytes() 方法</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> s1 = <span class="built_in">String</span>::from(<span class="string">&quot;नमस्ते&quot;</span>);</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> s1.bytes()&#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;x: &#123;&#125;&quot;</span>, x);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><p>HashMap 是一个键对值的存储结构，键保持唯一，对，它就像其他编程语言中的字典。</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> std::collections::HashMap;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="comment">// 创建一个HashMap</span></span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> map: HashMap&lt;<span class="built_in">i32</span>, <span class="built_in">i32</span>&gt; = HashMap::new();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 向HashMap中插入值</span></span><br><span class="line">    map.insert(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    map.insert(<span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, map);  <span class="comment">// &#123;0: 0, 1: 1&#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果插入重复Key的值，原值将被覆盖 (更新）</span></span><br><span class="line">    map.insert(<span class="number">0</span>, <span class="number">10</span>);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, map);  <span class="comment">// &#123;0: 10, 1: 1&#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 判断是否包指定的 Key，这里传的是引用</span></span><br><span class="line">    <span class="keyword">if</span> map.contains_key(&amp;<span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;Has Key 0&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;No key 0&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 移除一指定 key 的键和值</span></span><br><span class="line">    map.remove(&amp;<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, map);  <span class="comment">// &#123;1: 1&#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果 map 中不存在指定的 key，则插入，否则不插入</span></span><br><span class="line">    map.entry(<span class="number">0</span>).or_insert(<span class="number">100</span>);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, map);  <span class="comment">// &#123;0: 100, 1: 1&#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 从 map 中获取一个值，注意返回的类型是 Option&lt;T&gt; 类型</span></span><br><span class="line">    <span class="keyword">let</span> first = map.get(&amp;<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, first);    <span class="comment">// Some(100);</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>Author: </strong>iMoegirl
+        </p>
+        <p>
+            <strong>
+                Permalink: 
+            </strong>
+            <a href="http://imoegirl.com/2020/04/12/rust-syntax-summary-06/">http://imoegirl.com/2020/04/12/rust-syntax-summary-06/</a>
+        </p>
+        
+            <strong>
+                <p>任何技术问题，可加微信交流，微信: ifloop</p>
+
+            </strong>
+        
+            <strong>
+                <p>搜索并关注微信公众号 [ 萌一小栈 ] 可及时订阅最新技术文章</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>updated at 2021-08-21</p></div> 
+    <div class="post-entry__tags"><a href="/tags/Rust/" class="post-tags__link button"># Rust</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2020/04/25/u3d-game-resources-managemant/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            游戏项目资源管理
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2020/04/12/configure-nginx-https-and-redirect/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            nginx 配置 https 及重定向
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>Comments</h4>
+    
+    
+    
+    
+    
+    <div id="gitalk-container"></div>
+
+    
+    
+    
+    
+    
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">萌一小栈</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?ae464fe0e62cef297c26908427b0e7bd';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    <script>
+        function loadComment() {
+            let e, i;
+            (e = document.createElement("script")).src = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js',
+            document.body.appendChild(e);
+            e.onload = () => {
+                var gitalk = new Gitalk({
+                    clientID: '5b5aeaa767a06f6c23a4',
+                    clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+                    repo: 'imoegirl.github.io',
+                    owner: 'imoegirl',
+                    admin: 'imoegirl',
+                    id: window.location.pathname,
+                    distractionFreeMode: false
+                });
+                gitalk.render('gitalk-container');
+            };
+            (i = document.createElement("link")).rel = "stylesheet",
+            i.href = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css',
+            document.head.appendChild(i);
+        }
+    
+        var runningOnBrowser = typeof window !== "undefined";
+        var isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+        var supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    
+        setTimeout(function () {
+            if (!isBot && supportsIntersectionObserver) {
+                var comment_observer = new IntersectionObserver(function(entries) {
+                    if (entries[0].isIntersecting) {
+                        loadComment();
+                        comment_observer.disconnect();
+                    }
+                }, { threshold: [0] });
+                comment_observer.observe(document.getElementById('comment'));
+            } else {
+                loadComment();
+            }
+        }, 1);
+    </script>
+
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

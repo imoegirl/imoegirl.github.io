@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    
+    
+        <link rel="mask-icon" href="/images/favicon.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>萌一小栈</title>
+
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta property="og:type" content="website">
+<meta property="og:title" content="萌一小栈">
+<meta property="og:url" content="http://imoegirl.com/page/6/index.html">
+<meta property="og:site_name" content="萌一小栈">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="iMoegirl">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">萌一小栈</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+    <div class="cover">
+        <div class="cover__logo">
+            
+                <img no-lazy alt="author Image" class="cover__avatar" src="/images/avatar.png">
+            
+        </div>
+        
+        
+            <div class="cover__intro">
+                <p>Hi, nice to meet you!</p>
+ 
+            </div>
+        
+    </div>
+
+            <main class="main">
+    
+    <div class="post-list">
+        
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        队列
+    </h2>
+    
+        <p>生活中的一些排队行为，基本上都是队列的形式。这篇博客涉及的概念有 <code>队列</code>，<code>循环队列</code>，<code>优先队列</code>，<code>双端队列</code>。</p>
+<p>很多编程语言已经内置了队列结构，在实际项目中可以直接使用。这篇文章里的代码实现，主要用做原理理解。</p>
+<p><img src="https://ae01.alicdn.com/kf/Uaae9bd2566da45f69aa1f8051d671f94I.png" alt="p001601_1"></p>
+<p>拿超市买单为例，买完东西，一般会找一个结账台排队，等待结账。如果前面已经有人在排队，那你肯定是排在当前队伍的最后面，如果再来人，肯定是排在你的后面，依次往后排。每当有一个顾客买完单，那后面的顾客就会往前走，直到整个买单队伍没有人排队。这就是队列结构。是不是很简单~</p>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2019/12/" class="post-meta__date button">2019-12-18</a>
+    
+ 
+</div>
+<div class="post-entry__tags"><a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tags__link button"># 数据结构与算法</a></div> 
+<a href="/2019/12/18/data-structure-04-queue/" class="post-entry__link">队列</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        通过阅读儿童图书快速提高你的英语水平
+    </h2>
+    
+        <blockquote>
+<p>翻译自 <a target="_blank" rel="noopener" href="http://www.englishteachermelanie.com/improve-your-english-by-reading-childrens-book-series/">Improve Your English by Reading Children’s Book Series</a></p>
+</blockquote>
+<p>如果我告诉你，阅读英文不需要很难，不需要再为此头痛。如果我告诉你，可以通过你感兴趣的方式阅读，来学习新的英文单词，来提高你的听说能力。你是否会认为我很 Crazy?</p>
+<p>这篇文章，看到最后，我保证你会开始阅读，<code>爱上阅读</code>。</p>
+<p><img src="https://ae01.alicdn.com/kf/U9300c28b0bb548b2abb52cea1d9d9a37s.jpg" alt="p001501_Reading-childrens-books"></p>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2019/12/" class="post-meta__date button">2019-12-14</a>
+    
+ 
+</div>
+<div class="post-entry__tags"><a href="/tags/%E6%80%9D%E8%80%83%E4%B8%8E%E5%AD%A6%E4%B9%A0/" class="post-tags__link button"># 思考与学习</a></div> 
+<a href="/2019/12/14/improvement-english-through-reading/" class="post-entry__link">通过阅读儿童图书快速提高你的英语水平</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        一个不用背单词的高效英文学习法
+    </h2>
+    
+        <blockquote>
+<p>翻译自 <a target="_blank" rel="noopener" href="http://www.englishteachermelanie.com/english-immersion-reading-a-powerful-and-effective-way-to-learn/">English Immersion Reading: A Powerful and Effective Way to Learn</a></p>
+</blockquote>
+<p>你觉得英文阅读很无聊吗？你是否一直在寻找一种能让阅读更有趣，更高效地方式？</p>
+<p>接着往下看，你将会爱上 <strong>沉浸式阅读</strong></p>
+<p><img src="https://ae01.alicdn.com/kf/U95f6de640d8d4614a29ae48b5b48437e1.jpg" alt="p001401_Immersion-reading"></p>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2019/12/" class="post-meta__date button">2019-12-14</a>
+    
+ 
+</div>
+<div class="post-entry__tags"><a href="/tags/%E6%80%9D%E8%80%83%E4%B8%8E%E5%AD%A6%E4%B9%A0/" class="post-tags__link button"># 思考与学习</a></div> 
+<a href="/2019/12/14/immers-learning-english/" class="post-entry__link">一个不用背单词的高效英文学习法</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        堆栈
+    </h2>
+    
+        <p>有一堆书，一本叠一本地放入箱子里，最后放入的，一定是在最上面，对不对。取书的时候，规定只能从上面一本一本地取，如果要拿最先放入箱子里的那本书，也就是最下面的那本书，只能先把上面的拿出来。</p>
+<p><img src="https://ae01.alicdn.com/kf/U0f163fb443e04c6baeb40a27b7494e03E.png" alt="p001301_stack"></p>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2019/12/" class="post-meta__date button">2019-12-12</a>
+    
+ 
+</div>
+<div class="post-entry__tags"><a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tags__link button"># 数据结构与算法</a></div> 
+<a href="/2019/12/12/data-structure-03-stack/" class="post-entry__link">堆栈</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        链表
+    </h2>
+    
+        <h2 id="什么是链表"><a href="#什么是链表" class="headerlink" title="什么是链表"></a>什么是链表</h2><p>链表和数组一样，是一种线性的数据结构，由一个一个节点构成，节点中存放着数据，以及指向下一个或上一个节点的指针，通过指针，将节点链接在一起，构成整个链表结构。不同于数组，链表在内存中并不是连续的存储空间。</p>
+<p><img src="https://ae01.alicdn.com/kf/U4fd0f8a6cae646d8ba98c8fde1390dfeX.png" alt="p001201_Linkedlist"></p>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2019/12/" class="post-meta__date button">2019-12-11</a>
+    
+ 
+</div>
+<div class="post-entry__tags"><a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tags__link button"># 数据结构与算法</a></div> 
+<a href="/2019/12/11/data-structure-02-linkedlist/" class="post-entry__link">链表</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        超简单的VPS购买和配置教程
+    </h2>
+    
+        <p>这篇博客将一步一步教大家学习VPS的购买和配置教程，只需要简单几步，就可以拥有自己的VPS，然后愉快玩耍。可以自己搭一个科学上网代理服务器啦，托管自己的博客啦，等等。</p>
+<p>VPS服务商有很多种，这们我们选择相对比较稳定的 Vultr。</p>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2019/12/" class="post-meta__date button">2019-12-10</a>
+    
+ 
+</div>
+<div class="post-entry__tags"><a href="/tags/VPS/" class="post-tags__link button"># VPS</a></div> 
+<a href="/2019/12/10/vps-buy-and-setup/" class="post-entry__link">超简单的VPS购买和配置教程</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        数组
+    </h2>
+    
+        <p>数组，在数据结构中，是很基础，也很常用的一个，在很多很多业务中，都能看到它的身影。数组很简单，在不同的编程语言中，操作方式，也几乎都是类似的。</p>
+<p>那数组是什么呢？简单来说，就是在内存中分配一块连续的空间，用来存储相同类型的元素。使用索引，可以直接访问某一个元素的数据。大多数编程语言，数组的索引是从0开始的。</p>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2019/12/" class="post-meta__date button">2019-12-10</a>
+    
+ 
+</div>
+<div class="post-entry__tags"><a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tags__link button"># 数据结构与算法</a></div> 
+<a href="/2019/12/10/data-structure-01-array/" class="post-entry__link">数组</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        梦开始的地方
+    </h2>
+    
+        <p>经历过很多项目，遇到和解决过很多问题，但是没有没有以文字的形式总结过。所以这个系列，我打算从客户端的视角，去总结一个游戏项目从开始到上线，整个过程中的一些事情，人员之间的配合，客户端一些重要模块的实现，开发过程中遇到的问题等等。</p>
+<p><img src="https://ae01.alicdn.com/kf/U44ab2489d8a747bb9dfc1ef0d3c833f8G.jpg" alt="p000901_1"></p>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2019/12/" class="post-meta__date button">2019-12-08</a>
+    
+    <span class="separate-dot"></span><a href="/categories/Unity3D-%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/" class="button">Unity3D 游戏开发</a>
+
+ 
+</div>
+<div class="post-entry__tags"><a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/" class="post-tags__link button"># 游戏开发</a></div> 
+<a href="/2019/12/08/a-game-project-0-start/" class="post-entry__link">梦开始的地方</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        一个游戏是怎样被做出来的
+    </h2>
+    
+        <p>一个游戏是怎样被做出来的呢，当我开始写这篇文章的时候，才意识到，这个题目写的有点大，单纯的一篇文章，真的很难让大部分人了解一个游戏到底是怎样被做出来的，因为这里面涉及到了太多太多的细节。所以，我就来从宏观的角度来聊一聊一个游戏的开发过程是怎样的。</p>
+<p><img src="https://ae01.alicdn.com/kf/Ua58e2f00f0ca4f41adc1b9c0fd768b16y.jpg" alt="p000801_1"></p>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2019/12/" class="post-meta__date button">2019-12-07</a>
+    
+ 
+</div>
+<div class="post-entry__tags"><a href="/tags/%E6%83%B3%E5%88%B0%E4%BB%80%E4%B9%88%E5%86%99%E4%BB%80%E4%B9%88/" class="post-tags__link button"># 想到什么写什么</a></div> 
+<a href="/2019/12/07/how-a-game-is-made/" class="post-entry__link">一个游戏是怎样被做出来的</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        在游戏公司工作是什么体验呢？
+    </h2>
+    
+        <p>不知道大家对于一线城市的游戏公司，或者IT公司，是什么印象。亲身经历过，才知道，其实并没有都市爱情电视剧中演的那么高端(😂)。</p>
+<p><img src="https://ae01.alicdn.com/kf/U86a2d203ab0e49f5bb482531422839025.jpg" alt="p000701_1"></p>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2019/12/" class="post-meta__date button">2019-12-06</a>
+    
+ 
+</div>
+<div class="post-entry__tags"><a href="/tags/%E6%83%B3%E5%88%B0%E4%BB%80%E4%B9%88%E5%86%99%E4%BB%80%E4%B9%88/" class="post-tags__link button"># 想到什么写什么</a><a href="/tags/%E4%BD%93%E9%AA%8C/" class="post-tags__link button"># 体验</a></div> 
+<a href="/2019/12/06/experience-at-game-company/" class="post-entry__link">在游戏公司工作是什么体验呢？</a>
+                </div>
+            
+        
+    </div>
+    
+        <div class="nav">
+            <div class="nav__prev">
+                
+                    <a href="/page/5/" class="nav__link">
+                        <div>
+                            <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                        </div>
+                        <div>
+                            <div class="nav__label">
+                                Previous
+                            </div>
+                            <div class="nav__title">
+                                Page 5
+                            </div>
+                        </div>
+                    </a>
+                
+            </div>
+            <div class="nav__next">
+                
+                    <a href="/page/7/" class="nav__link">
+                        <div>
+                            <div class="nav__label">
+                                Next
+                            </div>
+                            <div class="nav__title">
+                                Page 7
+                            </div>
+                        </div>
+                        <div>
+                            <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                        </div>
+                    </a>
+                
+            </div>
+        </div>
+    
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">萌一小栈</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?ae464fe0e62cef297c26908427b0e7bd';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    
+    
+        <link rel="mask-icon" href="/images/favicon.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>Archive: 2020/1 | 萌一小栈</title>
+
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta property="og:type" content="website">
+<meta property="og:title" content="萌一小栈">
+<meta property="og:url" content="http://imoegirl.com/archives/2020/01/index.html">
+<meta property="og:site_name" content="萌一小栈">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="iMoegirl">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">萌一小栈</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+    <div class="cover">
+        <div class="cover__logo">
+            
+                <img no-lazy alt="author Image" class="cover__avatar" src="/images/avatar.png">
+            
+        </div>
+        
+        
+            <div class="cover__intro">
+                <p>Hi, nice to meet you!</p>
+ 
+            </div>
+        
+    </div>
+
+            
+<main class='main'>
+    
+		
+    <div class="post-list">
+        
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        使用 Unity 实现漂亮的数学曲面(下)
+    </h2>
+    
+        <p><a href="https://imoegirl.com/2020/01/10/unity-basis-03-math-curve1/">上一篇博客</a>我们实现了一些简单的数学曲面，这一节我们将继续更复杂的数学曲面展示，所有资源完全承接上一篇内容。</p>
+<h2 id="2-5-创建一个涟漪效果"><a href="#2-5-创建一个涟漪效果" class="headerlink" title="2.5 创建一个涟漪效果"></a>2.5 创建一个涟漪效果</h2><p>先来看一下最终要实现的效果图</p>
+<p><video controls loop id="video-kindlypersonalharrierhawk" alt="Ripple GIF" height="140" width="200" autoplay="true" playsinline="" preload="auto" poster="https://thumbs.gfycat.com/KindlyPersonalHarrierhawk-mobile.jpg" tabindex="-1"><source src="https://thumbs.gfycat.com/KindlyPersonalHarrierhawk-mobile.mp4" type="video/mp4"><source src="https://giant.gfycat.com/KindlyPersonalHarrierhawk.webm" type="video/webm"><source src="https://giant.gfycat.com/KindlyPersonalHarrierhawk.mp4" type="video/mp4"><source src="https://thumbs.gfycat.com/KindlyPersonalHarrierhawk-mobile.mp4" type="video/mp4"></video></p>
+<p>我们一步一步来实现这个效果。首先，要创建一个基于到原点距离正弦波。而这个距离，我们使用毕达哥拉斯定理也就是勾股定理 $a^2 + b^2 = c^2$ 。对于这个效果来说，我们是基于XZ坐标来求Y坐标的，所以也就是 $\sqrt{x^2 + z^2}$ 。</p>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2020/01/" class="post-meta__date button">2020-01-16</a>
+    
+ 
+</div>
+<div class="post-entry__tags"><a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/" class="post-tags__link button"># 游戏开发</a></div> 
+<a href="/2020/01/16/unity-basis-03-math-curve2/" class="post-entry__link">使用 Unity 实现漂亮的数学曲面(下)</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        使用 Unity 实现漂亮的数学曲面(上)
+    </h2>
+    
+        <p>这篇博客是上一篇 <a href="https://imoegirl.com/2020/01/06/unity-sine-visualization/"><code>使用Unity3D展示Sin函数动画</code></a> 的续篇，在上一篇的基础上，来实现更复杂的效果。在文章最后会有完整的 C# 代码和 Shader 代码，先来看一下最终的效果图</p>
+<p><video controls loop id="video-wigglyastonishingaltiplanochinchillamouse" alt="2D Multi-sine GIF" height="256" width="256" autoplay="true" playsinline="" preload="auto" poster="https://thumbs.gfycat.com/WigglyAstonishingAltiplanochinchillamouse-mobile.jpg" tabindex="-1"><source src="https://thumbs.gfycat.com/WigglyAstonishingAltiplanochinchillamouse-mobile.mp4" type="video/mp4"><source src="https://giant.gfycat.com/WigglyAstonishingAltiplanochinchillamouse.webm" type="video/webm"><source src="https://giant.gfycat.com/WigglyAstonishingAltiplanochinchillamouse.mp4" type="video/mp4"><source src="https://thumbs.gfycat.com/WigglyAstonishingAltiplanochinchillamouse-mobile.mp4" type="video/mp4"></video></p>
+<p>由于篇幅太长，所以将分为上下两部分，现在开始第一部分的内容。</p>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2020/01/" class="post-meta__date button">2020-01-10</a>
+    
+ 
+</div>
+<div class="post-entry__tags"><a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/" class="post-tags__link button"># 游戏开发</a></div> 
+<a href="/2020/01/10/unity-basis-03-math-curve1/" class="post-entry__link">使用 Unity 实现漂亮的数学曲面(上)</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        哈希
+    </h2>
+    
+        <p>今天我们来聊一下哈希(Hashing)，有时候也被称为散列。简单来说，哈希是一个唯一标识，用于标识一个东西。例如，一个人的身份证号就可以称为一个哈希，通过一个身份证号，可以定位到某一个人的信息。一个人的名字，也可以用作哈希，不过这个可能会产生重复，因为有很多人重名，这样导致的问题就是，通过名字，可能定位到多个人的信息，这种情况叫做哈希碰撞。</p>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2020/01/" class="post-meta__date button">2020-01-08</a>
+    
+ 
+</div>
+<div class="post-entry__tags"><a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tags__link button"># 数据结构与算法</a></div> 
+<a href="/2020/01/08/data-structure-08-hash/" class="post-entry__link">哈希</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        使用Unity3D展示Sin函数动画
+    </h2>
+    
+        <p>今天我们要实现的东西，就是下面这个动图的效果。使用代码控制方块的坐标，来展示 <code>Sin</code> 函数。方块的颜色变化，是随着坐标变化而动态改变的，我们会写一个超简单的 <code>Shader</code> 来实现。</p>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2020/01/" class="post-meta__date button">2020-01-06</a>
+    
+ 
+</div>
+<div class="post-entry__tags"><a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/" class="post-tags__link button"># 游戏开发</a></div> 
+<a href="/2020/01/06/unity-sine-visualization/" class="post-entry__link">使用Unity3D展示Sin函数动画</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        制作一个会动的时钟
+    </h2>
+    
+        <p>这是 Unity 基础系列教程的第一篇博客。我们将由浅入深，一步一步学习Unity及游戏开发相关的东西。整个系列教程所使用的Unity版本为 2018.4 及以上就可以，如果要使用特殊版本，则会在文中指出。</p>
+<p>今天要做的是一个能够实时显示当前时间的时钟，就是下面这个东东。</p>
+<p><img src="https://ae01.alicdn.com/kf/U93310f53935245659d219f8bab5dde58b.jpg" alt="p002001_Unity-001-1"></p>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2020/01/" class="post-meta__date button">2020-01-06</a>
+    
+ 
+</div>
+<div class="post-entry__tags"><a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/" class="post-tags__link button"># 游戏开发</a></div> 
+<a href="/2020/01/06/unity-basis-01-clock/" class="post-entry__link">制作一个会动的时钟</a>
+                </div>
+            
+        
+    </div>
+    
+
+
+	
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">萌一小栈</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?ae464fe0e62cef297c26908427b0e7bd';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

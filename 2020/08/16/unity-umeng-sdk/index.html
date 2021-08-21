@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    
+    
+        <link rel="mask-icon" href="/images/favicon.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>Unity 接入友盟SDK | 萌一小栈</title>
+
+
+    <meta name="keywords" content="游戏开发">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="友盟游戏统计 SDK 可以很方便的统计一些游戏数据。使用他们的自定义事件，来统计自己项目关心的数据。现在接入 SDK 已经比以前方便了很多，不需要再导出 Android 工程去修改 Java。下面将一步一步详细说明。 要使用友盟 SDK，一共有以下几步  在友盟后面新建应用 在友盟后面建立自定义事件 下载并导入 SDK 调用 SDK">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unity 接入友盟SDK">
+<meta property="og:url" content="http://imoegirl.com/2020/08/16/unity-umeng-sdk/index.html">
+<meta property="og:site_name" content="萌一小栈">
+<meta property="og:description" content="友盟游戏统计 SDK 可以很方便的统计一些游戏数据。使用他们的自定义事件，来统计自己项目关心的数据。现在接入 SDK 已经比以前方便了很多，不需要再导出 Android 工程去修改 Java。下面将一步一步详细说明。 要使用友盟 SDK，一共有以下几步  在友盟后面新建应用 在友盟后面建立自定义事件 下载并导入 SDK 调用 SDK">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://p.pstatp.com/origin/137cf000092e790e2d14d">
+<meta property="og:image" content="https://p.pstatp.com/origin/137830000cb4ef2eed85c">
+<meta property="og:image" content="https://p.pstatp.com/origin/ffe700022c13e8e82398">
+<meta property="og:image" content="https://p.pstatp.com/origin/1375b00023d8563d2836e">
+<meta property="og:image" content="https://p.pstatp.com/origin/1381900003eecd16f78ef">
+<meta property="og:image" content="https://p.pstatp.com/origin/fe7f00011dddda623590">
+<meta property="og:image" content="https://p.pstatp.com/origin/fe3a00021aca011d4f36">
+<meta property="og:image" content="https://p.pstatp.com/origin/ffc40001cfe11c16ba77">
+<meta property="og:image" content="https://p.pstatp.com/origin/fe44000245c95d41477b">
+<meta property="og:image" content="https://p.pstatp.com/origin/137930000facf52897cfe">
+<meta property="og:image" content="https://p.pstatp.com/origin/1384c000017ed51020bde">
+<meta property="og:image" content="https://p.pstatp.com/origin/1377c0000ed86a9312ccf">
+<meta property="og:image" content="https://p.pstatp.com/origin/13842000086bf7a4719b2">
+<meta property="og:image" content="https://p.pstatp.com/origin/138160000e561f813e2ec">
+<meta property="article:published_time" content="2020-08-16T02:56:24.000Z">
+<meta property="article:modified_time" content="2021-08-21T06:38:31.302Z">
+<meta property="article:author" content="iMoegirl">
+<meta property="article:tag" content="游戏开发">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://p.pstatp.com/origin/137cf000092e790e2d14d">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/atom-one-dark.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">萌一小栈</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        Unity 接入友盟SDK
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2020/08/" class="post-meta__date button">2020-08-16</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>友盟游戏统计 SDK 可以很方便的统计一些游戏数据。使用他们的自定义事件，来统计自己项目关心的数据。现在接入 SDK 已经比以前方便了很多，不需要再导出 Android 工程去修改 Java。下面将一步一步详细说明。</p>
+<p>要使用友盟 SDK，一共有以下几步</p>
+<ul>
+<li><strong>在友盟后面新建应用</strong></li>
+<li><strong>在友盟后面建立自定义事件</strong></li>
+<li><strong>下载并导入 SDK</strong></li>
+<li><strong>调用 SDK</strong></li>
+</ul>
+<span id="more"></span>
+
+<h2 id="1-在友盟后面新建应用"><a href="#1-在友盟后面新建应用" class="headerlink" title="1. 在友盟后面新建应用"></a>1. 在友盟后面新建应用</h2><p>首先注册账号，然后进入友盟工作台。↓ <a target="_blank" rel="noopener" href="https://www.umeng.com/">https://www.umeng.com/</a></p>
+<p><img src="https://p.pstatp.com/origin/137cf000092e790e2d14d"></p>
+<p>然后点击上面的产品，移动统计 ↓</p>
+<p><img src="https://p.pstatp.com/origin/137830000cb4ef2eed85c"></p>
+<p>点击添加应用 ↓</p>
+<p><img src="https://p.pstatp.com/origin/ffe700022c13e8e82398"></p>
+<p>然后填写应用信息，下面是我随便填的，根据自己的应用信息填写即可（随便填也没关系）↓</p>
+<p><img src="https://p.pstatp.com/origin/1375b00023d8563d2836e"></p>
+<p>点击注册后，将跳到下面的页面，这里我们只要关注这个 AppKey 即可，其他的不用管。这个 AppKey 会在 Unity 中用到 ↓</p>
+<p><img src="https://p.pstatp.com/origin/1381900003eecd16f78ef"></p>
+<h2 id="2-自定义事件"><a href="#2-自定义事件" class="headerlink" title="2. 自定义事件"></a>2. 自定义事件</h2><p>建立好了应用后，就要想好我们想要统计哪些数据。例如，有多少用户点了<strong>开始游戏</strong>，有多少用户点了 <strong>观看广告</strong>，有多少用户<strong>观看广告结束</strong>，等等，这些都可以统计。</p>
+<p>所谓的统计，也就是使用自定义的事件名，在不同的地方调用一下友盟的代码。所以接下来我们就建立自己想要统计的数据事件。</p>
+<p>在应用页面，点击我们刚才新建的应用 ↓</p>
+<p><img src="https://p.pstatp.com/origin/fe7f00011dddda623590"></p>
+<p>然后依次点击 设置 -&gt; 事件 -&gt; 手工添加 ↓</p>
+<p><img src="https://p.pstatp.com/origin/fe3a00021aca011d4f36"></p>
+<p>我们下面先定义一个统计游戏开始的事件，事件 ID 是这个事件的唯一表示，会在 SDK 调用时用到，显示名称是让我们自己知道这个事件是干嘛的。然后点击确定 ↓</p>
+<p><img src="https://p.pstatp.com/origin/ffc40001cfe11c16ba77"></p>
+<p>添加完后的事件，会显示在事件列表中。接下来我们再添加一个统计事件，例如游戏结束。↓</p>
+<p><img src="https://p.pstatp.com/origin/fe44000245c95d41477b"></p>
+<p><img src="https://p.pstatp.com/origin/137930000facf52897cfe"></p>
+<p>现在我们已经有了两个事件，当然，还可以添加更多，统计更多数据。这里为了演示，就只添加两个。↓</p>
+<p><img src="https://p.pstatp.com/origin/1384c000017ed51020bde"></p>
+<h2 id="3-下载并导入-SDK"><a href="#3-下载并导入-SDK" class="headerlink" title="3. 下载并导入 SDK"></a>3. 下载并导入 SDK</h2><p>建立好了事件，就可以在项目中使用了，首先要将友盟的 SDK 导入工程中。去友盟的 SDK 页面下载 SDK <a target="_blank" rel="noopener" href="https://developer.umeng.com/sdk/u3d">https://developer.umeng.com/sdk/u3d</a>，这里我们下载 Unity3D 的。</p>
+<p><img src="https://p.pstatp.com/origin/1377c0000ed86a9312ccf"></p>
+<p>下载下来的是一个 ZIP 压缩包，解压后，依次找到里面的 Unity3D -&gt; analytics -&gt; analytics_unit3d_x.x.x -&gt; analytics 目录下的 UmengGameAnalytics_vx.x.unitypackage 文件，将这个文件导入到 Unity 即可，其他的文件不用管。</p>
+<p>导入之后，就可以使用了。注意，如果导入后有什么报错，就看看错误是什么，尝试修复一下。</p>
+<h2 id="4-调用-SDK"><a href="#4-调用-SDK" class="headerlink" title="4. 调用 SDK"></a>4. 调用 SDK</h2><p>导入后，我们就需要写一个脚本，来调用 SDK。新建一个脚本，命名自己确定，这里我们使用 <code>UmengAgent</code>，代码如下</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">using</span> System.Collections;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">UmengAgent</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> UmengAgent Inst;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> appKey;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> channelId;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Awake</span>(<span class="params"></span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Inst = <span class="keyword">this</span>;</span><br><span class="line">        DontDestroyOnLoad(gameObject);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Start</span>(<span class="params"></span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Umeng.GA.StartWithAppKeyAndChannelId(appKey, channelId);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnGameStart</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        Umeng.GA.Event(<span class="string">&quot;GameStart&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnGameOver</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        Umeng.GA.Event(<span class="string">&quot;GameStart&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>代码中的 <code>appKey</code> 就是我们在友盟后台建立应用时的那个 appKey 的字符串，channelId 是我们自己定义的，标识渠道，例如我们出了不同的包，有的放在 GooglePlay，有的放在 AppStore，就可以通过自定义一个 channelId，来分别统计不同渠道的数据情况。</p>
+<p>在场景中新建一个 GameObject，将这个脚本挂上去，然后在 Inspector 面板上赋值 appKey 和 channelId。↓</p>
+<p><img src="https://p.pstatp.com/origin/13842000086bf7a4719b2"></p>
+<p>接下来，就是在游戏逻辑中调用 UmengAgent，在游戏开始后，调用一下 <code>UmengAgent.Inst.OngameStart();</code>，在游戏结束时调用一下 <code>UmengAgent.Inst.OnGameOver();</code>。这样，有多少次游戏开始，有多少次游戏结束，就会被统计下来。</p>
+<p>下图是我另一个工程的统计数据，样式大家可以看一下。</p>
+<p><img src="https://p.pstatp.com/origin/138160000e561f813e2ec"></p>
+<blockquote>
+<p>注意，友盟统计的数据有一定的延迟性，这些事件统计，可能并不会在调用了后立刻就出现在后面。</p>
+</blockquote>
+<p>以上就是在 Unity 中使用友盟统计的详细过程。</p>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>Author: </strong>iMoegirl
+        </p>
+        <p>
+            <strong>
+                Permalink: 
+            </strong>
+            <a href="http://imoegirl.com/2020/08/16/unity-umeng-sdk/">http://imoegirl.com/2020/08/16/unity-umeng-sdk/</a>
+        </p>
+        
+            <strong>
+                <p>任何技术问题，可加微信交流，微信: ifloop</p>
+
+            </strong>
+        
+            <strong>
+                <p>搜索并关注微信公众号 [ 萌一小栈 ] 可及时订阅最新技术文章</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>updated at 2021-08-21</p></div> 
+    <div class="post-entry__tags"><a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/" class="post-tags__link button"># 游戏开发</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2020/11/05/apk-signature/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            Apk 上架前的签名操作
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2020/07/11/simple-understanding-of-ray-tracing/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            简单理解光线追踪
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>Comments</h4>
+    
+    
+    
+    
+    
+    <div id="gitalk-container"></div>
+
+    
+    
+    
+    
+    
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">萌一小栈</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?ae464fe0e62cef297c26908427b0e7bd';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    <script>
+        function loadComment() {
+            let e, i;
+            (e = document.createElement("script")).src = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js',
+            document.body.appendChild(e);
+            e.onload = () => {
+                var gitalk = new Gitalk({
+                    clientID: '5b5aeaa767a06f6c23a4',
+                    clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+                    repo: 'imoegirl.github.io',
+                    owner: 'imoegirl',
+                    admin: 'imoegirl',
+                    id: window.location.pathname,
+                    distractionFreeMode: false
+                });
+                gitalk.render('gitalk-container');
+            };
+            (i = document.createElement("link")).rel = "stylesheet",
+            i.href = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css',
+            document.head.appendChild(i);
+        }
+    
+        var runningOnBrowser = typeof window !== "undefined";
+        var isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+        var supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    
+        setTimeout(function () {
+            if (!isBot && supportsIntersectionObserver) {
+                var comment_observer = new IntersectionObserver(function(entries) {
+                    if (entries[0].isIntersecting) {
+                        loadComment();
+                        comment_observer.disconnect();
+                    }
+                }, { threshold: [0] });
+                comment_observer.observe(document.getElementById('comment'));
+            } else {
+                loadComment();
+            }
+        }, 1);
+    </script>
+
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

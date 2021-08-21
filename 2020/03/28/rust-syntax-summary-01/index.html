@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    
+    
+        <link rel="mask-icon" href="/images/favicon.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>Rust 基础 | 基本语法 | 萌一小栈</title>
+
+
+    <meta name="keywords" content="Rust">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="1. 变量和可变性Rust 定义一个变量默认是不可变的，这一点与其他编程语言不同。 let x &#x3D; 10;x &#x3D; 11;     &#x2F;&#x2F; 这里会编译出错，  如果要定义可变量，需要使用 mut let mut x &#x3D; 10;x &#x3D; 11;  用 let 先定义一个变量，再次用 let 定义一个变量，会将之前的变量覆盖，虽然同名，但也不是原来的变量了，这叫做 Shadowing let x &#x3D; 10;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rust 基础 | 基本语法">
+<meta property="og:url" content="http://imoegirl.com/2020/03/28/rust-syntax-summary-01/index.html">
+<meta property="og:site_name" content="萌一小栈">
+<meta property="og:description" content="1. 变量和可变性Rust 定义一个变量默认是不可变的，这一点与其他编程语言不同。 let x &#x3D; 10;x &#x3D; 11;     &#x2F;&#x2F; 这里会编译出错，  如果要定义可变量，需要使用 mut let mut x &#x3D; 10;x &#x3D; 11;  用 let 先定义一个变量，再次用 let 定义一个变量，会将之前的变量覆盖，虽然同名，但也不是原来的变量了，这叫做 Shadowing let x &#x3D; 10;">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-03-28T14:45:24.000Z">
+<meta property="article:modified_time" content="2021-08-21T06:36:03.791Z">
+<meta property="article:author" content="iMoegirl">
+<meta property="article:tag" content="Rust">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/atom-one-dark.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">萌一小栈</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        Rust 基础 | 基本语法
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2020/03/" class="post-meta__date button">2020-03-28</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <h2 id="1-变量和可变性"><a href="#1-变量和可变性" class="headerlink" title="1. 变量和可变性"></a>1. 变量和可变性</h2><p>Rust 定义一个变量默认是不可变的，这一点与其他编程语言不同。</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> x = <span class="number">10</span>;</span><br><span class="line">x = <span class="number">11</span>;     <span class="comment">// 这里会编译出错，</span></span><br></pre></td></tr></table></figure>
+
+<p>如果要定义可变量，需要使用 mut</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">mut</span> x = <span class="number">10</span>;</span><br><span class="line">x = <span class="number">11</span>;</span><br></pre></td></tr></table></figure>
+
+<p>用 let 先定义一个变量，再次用 let 定义一个变量，会将之前的变量覆盖，虽然同名，但也不是原来的变量了，这叫做 Shadowing</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> x = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">let</span> x = <span class="string">&quot;Hello&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>常量的定义使用 const，常量是永远不会变的量，常量必须在定义的时候注明数据类型</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> MAX_SCORE: <span class="built_in">i32</span> = <span class="number">10000</span>;</span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+
+<h2 id="2-标量数据类型"><a href="#2-标量数据类型" class="headerlink" title="2. 标量数据类型"></a>2. 标量数据类型</h2><p>Rust 数据类型可以分为标量类型和复合类型，标量类型有四种 整型，浮点型，布尔型，字符型。而整型分为 8位、16位、32位、64位、128位，动态长度这几种，每一种又分为有符号型，无符号型。浮点数分为 32位、64位。</p>
+<p>关键字：<br>整型有符号型: <code>i8</code> <code>i16</code> <code>i32</code> <code>i64</code> <code>i128</code> <code>isize</code><br>整型无符号型: <code>u8</code> <code>u16</code> <code>u32</code> <code>u64</code> <code>u128</code> <code>usize</code></p>
+<blockquote>
+<p>整型默认类型为 <code>i32</code>。注意 <code>isize</code> <code>usize</code> 的长度是动态的，如果运行程序的计算机是32位的，则为32位，如果计算机为64位的，则为64位。另外，在Rust中遍历集合时，常用 <code>isize</code> 和 <code>usize</code>。</p>
+</blockquote>
+<p>浮点型: <code>f32</code> <code>f64</code> 浮点型默认是 f64<br>布尔型: <code>bool</code><br>字符型: <code>char</code></p>
+<blockquote>
+<p>字符型注意，在 Rust 中，<code>char</code> 类型是占4个字节的，这一点与其他编程语言不一样。char 类型，可以表示一个 unicode 字符。</p>
+</blockquote>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 整型</span></span><br><span class="line"><span class="keyword">let</span> x = <span class="number">1000</span>;</span><br><span class="line"><span class="keyword">let</span> x = <span class="number">1_000</span>;          <span class="comment">// 对的，这样定义也可以</span></span><br><span class="line"><span class="keyword">let</span> x = <span class="number">0xff</span>;           <span class="comment">// 十六进制</span></span><br><span class="line"><span class="keyword">let</span> x = <span class="number">0x_ff</span>;</span><br><span class="line"><span class="keyword">let</span> x = <span class="number">0o77</span>;           <span class="comment">// 八进制</span></span><br><span class="line"><span class="keyword">let</span> x = <span class="number">0o_77</span>;</span><br><span class="line"><span class="keyword">let</span> x = <span class="number">0b11110010</span>;     <span class="comment">// 二进制</span></span><br><span class="line"><span class="keyword">let</span> x = <span class="number">0b_11110010</span>;    <span class="comment">// 这样定义也可以</span></span><br><span class="line"><span class="keyword">let</span> x = <span class="string">b&#x27;A&#x27;</span>;           <span class="comment">// Byte (u8)，如果打印的话，是打印出 A 对应的 Ascii 码</span></span><br><span class="line"><span class="keyword">let</span> x: <span class="built_in">i32</span> = <span class="number">12</span>;        <span class="comment">// 也可以加上数据类型</span></span><br><span class="line"><span class="keyword">let</span> x: <span class="built_in">u32</span> = <span class="number">88</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 浮点型</span></span><br><span class="line"><span class="keyword">let</span> y = <span class="number">0.5</span>;</span><br><span class="line"><span class="keyword">let</span> y: <span class="built_in">f64</span> = <span class="number">0.5</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 布尔型</span></span><br><span class="line"><span class="keyword">let</span> is_girl = <span class="literal">false</span>;</span><br><span class="line"><span class="keyword">let</span> is_boy: <span class="built_in">bool</span> = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 字符型</span></span><br><span class="line"><span class="keyword">let</span> c = <span class="string">&#x27;z&#x27;</span>;</span><br><span class="line"><span class="keyword">let</span> z = <span class="string">&#x27;ℤ&#x27;</span>;</span><br><span class="line"><span class="keyword">let</span> heart_eyed_cat = &#x27;😻&#x27;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-复合数据类型"><a href="#3-复合数据类型" class="headerlink" title="3. 复合数据类型"></a>3. 复合数据类型</h2><p>Rust 有两个基本的复合数据类型，一个是元组，一个是数组。元组是固定大小，可以将不同类型的数据组织到一起的数据类型。数据与其他编程语言一样，固定大小，只能保存同类型的数据。</p>
+<p>Tuple (元组)，涉及到的操作有，构建，访问，解构</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> tp = (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5.5</span>, <span class="string">&quot;hello&quot;</span>, <span class="string">&#x27;A&#x27;</span>, <span class="literal">false</span>);</span><br><span class="line"><span class="keyword">let</span> tp: (<span class="built_in">i32</span>, <span class="built_in">f64</span>, <span class="built_in">i32</span>) = (<span class="number">10</span>, <span class="number">3.1</span>, <span class="number">44</span>);        <span class="comment">// 如果前面加了数据类型，则后面的数据要与前面的类型一一对应</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> x = tp.<span class="number">0</span>;   <span class="comment">// 访问第0个元素</span></span><br><span class="line"><span class="keyword">let</span> y = tp.<span class="number">1</span>;   <span class="comment">// 访问第1个元素</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> (x, y, z) = tp;  <span class="comment">// 元组解构，可以用这种方式，将元组中的值按索引分别赋值给前面的变量，一一对应</span></span><br><span class="line"><span class="keyword">let</span> (x, y, ..) = tp; <span class="comment">// 只将前两个元素分别赋值给 x, y 剩余元素忽略</span></span><br></pre></td></tr></table></figure>
+
+<p>Array (数组)</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> month = [<span class="string">&quot;january&quot;</span>, <span class="string">&quot;February&quot;</span>, <span class="string">&quot;March&quot;</span>];</span><br><span class="line"><span class="keyword">let</span> week: [&amp;<span class="built_in">str</span>; <span class="number">2</span>] = [<span class="string">&quot;Monday&quot;</span>, <span class="string">&quot;Tuesday&quot;</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 格式，let 数组变量名: [数据类型; 数据个数] = [数据1, 数据2, ...]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> day1 = week[<span class="number">0</span>];</span><br><span class="line"><span class="keyword">let</span> day2 = week[<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> length = week.len();    <span class="comment">// 可以通过 .len() 访问数组的长度</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="4-函数"><a href="#4-函数" class="headerlink" title="4. 函数"></a>4. 函数</h2><p>一个函数，有函数名，函数参数，函数返回值等。</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这是一个简单的函数</span></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">function1</span></span>() &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这是一个带参数的函数</span></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">print_age</span></span>(age: <span class="built_in">i32</span>) &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;Age: &#123;&#125;&quot;</span>, age);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这是一个带返回值的参数</span></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">sum</span></span>(a: <span class="built_in">i32</span>, b: <span class="built_in">i32</span>) -&gt; <span class="built_in">i32</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这是Rust中通常带有返回值的函数</span></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">sum</span></span>(a: <span class="built_in">i32</span>, b: <span class="built_in">i32</span>) -&gt; <span class="built_in">i32</span> &#123;</span><br><span class="line">    a + b</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面的函数中，我们没有使用 return，而是直接 a + b，但是结尾没有分号。在 Rust 中，有语句和表达式两个概念，语句简单理解为普通的代码。而表达式，是一段经过计算，会产生一个值的语句，结尾没有分号。如果一个表达式在一个作用域的最后，则这个表达式的结果，就是返回值。</p>
+</blockquote>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> x = &#123; <span class="number">5</span> + <span class="number">3</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">square</span></span>(x: <span class="built_in">i32</span>) -&gt; <span class="built_in">i32</span> &#123;</span><br><span class="line">    x * x</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="控制语句"><a href="#控制语句" class="headerlink" title="控制语句"></a>控制语句</h2><p>分支语句:</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> number = <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// if else</span></span><br><span class="line"><span class="keyword">if</span> number % <span class="number">2</span> == <span class="number">0</span> &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;state 1&quot;</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> number % <span class="number">3</span> == <span class="number">0</span> &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;state 2&quot;</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;state 3&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// if in let</span></span><br><span class="line"><span class="keyword">let</span> is_girl = <span class="literal">false</span>;</span><br><span class="line"><span class="keyword">let</span> sign = <span class="keyword">if</span> is_girl &#123; <span class="number">0</span> &#125; <span class="keyword">else</span> &#123; <span class="number">1</span> &#125;;</span><br></pre></td></tr></table></figure>
+
+<p>循环语句:</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="comment">// loop</span></span><br><span class="line"><span class="keyword">loop</span> &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;这是一个死循环&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 从循环中返回一个值</span></span><br><span class="line"><span class="keyword">let</span> <span class="keyword">mut</span> counter = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">let</span> result = <span class="keyword">loop</span> &#123;</span><br><span class="line">    counter += <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> counter == <span class="number">10</span> &#123;</span><br><span class="line">        <span class="keyword">break</span> counter * <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// result 的值为20</span></span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;result: &#123;&#125;&quot;</span>, result); </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// while</span></span><br><span class="line"><span class="keyword">let</span> <span class="keyword">mut</span> number = <span class="number">3</span>;</span><br><span class="line"><span class="keyword">while</span> number != <span class="number">0</span> &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, number);</span><br><span class="line">    number -= <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> array = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>];</span><br><span class="line"><span class="keyword">let</span> <span class="keyword">mut</span> index = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span> index &lt; array.len() &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;index: &#123;&#125;, Value: &#123;&#125;&quot;</span>, index, array[index]);</span><br><span class="line">    index += <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> element <span class="keyword">in</span> array.iter() &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;value: &#123;&#125;&quot;</span>, element);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 打印出 1，2，3 不包含结尾数字</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> (<span class="number">1</span>..<span class="number">4</span>) &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, i);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 打印出 1，2，3，4 包含结尾数字</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> (<span class="number">1</span>..=<span class="number">4</span>) &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, i);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 倒着打印，3，2，1</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> (<span class="number">1</span>..<span class="number">4</span>).rev() &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, i);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 倒着打印 4，3，2，1</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> (<span class="number">1</span>..=<span class="number">4</span>).rev() &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>Author: </strong>iMoegirl
+        </p>
+        <p>
+            <strong>
+                Permalink: 
+            </strong>
+            <a href="http://imoegirl.com/2020/03/28/rust-syntax-summary-01/">http://imoegirl.com/2020/03/28/rust-syntax-summary-01/</a>
+        </p>
+        
+            <strong>
+                <p>任何技术问题，可加微信交流，微信: ifloop</p>
+
+            </strong>
+        
+            <strong>
+                <p>搜索并关注微信公众号 [ 萌一小栈 ] 可及时订阅最新技术文章</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>updated at 2021-08-21</p></div> 
+    <div class="post-entry__tags"><a href="/tags/Rust/" class="post-tags__link button"># Rust</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2020/03/29/rust-syntax-summary-02/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            Rust 基础 | 所有权
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2020/03/19/unity-shader-basis-05/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            Unity Shader | 半兰伯特、高光反射、BlinnPhone
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>Comments</h4>
+    
+    
+    
+    
+    
+    <div id="gitalk-container"></div>
+
+    
+    
+    
+    
+    
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">萌一小栈</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?ae464fe0e62cef297c26908427b0e7bd';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    <script>
+        function loadComment() {
+            let e, i;
+            (e = document.createElement("script")).src = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js',
+            document.body.appendChild(e);
+            e.onload = () => {
+                var gitalk = new Gitalk({
+                    clientID: '5b5aeaa767a06f6c23a4',
+                    clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+                    repo: 'imoegirl.github.io',
+                    owner: 'imoegirl',
+                    admin: 'imoegirl',
+                    id: window.location.pathname,
+                    distractionFreeMode: false
+                });
+                gitalk.render('gitalk-container');
+            };
+            (i = document.createElement("link")).rel = "stylesheet",
+            i.href = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css',
+            document.head.appendChild(i);
+        }
+    
+        var runningOnBrowser = typeof window !== "undefined";
+        var isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+        var supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    
+        setTimeout(function () {
+            if (!isBot && supportsIntersectionObserver) {
+                var comment_observer = new IntersectionObserver(function(entries) {
+                    if (entries[0].isIntersecting) {
+                        loadComment();
+                        comment_observer.disconnect();
+                    }
+                }, { threshold: [0] });
+                comment_observer.observe(document.getElementById('comment'));
+            } else {
+                loadComment();
+            }
+        }, 1);
+    </script>
+
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    
+    
+        <link rel="mask-icon" href="/images/favicon.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>在Ubuntu上开启Swap | 萌一小栈</title>
+
+
+    <meta name="keywords" content="Ubuntu">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="在内存不够大时，需要开启Swap，使用一部分硬盘，作为虚拟内存，解决内存容量不足的情况。这篇博客是以 Ubuntu 基础来操作的，其他 Linux 系统基本类似。很简单，跟着下面的步骤，一步一步来操作即可。  注意：下面命令的操作，都是在终端中进行的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在Ubuntu上开启Swap">
+<meta property="og:url" content="http://imoegirl.com/2020/02/09/open-swap-on-ubuntu/index.html">
+<meta property="og:site_name" content="萌一小栈">
+<meta property="og:description" content="在内存不够大时，需要开启Swap，使用一部分硬盘，作为虚拟内存，解决内存容量不足的情况。这篇博客是以 Ubuntu 基础来操作的，其他 Linux 系统基本类似。很简单，跟着下面的步骤，一步一步来操作即可。  注意：下面命令的操作，都是在终端中进行的">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-02-09T04:15:40.000Z">
+<meta property="article:modified_time" content="2021-08-21T06:35:35.884Z">
+<meta property="article:author" content="iMoegirl">
+<meta property="article:tag" content="Ubuntu">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/atom-one-dark.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">萌一小栈</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        在Ubuntu上开启Swap
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2020/02/" class="post-meta__date button">2020-02-09</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>在内存不够大时，需要开启Swap，使用一部分硬盘，作为虚拟内存，解决内存容量不足的情况。这篇博客是以 Ubuntu 基础来操作的，其他 Linux 系统基本类似。很简单，跟着下面的步骤，一步一步来操作即可。</p>
+<blockquote>
+<p>注意：下面命令的操作，都是在终端中进行的</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="1-确定当前没有开启-Swap"><a href="#1-确定当前没有开启-Swap" class="headerlink" title="1. 确定当前没有开启 Swap"></a>1. 确定当前没有开启 Swap</h2><p>在终端使用命令 <code>free -m</code> 查看输出结果</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">total              used       free     shared    buffers     cached</span><br><span class="line">Mem:               1840       1614     226       15          36       1340</span><br><span class="line">-/+ buffers/cache:            238      1602</span><br><span class="line">Swap:              0          0        0</span><br></pre></td></tr></table></figure>
+
+<p>可以看到最后一行是0 0 0，则表示当前没有开启。</p>
+<h2 id="2-创建-Swap-文件"><a href="#2-创建-Swap-文件" class="headerlink" title="2. 创建 Swap 文件"></a>2. 创建 Swap 文件</h2><p>使用下面命令创建交换文件。因为要分配硬盘空间，所以有可能比较慢，等待一会</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">dd if=/dev/zero of=/swapfile count=2048 bs=1M</span><br></pre></td></tr></table></figure>
+
+<p><strong>count=2048</strong> 表示创建 2G 的虚拟内存，因为这里用到的单位是 <code>M</code>，如果要创建 6G 虚拟内存，则把2048 改成 6144 即可，因为 1024 * 6 = 6144。</p>
+<p>可以使用 <code>ls / | grep swapfile</code> 命令查看一下，确保交换文件存在，创建成功。</p>
+<h2 id="3-激活-Swap-文件"><a href="#3-激活-Swap-文件" class="headerlink" title="3. 激活 Swap 文件"></a>3. 激活 Swap 文件</h2><p>依次执行下面的命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">chmod 600 /swapfile</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkswap /swapfile</span><br></pre></td></tr></table></figure>
+
+<p>依次运行上面两个命令后，如果成功，将会看到类似下面的输出</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Setting up swapspace version 1, size = 2097148 KiB</span><br><span class="line">no label, UUID=ff3fc469-9c4b-4913-b653-ec53d6460d0e</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-开启-Swap"><a href="#4-开启-Swap" class="headerlink" title="4. 开启 Swap"></a>4. 开启 Swap</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">swapon /swapfile</span><br></pre></td></tr></table></figure>
+
+<p>到这里，Swap 已经开启成功。我们再次使用 <code>free -m</code> 命令查看一下，你将看到类似下面的输出。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">total       used       free     shared    buffers     cached</span><br><span class="line">Mem:          1840       1754         86         16         23       1519</span><br><span class="line">-/+ buffers/cache:        210       1630</span><br><span class="line">Swap:         2047          0       2047</span><br></pre></td></tr></table></figure>
+
+<p>最后一行 Swap 将不再是0 0 0，而是我们上面设置的大小</p>
+<h2 id="5-设置系统启动时自动开启-Swap"><a href="#5-设置系统启动时自动开启-Swap" class="headerlink" title="5. 设置系统启动时自动开启 Swap"></a>5. 设置系统启动时自动开启 Swap</h2><p>使用编辑器编辑 <strong>/etc/fstab</strong> 文件，添加 Swap 自动开启的配置，这里使用 Vim进行编辑，也可以使用其他文本编辑工具，例如 nano</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim /etc/fstab</span><br></pre></td></tr></table></figure>
+
+<p>在 fstab 文件最后一行添加下面的内容</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/swapfile none swap sw 0 0</span><br></pre></td></tr></table></figure>
+
+<p>然后保存，退出。</p>
+<h3 id="好了，现在-Swap-已经配置完，并且可以在系统启动时自动开启。"><a href="#好了，现在-Swap-已经配置完，并且可以在系统启动时自动开启。" class="headerlink" title="好了，现在 Swap 已经配置完，并且可以在系统启动时自动开启。"></a>好了，现在 Swap 已经配置完，并且可以在系统启动时自动开启。</h3>
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>Author: </strong>iMoegirl
+        </p>
+        <p>
+            <strong>
+                Permalink: 
+            </strong>
+            <a href="http://imoegirl.com/2020/02/09/open-swap-on-ubuntu/">http://imoegirl.com/2020/02/09/open-swap-on-ubuntu/</a>
+        </p>
+        
+            <strong>
+                <p>任何技术问题，可加微信交流，微信: ifloop</p>
+
+            </strong>
+        
+            <strong>
+                <p>搜索并关注微信公众号 [ 萌一小栈 ] 可及时订阅最新技术文章</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>updated at 2021-08-21</p></div> 
+    <div class="post-entry__tags"><a href="/tags/Ubuntu/" class="post-tags__link button"># Ubuntu</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2020/02/11/python-delete-kindle-pc-content/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            使用 Python 去掉 Kindle PC 复制时自动添加的内容
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2020/02/09/ligin-google-vps/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            使用外部工具登录Google VPS
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>Comments</h4>
+    
+    
+    
+    
+    
+    <div id="gitalk-container"></div>
+
+    
+    
+    
+    
+    
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">萌一小栈</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?ae464fe0e62cef297c26908427b0e7bd';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    <script>
+        function loadComment() {
+            let e, i;
+            (e = document.createElement("script")).src = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js',
+            document.body.appendChild(e);
+            e.onload = () => {
+                var gitalk = new Gitalk({
+                    clientID: '5b5aeaa767a06f6c23a4',
+                    clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+                    repo: 'imoegirl.github.io',
+                    owner: 'imoegirl',
+                    admin: 'imoegirl',
+                    id: window.location.pathname,
+                    distractionFreeMode: false
+                });
+                gitalk.render('gitalk-container');
+            };
+            (i = document.createElement("link")).rel = "stylesheet",
+            i.href = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css',
+            document.head.appendChild(i);
+        }
+    
+        var runningOnBrowser = typeof window !== "undefined";
+        var isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+        var supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    
+        setTimeout(function () {
+            if (!isBot && supportsIntersectionObserver) {
+                var comment_observer = new IntersectionObserver(function(entries) {
+                    if (entries[0].isIntersecting) {
+                        loadComment();
+                        comment_observer.disconnect();
+                    }
+                }, { threshold: [0] });
+                comment_observer.observe(document.getElementById('comment'));
+            } else {
+                loadComment();
+            }
+        }, 1);
+    </script>
+
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

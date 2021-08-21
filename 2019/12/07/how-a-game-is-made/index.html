@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    
+    
+        <link rel="mask-icon" href="/images/favicon.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>一个游戏是怎样被做出来的 | 萌一小栈</title>
+
+
+    <meta name="keywords" content="想到什么写什么">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="一个游戏是怎样被做出来的呢，当我开始写这篇文章的时候，才意识到，这个题目写的有点大，单纯的一篇文章，真的很难让大部分人了解一个游戏到底是怎样被做出来的，因为这里面涉及到了太多太多的细节。所以，我就来从宏观的角度来聊一聊一个游戏的开发过程是怎样的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一个游戏是怎样被做出来的">
+<meta property="og:url" content="http://imoegirl.com/2019/12/07/how-a-game-is-made/index.html">
+<meta property="og:site_name" content="萌一小栈">
+<meta property="og:description" content="一个游戏是怎样被做出来的呢，当我开始写这篇文章的时候，才意识到，这个题目写的有点大，单纯的一篇文章，真的很难让大部分人了解一个游戏到底是怎样被做出来的，因为这里面涉及到了太多太多的细节。所以，我就来从宏观的角度来聊一聊一个游戏的开发过程是怎样的。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ua58e2f00f0ca4f41adc1b9c0fd768b16y.jpg">
+<meta property="article:published_time" content="2019-12-07T06:19:38.000Z">
+<meta property="article:modified_time" content="2021-08-21T06:34:55.022Z">
+<meta property="article:author" content="iMoegirl">
+<meta property="article:tag" content="想到什么写什么">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/Ua58e2f00f0ca4f41adc1b9c0fd768b16y.jpg">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/atom-one-dark.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">萌一小栈</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        一个游戏是怎样被做出来的
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2019/12/" class="post-meta__date button">2019-12-07</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>一个游戏是怎样被做出来的呢，当我开始写这篇文章的时候，才意识到，这个题目写的有点大，单纯的一篇文章，真的很难让大部分人了解一个游戏到底是怎样被做出来的，因为这里面涉及到了太多太多的细节。所以，我就来从宏观的角度来聊一聊一个游戏的开发过程是怎样的。</p>
+<p><img src="https://ae01.alicdn.com/kf/Ua58e2f00f0ca4f41adc1b9c0fd768b16y.jpg" alt="p000801_1"></p>
+<span id="more"></span>
+
+<p>每一个游戏，可能都始于一个很小的想法，或者故事，然后像种子一样，慢慢成长，最后形成一个完善的体系化的设计。就像写一个故事，最开始，可能只有一个大概的方向，然后会构思里面的人物，性格，故事的发生地点，角色之间的关系，等等，有了宏观方向上的故事线，就有了大概的骨架，在不偏离故事线的情况下，去完善细节，让整个故事更有灵魂。一个游戏的构思，我觉得也是有类似之处。</p>
+<p>首先，简单介绍一下一个游戏公司的人员，大概都分为哪些部分。从宏观上来分，大概分为策划，美术，程序，测试，音频，运营。在这里，暂时不详细地介绍每一个职位的细分以及工作的内容，等我写一篇文章专门介绍这个。</p>
+<p>前期的概念设计，是由游戏策划来做的。游戏策划人员会细分成系统策划，剧情策划，数值策划等等。为了能让每一个人构思的东西，能够不偏离游戏的故事线，以及最后整合到一起，形成一个完整体系，所以还会有一个职位叫做策划总监，或者有的项目还会有制作人。他们会拍板每一个设计是否要采纳，当然，也是和所有策划同学讨论决定的，但是也拥有最终决定权。</p>
+<p>设计阶段产出的内容，一般都是设计文档，或者一些参考图之类的，为后面开发阶段做准备。</p>
+<p>现在来介绍一下美术部的同学，可以说，我们在游戏中眼睛能看到的东西，不管是一个模型，一个世界，一个按钮，一个炫酷的特效等等，都是由美术部的同学做的。美术部分，也会细分，大概分成2D和3D，2D 的同学主要做 UI，原画，3D 的同学呢，有的做场景，有的做角色，有的做动画，有的做特效等等。</p>
+<p>在策划有了大概的设计之后，美术部的同学就可以开始做一些东西了。</p>
+<p>与此同时，程序的同也开始工作了，一开始做的事情呢，要能就是搭建游戏的程序骨架。会写一些与具体的游戏玩法没有关系的东西，就像建造房子时的地基，不管上面的房子要建造成什么样子，地基都可以在有了大概的设计后，开工，与上面的房子建造成什么样子，关系不大，只要能承载上面的房子就 OK。程序的骨架也是一样的。这个通常称做搭框架。有很多东西，不需要从0开始写，很多模块都有现成的，要么是别人写好的，要么是之前项目中的，都可以直接或者稍微改一下就拿过来用。减少开发时间和成本。</p>
+<p>前期的这个阶段会走的很慢，因为一切刚刚开始。慢慢地，设计方面越来越完善，很多东西走出实验阶段，美术知道具体做什么，就可以加快速度开始做。与此同时，美术做的东西，也会直接进入游戏工程中，在经过一段时间后，就可以有一个游戏的雏形了，可以叫做 Demo 版本。就是一个不完善，但是能够大概反应游戏方向的可玩版本。</p>
+<p>在 Demo 版本出来后，验证了游戏的设计想法是可行的，就可以正式地，流程化地往下进行。</p>
+<p>接下来的发展就很明确了。不同的策划会构思不同的游戏功能，每一个游戏功能涉及到的美术部分，会由美术部的同学去做，而这个功能的实现，就由某一个程序的同学去实现。在这个过程中，程序，美术，策划，会经常性的交流和对接，例如，有设计不明确，或者不合理，或者做不了的情况，程序都会和策划聊。或者有的事情，可能由美术那边做起来不太方便，而程序写点代码就可以完成，那这部分可能就会由程序同学写代码实现。总之大家的目标是一致的，就是把这个功能做好。</p>
+<p>随着时间的流逝，以及大家的努力工作，游戏也会越来越完善。在这个过程中，游戏会有很多里程碑阶段的版本。在游戏相对完善时，测试同学就会介入，测试，是游戏的质量保证。测试同学会测试每一个功能，每一个细节，然后将发现的问题，反馈到 Bug 系统上，程序同学会根据测试同学反馈的问题，去进行修复。修复后，测试同学会根据 Bug 系统上问题的状态，去再次确认是否已修复。这个循环基本上是一直存在的。</p>
+<p>在版本相对完善的时候，音频的同学，会开始为整个游戏的各个功能制作音频，然后整合到版本中。</p>
+<p>整个制作的流程，大概就是这样。过程就这么多，但是这个过程中的每一步，都是很艰辛的。可能某一些功能，会不断地修改，完善。美术同学做的东西，也会不断的更新，每一版可能都会比上一版更漂亮。加班加点，是很正常的。</p>
+<p>在游戏真正上线前，会有好几个阶段的不同规模的真实玩家测试。然后根据玩家的反馈，再去修改和完善游戏。经历几次测试和完善后，最终就是上线版本。游戏上线后，我们就可以从苹果的 AppStore 或者 Android 的一些应用市场下载到游戏了。</p>
+<p>一个游戏的研发周期大概1年到几年，根据不同的游戏规模，所花费的时间是一样的。一个游戏研发成本，也是很高的，从最初的游戏概念，到最终的游戏上线，根据游戏的规模，可能要花费<code>上百万</code>到<code>上千万</code>软妹币，或者一些 3A 大作，会花费<code>上亿美元</code>。</p>
+<p>一个游戏上线，并不意味着就会有盈利。一方面，游戏好不好玩是一个关键要素，其实，也需要运营同学的努力，去推广游戏。</p>
+<p>好了，今天先介绍到这，我知道很多人读完了可能一脸茫然，还是不知道一个游戏到底是怎么做出来的，没关系，欢迎进入游戏行业亲自体会，哈哈哈哈~</p>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>Author: </strong>iMoegirl
+        </p>
+        <p>
+            <strong>
+                Permalink: 
+            </strong>
+            <a href="http://imoegirl.com/2019/12/07/how-a-game-is-made/">http://imoegirl.com/2019/12/07/how-a-game-is-made/</a>
+        </p>
+        
+            <strong>
+                <p>任何技术问题，可加微信交流，微信: ifloop</p>
+
+            </strong>
+        
+            <strong>
+                <p>搜索并关注微信公众号 [ 萌一小栈 ] 可及时订阅最新技术文章</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>updated at 2021-08-21</p></div> 
+    <div class="post-entry__tags"><a href="/tags/%E6%83%B3%E5%88%B0%E4%BB%80%E4%B9%88%E5%86%99%E4%BB%80%E4%B9%88/" class="post-tags__link button"># 想到什么写什么</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2019/12/08/a-game-project-0-start/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            梦开始的地方
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2019/12/06/experience-at-game-company/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            在游戏公司工作是什么体验呢？
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>Comments</h4>
+    
+    
+    
+    
+    
+    <div id="gitalk-container"></div>
+
+    
+    
+    
+    
+    
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">萌一小栈</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?ae464fe0e62cef297c26908427b0e7bd';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    <script>
+        function loadComment() {
+            let e, i;
+            (e = document.createElement("script")).src = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js',
+            document.body.appendChild(e);
+            e.onload = () => {
+                var gitalk = new Gitalk({
+                    clientID: '5b5aeaa767a06f6c23a4',
+                    clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+                    repo: 'imoegirl.github.io',
+                    owner: 'imoegirl',
+                    admin: 'imoegirl',
+                    id: window.location.pathname,
+                    distractionFreeMode: false
+                });
+                gitalk.render('gitalk-container');
+            };
+            (i = document.createElement("link")).rel = "stylesheet",
+            i.href = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css',
+            document.head.appendChild(i);
+        }
+    
+        var runningOnBrowser = typeof window !== "undefined";
+        var isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+        var supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    
+        setTimeout(function () {
+            if (!isBot && supportsIntersectionObserver) {
+                var comment_observer = new IntersectionObserver(function(entries) {
+                    if (entries[0].isIntersecting) {
+                        loadComment();
+                        comment_observer.disconnect();
+                    }
+                }, { threshold: [0] });
+                comment_observer.observe(document.getElementById('comment'));
+            } else {
+                loadComment();
+            }
+        }, 1);
+    </script>
+
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    
+    
+        <link rel="mask-icon" href="/images/favicon.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>Unity 接入 Sigmob SDK | 萌一小栈</title>
+
+
+    <meta name="keywords" content="游戏开发">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="在 Unity 项目中接入Sigmob 时，遇到很多问题，他们的文档写的也不是很清楚，特别是对于 Android 开发没有很深入了解的情况，读起来很困难，这篇博客记录了详细的 Sigmob 广告 sdk 接入过程。 1. 注册 Sigmob 开发者账户这一步不需要过多解释，直接注册就行 2. 下载 Sigmob SDK 并导入到工程中这一步，我接入的是 Sigmob SDk, 而不是聚合 SDK，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unity 接入 Sigmob SDK">
+<meta property="og:url" content="http://imoegirl.com/2021/01/06/sigmob-sdk-for-unity/index.html">
+<meta property="og:site_name" content="萌一小栈">
+<meta property="og:description" content="在 Unity 项目中接入Sigmob 时，遇到很多问题，他们的文档写的也不是很清楚，特别是对于 Android 开发没有很深入了解的情况，读起来很困难，这篇博客记录了详细的 Sigmob 广告 sdk 接入过程。 1. 注册 Sigmob 开发者账户这一步不需要过多解释，直接注册就行 2. 下载 Sigmob SDK 并导入到工程中这一步，我接入的是 Sigmob SDk, 而不是聚合 SDK，">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://imoegirl.com/2021/01/06/sigmob-sdk-for-unity/sigmob1.png">
+<meta property="article:published_time" content="2021-01-06T14:03:56.000Z">
+<meta property="article:modified_time" content="2021-08-21T06:36:48.161Z">
+<meta property="article:author" content="iMoegirl">
+<meta property="article:tag" content="游戏开发">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://imoegirl.com/2021/01/06/sigmob-sdk-for-unity/sigmob1.png">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/atom-one-dark.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">萌一小栈</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        Unity 接入 Sigmob SDK
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2021/01/" class="post-meta__date button">2021-01-06</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>在 Unity 项目中接入Sigmob 时，遇到很多问题，他们的文档写的也不是很清楚，特别是对于 Android 开发没有很深入了解的情况，读起来很困难，这篇博客记录了详细的 Sigmob 广告 sdk 接入过程。</p>
+<h2 id="1-注册-Sigmob-开发者账户"><a href="#1-注册-Sigmob-开发者账户" class="headerlink" title="1. 注册 Sigmob 开发者账户"></a>1. 注册 Sigmob 开发者账户</h2><p>这一步不需要过多解释，直接注册就行</p>
+<h2 id="2-下载-Sigmob-SDK-并导入到工程中"><a href="#2-下载-Sigmob-SDK-并导入到工程中" class="headerlink" title="2. 下载 Sigmob SDK 并导入到工程中"></a>2. 下载 Sigmob SDK 并导入到工程中</h2><p>这一步，我接入的是 Sigmob SDk, 而不是聚合 SDK，看下面的图下载</p>
+<span id="more"></span>
+
+<p><img src="sigmob1.png" alt="Download"></p>
+<h2 id="3-下载移动安全联盟统一SDK并导入到工程中"><a href="#3-下载移动安全联盟统一SDK并导入到工程中" class="headerlink" title="3. 下载移动安全联盟统一SDK并导入到工程中"></a>3. 下载移动安全联盟统一SDK并导入到工程中</h2><p>根据sigmob的文档中说明，这个东西是用来获取设备标识的，可以根据sigmob文档中的地址去 MSA联盟官网注册并下载SDK，但是需要时间审核，我是直接从 Github 找的别人的Demo，然后从Demo里把这个SDK给拿出来用的，我用的 arr 文件是 <code>msa_mdid_1.0.13.aar</code>。</p>
+<p>这个东西还有一个配置文件，需要放到 Plugins/Android/assets目录下，文件名为 <code>supplierconfig.json</code>，文件内容如下，直接完整拷贝即可</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;supplier&quot;</span>:&#123;</span><br><span class="line">    <span class="attr">&quot;vivo&quot;</span>:&#123;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">&quot;xiaomi&quot;</span>:&#123;</span><br><span class="line"></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">&quot;huawei&quot;</span>:&#123;</span><br><span class="line"></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">&quot;oppo&quot;</span>:&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>msa_mdid_1.0.13.aar 放到 Plugins/Android/libs 目录下</p>
+<h2 id="4-编写主-Activity-脚本，并放到-Unity-工程中"><a href="#4-编写主-Activity-脚本，并放到-Unity-工程中" class="headerlink" title="4. 编写主 Activity 脚本，并放到 Unity 工程中"></a>4. 编写主 Activity 脚本，并放到 Unity 工程中</h2><p>以前不知道居然可以直接将 java 文件放到 Unity 中，而不需要使用 Android Studio 等来建立 Android 库。在 Plugins/Android 下面建立一个名为 <code>MainActivity.java</code> 的文件，写入以下内容</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.treeland.singledout;        <span class="comment">// 这一外包名和自己工程的包名一样即可</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.bun.miitmdid.core.ErrorCode;</span><br><span class="line"><span class="keyword">import</span> com.bun.miitmdid.core.JLibrary;</span><br><span class="line"><span class="keyword">import</span> com.bun.miitmdid.core.MdidSdkHelper;</span><br><span class="line"><span class="keyword">import</span> com.bun.supplier.IIdentifierListener;</span><br><span class="line"><span class="keyword">import</span> com.bun.supplier.IdSupplier;</span><br><span class="line"><span class="keyword">import</span> com.unity3d.player.UnityPlayer;</span><br><span class="line"><span class="keyword">import</span> com.unity3d.player.UnityPlayerActivity;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">UnityPlayerActivity</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">long</span> timeb, timee;</span><br><span class="line">	</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">			JLibrary.InitEntry(MainActivity.<span class="keyword">this</span>);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;<span class="comment">//初始化</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">   </span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GetOAID</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">    	timeb = System.currentTimeMillis();</span><br><span class="line">    	<span class="keyword">int</span> errorCode = MdidSdkHelper.InitSdk(MainActivity.<span class="keyword">this</span>, <span class="keyword">true</span>, <span class="keyword">new</span> IIdentifierListener() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnSupport</span><span class="params">(<span class="keyword">boolean</span> b, IdSupplier idSupplier)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (idSupplier == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                SendToUnity(<span class="string">&quot;OAID=&quot;</span> + idSupplier.getOAID());</span><br><span class="line">                timee = System.currentTimeMillis();</span><br><span class="line">                SendToUnity(<span class="string">&quot;耗时：&quot;</span> + (timee - timeb) + <span class="string">&quot;毫秒&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (errorCode == ErrorCode.INIT_ERROR_DEVICE_NOSUPPORT) &#123;</span><br><span class="line">        	SendToUnity(<span class="string">&quot;获取OAID：&quot;</span> + <span class="string">&quot;不支持的设备&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (errorCode == ErrorCode.INIT_ERROR_LOAD_CONFIGFILE) &#123;</span><br><span class="line">        	SendToUnity(<span class="string">&quot;获取OAID：&quot;</span> + <span class="string">&quot;加载配置文件出错&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (errorCode == ErrorCode.INIT_ERROR_MANUFACTURER_NOSUPPORT) &#123;</span><br><span class="line">        	SendToUnity(<span class="string">&quot;获取OAID：&quot;</span> + <span class="string">&quot;不支持的设备厂商&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (errorCode == ErrorCode.INIT_ERROR_RESULT_DELAY) &#123;</span><br><span class="line">        	SendToUnity(<span class="string">&quot;获取OAID：&quot;</span> + <span class="string">&quot;获取接口是异步的，结果会在回调中返回，回调执行的回调可能在工作线程&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (errorCode == ErrorCode.INIT_HELPER_CALL_ERROR) &#123;</span><br><span class="line">        	SendToUnity(<span class="string">&quot;获取OAID：&quot;</span> + <span class="string">&quot;反射调用出错&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        	SendToUnity(<span class="string">&quot;获取OAID：&quot;</span> + <span class="string">&quot;获取成功&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">     <span class="comment">// 发送消息给Unity</span></span><br><span class="line">     <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">SendToUnity</span><span class="params">(String msg)</span></span></span><br><span class="line"><span class="function">     </span>&#123;</span><br><span class="line">    	 UnityPlayer.UnitySendMessage(<span class="string">&quot;Main Camera&quot;</span>, <span class="string">&quot;OnJavaMsg&quot;</span>, msg);</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="5-配置-AndroidManifest-xml-文件"><a href="#5-配置-AndroidManifest-xml-文件" class="headerlink" title="5. 配置 AndroidManifest.xml 文件"></a>5. 配置 AndroidManifest.xml 文件</h2><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">manifest</span> <span class="attr">xmlns:android</span>=<span class="string">&quot;http://schemas.android.com/apk/res/android&quot;</span> <span class="attr">package</span>=<span class="string">&quot;com.treeland.singledout&quot;</span> <span class="attr">android:installLocation</span>=<span class="string">&quot;preferExternal&quot;</span> <span class="attr">android:versionCode</span>=<span class="string">&quot;1&quot;</span> <span class="attr">android:versionName</span>=<span class="string">&quot;1.0&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">uses-permission</span> <span class="attr">android:name</span>=<span class="string">&quot;android.permission.INTERNET&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">uses-permission</span> <span class="attr">android:name</span>=<span class="string">&quot;android.permission.ACCESS_NETWORK_STATE&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">uses-permission</span> <span class="attr">android:name</span>=<span class="string">&quot;android.permission.READ_PHONE_STATE&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">uses-permission</span> <span class="attr">android:name</span>=<span class="string">&quot;android.permission.ACCESS_WIFI_STATE&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">uses-permission</span> <span class="attr">android:name</span>=<span class="string">&quot;android.permission.WRITE_EXTERNAL_STORAGE&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">uses-permission</span> <span class="attr">android:name</span>=<span class="string">&quot;android.permission.ACCESS_COARSE_LOCATION&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">uses-permission</span> <span class="attr">android:name</span>=<span class="string">&quot;android.permission.CHANGE_WIFI_STATE&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">uses-permission</span> <span class="attr">android:name</span>=<span class="string">&quot;android.permission.ACCESS_FINE_LOCATION&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">uses-permission</span> <span class="attr">android:name</span>=<span class="string">&quot;android.permission.REQUEST_INSTALL_PACKAGES&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">supports-screens</span> <span class="attr">android:smallScreens</span>=<span class="string">&quot;true&quot;</span> <span class="attr">android:normalScreens</span>=<span class="string">&quot;true&quot;</span> <span class="attr">android:largeScreens</span>=<span class="string">&quot;true&quot;</span> <span class="attr">android:xlargeScreens</span>=<span class="string">&quot;true&quot;</span> <span class="attr">android:anyDensity</span>=<span class="string">&quot;true&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">application</span> <span class="attr">android:icon</span>=<span class="string">&quot;@drawable/app_icon&quot;</span> <span class="attr">android:label</span>=<span class="string">&quot;@string/app_name&quot;</span> <span class="attr">android:debuggable</span>=<span class="string">&quot;false&quot;</span> <span class="attr">android:networkSecurityConfig</span>=<span class="string">&quot;@xml/network_security_config&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">provider</span> <span class="attr">android:name</span>=<span class="string">&quot;com.sigmob.sdk.SigmobFileProvider&quot;</span> <span class="attr">android:authorities</span>=<span class="string">&quot;com.treeland.singledout.sigprovider&quot;</span> <span class="attr">android:exported</span>=<span class="string">&quot;false&quot;</span> <span class="attr">android:grantUriPermissions</span>=<span class="string">&quot;true&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">meta-data</span> <span class="attr">android:name</span>=<span class="string">&quot;android.support.FILE_PROVIDER_PATHS&quot;</span> <span class="attr">android:resource</span>=<span class="string">&quot;@xml/sigmob_provider_paths&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">provider</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">activity</span> <span class="attr">android:name</span>=<span class="string">&quot;com.sigmob.sdk.base.common.AdActivity&quot;</span> <span class="attr">android:theme</span>=<span class="string">&quot;@android:style/Theme.DeviceDefault&quot;</span> <span class="attr">android:configChanges</span>=<span class="string">&quot;keyboardHidden|orientation|screenSize&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">activity</span> <span class="attr">android:name</span>=<span class="string">&quot;com.treeland.singledout.MainActivity&quot;</span> <span class="attr">android:label</span>=<span class="string">&quot;@string/app_name&quot;</span> <span class="attr">android:configChanges</span>=<span class="string">&quot;fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">&quot;android.intent.action.MAIN&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">category</span> <span class="attr">android:name</span>=<span class="string">&quot;android.intent.category.LAUNCHER&quot;</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">meta-data</span> <span class="attr">android:name</span>=<span class="string">&quot;android.app.lib_name&quot;</span> <span class="attr">android:value</span>=<span class="string">&quot;unity&quot;</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">meta-data</span> <span class="attr">android:name</span>=<span class="string">&quot;unityplayer.ForwardNativeEventsToDalvik&quot;</span> <span class="attr">android:value</span>=<span class="string">&quot;false&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">activity</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">application</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">manifest</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注册将上面代码中，所有的 <code>com.treeland.singledout</code> 字符串换成自己的 Unity 包名，即可，其他东西保持不变。如果第4步中建立的 java文件名不是 MainActivity，那就要修改上 AndroidManifest.xml 中的主 activity 的 <code>android:name</code> 属性，为自己的 Java 类名</p>
+</blockquote>
+<p>到此，Sigmob SDK 接入的整个流程结束，可以开始编包，如果报错，根据错误提示一点一点查找问题。</p>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>Author: </strong>iMoegirl
+        </p>
+        <p>
+            <strong>
+                Permalink: 
+            </strong>
+            <a href="http://imoegirl.com/2021/01/06/sigmob-sdk-for-unity/">http://imoegirl.com/2021/01/06/sigmob-sdk-for-unity/</a>
+        </p>
+        
+            <strong>
+                <p>任何技术问题，可加微信交流，微信: ifloop</p>
+
+            </strong>
+        
+            <strong>
+                <p>搜索并关注微信公众号 [ 萌一小栈 ] 可及时订阅最新技术文章</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>updated at 2021-08-21</p></div> 
+    <div class="post-entry__tags"><a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/" class="post-tags__link button"># 游戏开发</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2021/03/12/unity-xcode-auto-signing/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            Unity XCode 自动设置签名
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2020/11/30/understanding-boids/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            理解 Boids
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>Comments</h4>
+    
+    
+    
+    
+    
+    <div id="gitalk-container"></div>
+
+    
+    
+    
+    
+    
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">萌一小栈</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?ae464fe0e62cef297c26908427b0e7bd';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    <script>
+        function loadComment() {
+            let e, i;
+            (e = document.createElement("script")).src = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js',
+            document.body.appendChild(e);
+            e.onload = () => {
+                var gitalk = new Gitalk({
+                    clientID: '5b5aeaa767a06f6c23a4',
+                    clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+                    repo: 'imoegirl.github.io',
+                    owner: 'imoegirl',
+                    admin: 'imoegirl',
+                    id: window.location.pathname,
+                    distractionFreeMode: false
+                });
+                gitalk.render('gitalk-container');
+            };
+            (i = document.createElement("link")).rel = "stylesheet",
+            i.href = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css',
+            document.head.appendChild(i);
+        }
+    
+        var runningOnBrowser = typeof window !== "undefined";
+        var isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+        var supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    
+        setTimeout(function () {
+            if (!isBot && supportsIntersectionObserver) {
+                var comment_observer = new IntersectionObserver(function(entries) {
+                    if (entries[0].isIntersecting) {
+                        loadComment();
+                        comment_observer.disconnect();
+                    }
+                }, { threshold: [0] });
+                comment_observer.observe(document.getElementById('comment'));
+            } else {
+                loadComment();
+            }
+        }, 1);
+    </script>
+
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

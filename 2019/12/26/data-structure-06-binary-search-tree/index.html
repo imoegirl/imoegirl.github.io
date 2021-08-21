@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    
+    
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+    
+    
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    
+    
+        <link rel="mask-icon" href="/images/favicon.png">
+    
+
+
+    <!-- meta -->
+
+
+<title>二叉查找树 | 萌一小栈</title>
+
+
+    <meta name="keywords" content="数据结构与算法">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="二叉查找树（Binary Search Tree），简写BST，是满足某些条件的特殊二叉树。任何一个节点的左子树上的点，都必须小于当前节点。任何一个节点的右子树上的点，都必须大于当前节点。任何一棵子树，也都满足上面两个条件。另外二叉查找树中，是不存在重复节点的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二叉查找树">
+<meta property="og:url" content="http://imoegirl.com/2019/12/26/data-structure-06-binary-search-tree/index.html">
+<meta property="og:site_name" content="萌一小栈">
+<meta property="og:description" content="二叉查找树（Binary Search Tree），简写BST，是满足某些条件的特殊二叉树。任何一个节点的左子树上的点，都必须小于当前节点。任何一个节点的右子树上的点，都必须大于当前节点。任何一棵子树，也都满足上面两个条件。另外二叉查找树中，是不存在重复节点的。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U045c9c24d1e84ce5875ffeec82ebbbe2r.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ua63110ae23ca486f8583b3ac3c39e846m.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U622a15395ad744b7874f006a9dbd3eadl.png">
+<meta property="og:image" content="https://i.ibb.co/Rj3CxXR/BST-Delete2.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ucff6007d4826401b98a79647c1d7da394.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U8ade5dfe93d5409f8d502d4ab78a91be2.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U988f6a40263746b59785b2c6673e393dT.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U55653b5575d94469bd65a40023458376i.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/U48c8151a06e14a8d809c4067e0ea59d0N.png">
+<meta property="article:published_time" content="2019-12-26T05:18:06.000Z">
+<meta property="article:modified_time" content="2021-08-21T06:34:23.118Z">
+<meta property="article:author" content="iMoegirl">
+<meta property="article:tag" content="数据结构与算法">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/U045c9c24d1e84ce5875ffeec82ebbbe2r.png">
+
+
+    
+<link rel="stylesheet" href="/css/style/main.css">
+ 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/atom-one-dark.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">萌一小栈</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/about/" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/about/" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        二叉查找树
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2019/12/" class="post-meta__date button">2019-12-26</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>二叉查找树（Binary Search Tree），简写BST，是满足某些条件的特殊二叉树。任何一个节点的左子树上的点，都必须小于当前节点。任何一个节点的右子树上的点，都必须大于当前节点。任何一棵子树，也都满足上面两个条件。另外二叉查找树中，是不存在重复节点的。</p>
+<p><img src="https://ae01.alicdn.com/kf/U045c9c24d1e84ce5875ffeec82ebbbe2r.png" alt="p001801_BSTSearch"></p>
+ <span id="more"></span>
+
+<p>上图中的二叉查找树，我们从Root节点3开始看，它的左子树（1，2） 和右子树（6，4，9，7）分别满足条件，左子树上的点，都小于当前节点，右子树上的点，都大于当前节点。</p>
+<p>继续，我们以6作为起点，来看一下这棵子树，6的左子树（4），右子树（9，7）也满足上面两条规则。</p>
+<p>整棵树中，任何一个点下面的子树，都满足上面提到的两条规则。你现在是不是对Binary Search Tree已经有一个大概的形象概念了。</p>
+<h2 id="为什么叫做-Binary-Search-Tree呢？"><a href="#为什么叫做-Binary-Search-Tree呢？" class="headerlink" title="为什么叫做 Binary Search Tree呢？"></a>为什么叫做 Binary Search Tree呢？</h2><p>因为在BST中搜索一个值是非常简单和高效的。</p>
+<p><img src="https://ae01.alicdn.com/kf/Ua63110ae23ca486f8583b3ac3c39e846m.png" alt="p001802_BST-Delete1"></p>
+<p>看上面的树，假设要搜索7这个节点。首先从Root节点出发，我们知道7大于3，所以会走到右子树6，然后因为7也大于6，所以会继续往右子树走，到了9，因为7小于9，所以会向左子树走，走到7，发现7等于7，所以找到要搜索的节点。</p>
+<h2 id="二叉树的一些性质"><a href="#二叉树的一些性质" class="headerlink" title="二叉树的一些性质"></a>二叉树的一些性质</h2><ul>
+<li>将任何一个点看作Root节点，则这个点的左子树也是 Binary Search Tree</li>
+<li>将任何一个点看作Root节点，则这个点的右子树也是 Binary Search Tree</li>
+<li>Binary Search Tree中的最小节点，一定是整棵树中最左下的叶子节点(从Root开始一直顺着左子树往下走，直到某一个点没有左子节点，则这个点就是最小的)</li>
+<li>Binary Search Tree中的最大节点，一定是整棵树中最右下的叶子节点(从Root开始一直顺着右子树往下走，直到某一个点没有右子节点，则这个点就是最大的)</li>
+</ul>
+<h2 id="怎样构建和插入节点"><a href="#怎样构建和插入节点" class="headerlink" title="怎样构建和插入节点"></a>怎样构建和插入节点</h2><p>向BST中插入一个节点，也是一个构建的过程，和上面的搜索思路基本一样。首先从Root开始，如果Root点为空，则直接构建Root点。如果Root点不为空，则要判断要插入的值，比Root点的值大还是小，如果小，则往左子树走，如果大，则往右子树走。直到走到某一个点，我们称为点X，发现要插入的值，小于那个点X的值，并且点X没有左子树，则要插入的点作为X的左子节点。或者，要插入的点大于X，并且X没有右子树，则要插入的点作为X的右子节点。</p>
+<p>下面是代码实现（为了方便后面的删除逻辑，我们每一个点，包含了指向左子树，右子树，以及父节点的引用）</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这里先定义出节点的结构</span></span><br><span class="line"><span class="keyword">class</span> <span class="title">Node</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> data;</span><br><span class="line">    <span class="keyword">public</span> Node parent;</span><br><span class="line">    <span class="keyword">public</span> Node left;</span><br><span class="line">    <span class="keyword">public</span> Node right;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span>(<span class="params"><span class="built_in">int</span> _data</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>.data = _data;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 定义二叉搜索树结构</span></span><br><span class="line"><span class="keyword">class</span> <span class="title">BST</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> Node root;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 这个函数是 private 的，递归调用，插入节点</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> Node <span class="title">RecursionInsert</span>(<span class="params">Node node, <span class="built_in">int</span> data</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (node == <span class="literal">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> Node(data);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (data &lt; node.data)</span><br><span class="line">        &#123;</span><br><span class="line">            node.left = RecursionInsert(node.left, data);</span><br><span class="line">            node.left.parent = node;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (data &gt; node.data)</span><br><span class="line">        &#123;</span><br><span class="line">            node.right = RecursionInsert(node.right, data);</span><br><span class="line">            node.right.parent = node;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 对外开放的 插入 接口</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Insert</span>(<span class="params"><span class="built_in">int</span> data</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="literal">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            root = RecursionInsert(root, data);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            RecursionInsert(root, data);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 按层序打印二叉树</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">LevelOrderTraversal</span>(<span class="params"></span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Queue&lt;Node&gt; q = <span class="keyword">new</span> Queue&lt;Node&gt;();</span><br><span class="line">        q.Enqueue(root);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (q.Count &gt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            Node currNode = q.Dequeue();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (currNode.left != <span class="literal">null</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                q.Enqueue(currNode.left);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (currNode.right != <span class="literal">null</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                q.Enqueue(currNode.right);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 括号里面是父节点的值</span></span><br><span class="line">            <span class="built_in">string</span> msg = <span class="built_in">string</span>.Format(<span class="string">&quot;&#123;0&#125;(&#123;1&#125;)&quot;</span>, currNode.data, currNode.parent != <span class="literal">null</span> ? currNode.parent.data.ToString() : <span class="string">&quot;null&quot;</span>);</span><br><span class="line">            Debug.Log(msg);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建一个二叉搜索树</span></span><br><span class="line"><span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/* Let us create following BST </span></span><br><span class="line"><span class="comment">          50 </span></span><br><span class="line"><span class="comment">       /     \ </span></span><br><span class="line"><span class="comment">      30      70 </span></span><br><span class="line"><span class="comment">     /  \    /  \ </span></span><br><span class="line"><span class="comment">   20   40  60   80 */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        BST bst = <span class="keyword">new</span> BST();</span><br><span class="line">        bst.Insert(<span class="number">50</span>);</span><br><span class="line">        bst.Insert(<span class="number">30</span>);</span><br><span class="line">        bst.Insert(<span class="number">20</span>);</span><br><span class="line">        bst.Insert(<span class="number">40</span>);</span><br><span class="line">        bst.Insert(<span class="number">70</span>);</span><br><span class="line">        bst.Insert(<span class="number">60</span>);</span><br><span class="line">        bst.Insert(<span class="number">80</span>);</span><br><span class="line"></span><br><span class="line">        bst.LevelOrderTraversal();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码，首先定义了每一个 Node 节点的数据结构，然后定义了二叉查找树的结构类，最后是C#调用BST的插入和打印方法。插入节点这里使用了递归的机结构，还可以使用非递归，循环的形式去插入。</p>
+<h2 id="从最简单的开始，删除一个节点"><a href="#从最简单的开始，删除一个节点" class="headerlink" title="从最简单的开始，删除一个节点"></a>从最简单的开始，删除一个节点</h2><p>从 BST 中删除节点，是相比来说比较复杂的，复杂，也只是相对于插入来说。只要理清几种不同的情况，也就不复杂了。看过很多教程，一上来就是罗列各个情况，然后上代码展示，如果是第一次学习 BST，可能会有一点抽象。我们先不考虑代码怎么实现，先从语言上把这个事情讲明白，最后再看代码。</p>
+<p>从 BST 中删除节点其实很容易，只要改变一下指针就可以了，重点是，删除了一个节点后，还要让整棵 BST 依然保持一个正确的结构，这就是我们要做的。一切从最简单开始。</p>
+<p><img src="https://ae01.alicdn.com/kf/U622a15395ad744b7874f006a9dbd3eadl.png" alt="p001803_BST-Delete2"></p>
+<p>上面的图中，我们要删除一个叶子节点，就是左边的数据为3的那个节点。这个节点的父节点是4，我们只需要将4这个节点中指向左子树的指针设置为空，就可以了。这是很容易理解的。而删除右边的叶子节点，也是一样的。就像下面的图。</p>
+<p><img src="https://i.ibb.co/Rj3CxXR/BST-Delete2.png"></p>
+<p>我们删除18这个节点，只需要将13这个节点中指向右子树的指针设置为空，即可。</p>
+<p>上面说的，就是删除操作中最简单的一种情况，删除叶子节点。还有一个很重要的点要注意，在删除的时候，要判断要删除的节点是不是 Root 节点，也就是说，整棵树只有一个节点的情况，这样的话还需要将 Root 节点设为空。Root节点的父节点，是永远为空的。</p>
+<blockquote>
+<p><strong>注意: 记住，现在不要考虑代码实现的问题，一定要先理解思路，文章的最后，会上代码的。</strong></p>
+</blockquote>
+<h2 id="关于节点删除，加大一点点难度"><a href="#关于节点删除，加大一点点难度" class="headerlink" title="关于节点删除，加大一点点难度"></a>关于节点删除，加大一点点难度</h2><p>接下来我们加大一点点难度。看下面的图 (可以忽略图中的红色字，只看树的节点结构)</p>
+<p><img src="https://ae01.alicdn.com/kf/Ucff6007d4826401b98a79647c1d7da394.png" alt="p001804_BST-Delete3"></p>
+<p>我们要删除左边图中5这个节点，而5这个节点只拥有一个子树，就是左子树。而5的父节点是2，它是2的右子树。我们要删除5，只需要将2的<code>右子树</code>，指向5的子树就可以 (这里其实不太关心5的子树是左子树还是右子树)。简单来说，就是将2原本指向5的指针，改为指向5的子树，即可。就是右边图的样子。</p>
+<p>我们刚才删除的5节点，只有左子树，再看一个要删除的节点只有右子树的情况。</p>
+<p><img src="https://ae01.alicdn.com/kf/U8ade5dfe93d5409f8d502d4ab78a91be2.png" alt="p001805_BST-Delete4"></p>
+<p>上面的图中， 我们要删除3这个节点，而这个节点只有右子树。3的父亲节点是2，所以，我们只需要将2原本指向3节点的指针，改为指向3的子树即可。就像右边的图那样。</p>
+<p>不要着急，慢慢体会一下。在上面两种情况没有彻底理解思路之前，先不要往下看，否则可能会更困惑。</p>
+<blockquote>
+<p><strong>注意: 因为我们的 Node 结构中加入了一个指向父节点的指针，所以在删除节点的时候，还要注意更新某些节点的 parent 指针指向。</strong></p>
+</blockquote>
+<h2 id="更复杂的情况，先聊一下后继节点"><a href="#更复杂的情况，先聊一下后继节点" class="headerlink" title="更复杂的情况，先聊一下后继节点"></a>更复杂的情况，先聊一下后继节点</h2><p>如果上面只是小打小闹，那接下来，就是直面恐惧，噢不，直面复杂时刻啦，哈哈哈~</p>
+<p>最复杂的一种情况，就是要删除的节点，即有左子树，又有右子树。在说这种情况怎么操作之前，我们先来说一个前提概念，叫做后继节点。一个节点的后继节点，严肃点说就是在中序遍历的时候，遍历完当前节点后，下一个要访问的节点，就是当前的节点的后继节点。好吧，通俗点来讲，就是假设在遍历一棵树时，访问完 1 号节点，如果接下来访问的是3号节点，那3号节点就是1的后继节点。</p>
+<p>那一个点的后继节点怎么找呢？这个就很简单了。假设我们要找节点 A 的后继节点，那就是从 A 这个点的右子树开始，一路向左走，走到某一个节点没有左子树可以往下走了，那这个节点，就是 A 的后继节点 (注意，这个后继节点有可能是叶子节点，也有可能不是)。看下面的图。</p>
+<p><img src="https://ae01.alicdn.com/kf/U988f6a40263746b59785b2c6673e393dT.png" alt="p001806_BST-Delete5"></p>
+<p>我们先看左边部分的图，我们要找节点 9 的后继节点。按上面的规则，从节点 9 的右子树 15 开始，依次往左走，先到达 15 判断一下是否可以走，可以，我们走到 13，再判断一下是否可以继续往左走，可以，走到 11，然后再看是否可以继续往左走，发现不可以了，那 11 就是节点 9 的后继节点。</p>
+<p>再看右边部分的图，我们要找节点 6 的后继节点。按上面的规则从右子树 11 开始，判断是否可以往左走，可以，走到 8，再判断是一下是否可以继续往左走，发现 8 已经没有左子树可以往下走了，所以 8 就是节点 6 的后继节点。</p>
+<h2 id="最后一种删除节点的情况"><a href="#最后一种删除节点的情况" class="headerlink" title="最后一种删除节点的情况"></a>最后一种删除节点的情况</h2><p>理解了后继节点，就可以来说最后一种，也是最复杂的一种删除节点的情况了。就是要删除的节点，即有左子树，又有右子树。操作的流程是这样的。假设我们要删除的节点是 A，第一步，我们要找到 A 的后继节点。第二步，用 A 的后继节点数据，替换要删除的节点 A 的数据。第三步，删除后继节点。（因为后继节点要么是叶子节点，要么只有右子树，所以删除比较简单，就按之前聊过的删除方法即可）。下面用示例解释</p>
+<p><img src="https://ae01.alicdn.com/kf/U55653b5575d94469bd65a40023458376i.png" alt="p001807_BST-Delete6"></p>
+<p>上图中，从第一个图开始看，我们要删除数据为 9 的节点。第一步，将要删除的节点使用一个指针指向。第二步，看第二个图，找到 9 节点的后继节点，也就是 11。第三步，看第三张图，用后继节点的数据，替换要删除的节点的数据，也就是用 11 替换 9。第四步，也就是最后一个图，删除后继节点 11。到此，删除操作完成。</p>
+<p>接下来再看一个示例</p>
+<p><img src="https://ae01.alicdn.com/kf/U48c8151a06e14a8d809c4067e0ea59d0N.png" alt="p001808_BST-Delete7"></p>
+<p>上图中，我们要删除节点 6，还是先找到 6 的后继节点 8，然后用节点 8 的数据，替换我们要删除的节点 6 的数据(第三个小图)。接下来就是删除后继节点 8，这里要注意，我们跟着箭头的方向，看第四个小图。在删除后继节点 8 时，我们发现节点 8 不是叶子节点，而是有右子树，所以我们需要将节点 8 的父节点，原本指向 8 的指针，改为指向 8 的右子树。也就是上图中将节点 11 的左指针，改为指向节点 9，然后就是最后一个小图的情况。（因为我们的 Node 结构中拥有 parent 指针，所以要记得把节点 9 的parent 指针从原来指向 8 改为现在指向 9）。到此，删除节点结束。</p>
+<p>接下来，我们展示完整的代码</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">class</span> <span class="title">Debug</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Log</span>(<span class="params"><span class="built_in">string</span> msg</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine(msg);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Node</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> data;</span><br><span class="line">    <span class="keyword">public</span> Node parent;</span><br><span class="line">    <span class="keyword">public</span> Node left;</span><br><span class="line">    <span class="keyword">public</span> Node right;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span>(<span class="params"><span class="built_in">int</span> _data</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>.data = _data;</span><br><span class="line">        Console.WriteLine(<span class="string">&quot;Insert: &quot;</span> + <span class="keyword">this</span>.data);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">BST</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> Node root;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> Node <span class="title">RecursionInsert</span>(<span class="params">Node node, <span class="built_in">int</span> data</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (node == <span class="literal">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> Node(data);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (data &lt; node.data)</span><br><span class="line">        &#123;</span><br><span class="line">            node.left = RecursionInsert(node.left, data);</span><br><span class="line">            node.left.parent = node;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (data &gt; node.data)</span><br><span class="line">        &#123;</span><br><span class="line">            node.right = RecursionInsert(node.right, data);</span><br><span class="line">            node.right.parent = node;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 插入一个数据</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Insert</span>(<span class="params"><span class="built_in">int</span> data</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="literal">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            root = RecursionInsert(root, data);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            RecursionInsert(root, data);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 删除节点</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DeleteNode</span>(<span class="params"><span class="built_in">int</span> data</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Node delNode = root;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 首先要找到待删除的节点</span></span><br><span class="line">        <span class="keyword">while</span> (delNode != <span class="literal">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (delNode.data == data)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (data &lt; delNode.data)</span><br><span class="line">            &#123;</span><br><span class="line">                delNode = delNode.left;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (data &gt; delNode.data)</span><br><span class="line">            &#123;</span><br><span class="line">                delNode = delNode.right;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (delNode == <span class="literal">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            Debug.Log(<span class="string">&quot;Not found &quot;</span> + data);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 要删除的节点即没有左子树，也没有右子树，是叶子节点，或者是 Root 节点</span></span><br><span class="line">        <span class="keyword">if</span> (delNode.left == <span class="literal">null</span> &amp;&amp; delNode.right == <span class="literal">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            Node parent = delNode.parent;</span><br><span class="line">            <span class="keyword">if</span> (parent == <span class="literal">null</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                root = <span class="literal">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (parent.left == delNode)</span><br><span class="line">                &#123;</span><br><span class="line">                    parent.left = <span class="literal">null</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                &#123;</span><br><span class="line">                    parent.right = <span class="literal">null</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (delNode.left != <span class="literal">null</span> &amp;&amp; delNode.right == <span class="literal">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 要删除的节点只有左子树的情况</span></span><br><span class="line">            Node parent = delNode.parent;</span><br><span class="line">            Node child = delNode.left;</span><br><span class="line">            <span class="keyword">if</span> (parent == <span class="literal">null</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                root = child;</span><br><span class="line">                root.parent = <span class="literal">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (parent.left == delNode)</span><br><span class="line">                &#123;</span><br><span class="line">                    parent.left = child;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                &#123;</span><br><span class="line">                    parent.right = child;</span><br><span class="line">                &#125;</span><br><span class="line">                child.parent = parent;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (delNode.right != <span class="literal">null</span> &amp;&amp; delNode.left == <span class="literal">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 要删除的节点只有右子树的情况</span></span><br><span class="line">            Node parent = delNode.parent;</span><br><span class="line">            Node child = delNode.right;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (parent == <span class="literal">null</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                root = child;</span><br><span class="line">                root.parent = <span class="literal">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (parent.left == delNode)</span><br><span class="line">                &#123;</span><br><span class="line">                    parent.left = child;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                &#123;</span><br><span class="line">                    parent.right = child;</span><br><span class="line">                &#125;</span><br><span class="line">                child.parent = parent;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (delNode.left != <span class="literal">null</span> &amp;&amp; delNode.right != <span class="literal">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 要删除的节点即有左子树，也有右子树的情况</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 首先找到后继节点</span></span><br><span class="line">            Node successorNode = FindMinimumLeftValue(delNode.right);</span><br><span class="line">            delNode.data = successorNode.data;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 如果后继节点是叶子节点，则直接删除即可</span></span><br><span class="line">            <span class="keyword">if</span> (successorNode.left == <span class="literal">null</span> &amp;&amp; successorNode.right == <span class="literal">null</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (successorNode.parent.left == successorNode)</span><br><span class="line">                &#123;</span><br><span class="line">                    successorNode.parent.left = <span class="literal">null</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                &#123;</span><br><span class="line">                    successorNode.parent.right = <span class="literal">null</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// 如果后继节点不是叶子节点，要将后继节点的父节点指向后继节点的子树，</span></span><br><span class="line">                <span class="comment">// 同时，修改子树父节点的指针</span></span><br><span class="line">                Node successorChild = successorNode.left != <span class="literal">null</span> ? successorNode.left : successorNode.right;</span><br><span class="line">                Node parent = successorNode.parent;</span><br><span class="line">                <span class="keyword">if</span> (parent.left == successorNode)</span><br><span class="line">                &#123;</span><br><span class="line">                    parent.left = successorChild;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                &#123;</span><br><span class="line">                    parent.right = successorChild;</span><br><span class="line">                &#125;</span><br><span class="line">                successorChild.parent = parent;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 找到一颗子树的最小左节点</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Node <span class="title">FindMinimumLeftValue</span>(<span class="params">Node fromNode</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Node opt = fromNode;</span><br><span class="line">        <span class="keyword">while</span> (opt.left != <span class="literal">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            opt = opt.left;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> opt;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">LevelOrderTraversal</span>(<span class="params"></span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Queue&lt;Node&gt; q = <span class="keyword">new</span> Queue&lt;Node&gt;();</span><br><span class="line">        q.Enqueue(root);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (q.Count &gt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            Node currNode = q.Dequeue();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (currNode.left != <span class="literal">null</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                q.Enqueue(currNode.left);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (currNode.right != <span class="literal">null</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                q.Enqueue(currNode.right);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">string</span> msg = <span class="built_in">string</span>.Format(<span class="string">&quot;&#123;0&#125;(&#123;1&#125;)&quot;</span>, currNode.data, currNode.parent != <span class="literal">null</span> ? currNode.parent.data.ToString() : <span class="string">&quot;null&quot;</span>);</span><br><span class="line">            Debug.Log(msg);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Let us create following BST </span></span><br><span class="line"><span class="comment">          50 </span></span><br><span class="line"><span class="comment">       /     \ </span></span><br><span class="line"><span class="comment">      30      70 </span></span><br><span class="line"><span class="comment">     /  \    /  \ </span></span><br><span class="line"><span class="comment">   20   40  60   80 */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        BST bst = <span class="keyword">new</span> BST();</span><br><span class="line">        bst.Insert(<span class="number">50</span>);</span><br><span class="line">        bst.Insert(<span class="number">50</span>);</span><br><span class="line">        bst.Insert(<span class="number">30</span>);</span><br><span class="line">        bst.Insert(<span class="number">20</span>);</span><br><span class="line">        bst.Insert(<span class="number">40</span>);</span><br><span class="line">        bst.Insert(<span class="number">70</span>);</span><br><span class="line">        bst.Insert(<span class="number">60</span>);</span><br><span class="line">        bst.Insert(<span class="number">80</span>);</span><br><span class="line"></span><br><span class="line">        bst.LevelOrderTraversal();</span><br><span class="line"></span><br><span class="line">        bst.DeleteNode(<span class="number">70</span>);</span><br><span class="line"></span><br><span class="line">        bst.LevelOrderTraversal();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>好了，终于讲完了二叉查找树最基本的知识。这篇博客内容很长，如果第一遍没读懂，也没关系，先休息一下，过段时间再读一遍，可能就会更容易理解。</p>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>Author: </strong>iMoegirl
+        </p>
+        <p>
+            <strong>
+                Permalink: 
+            </strong>
+            <a href="http://imoegirl.com/2019/12/26/data-structure-06-binary-search-tree/">http://imoegirl.com/2019/12/26/data-structure-06-binary-search-tree/</a>
+        </p>
+        
+            <strong>
+                <p>任何技术问题，可加微信交流，微信: ifloop</p>
+
+            </strong>
+        
+            <strong>
+                <p>搜索并关注微信公众号 [ 萌一小栈 ] 可及时订阅最新技术文章</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>updated at 2021-08-21</p></div> 
+    <div class="post-entry__tags"><a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-tags__link button"># 数据结构与算法</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/2019/12/30/algo-knuth-shuffle/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            一个公平的洗牌算法 | Knuth-Shuffle
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/2019/12/21/data-structure-05-binary-tree/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            二叉树
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>Comments</h4>
+    
+    
+    
+    
+    
+    <div id="gitalk-container"></div>
+
+    
+    
+    
+    
+    
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/">萌一小栈</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement('script');
+            hm.src = 'https://hm.baidu.com/hm.js?ae464fe0e62cef297c26908427b0e7bd';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    <script>
+        function loadComment() {
+            let e, i;
+            (e = document.createElement("script")).src = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js',
+            document.body.appendChild(e);
+            e.onload = () => {
+                var gitalk = new Gitalk({
+                    clientID: '5b5aeaa767a06f6c23a4',
+                    clientSecret: '68effbb7744a86e2c4cf68830cfc92deb48d7ad6',
+                    repo: 'imoegirl.github.io',
+                    owner: 'imoegirl',
+                    admin: 'imoegirl',
+                    id: window.location.pathname,
+                    distractionFreeMode: false
+                });
+                gitalk.render('gitalk-container');
+            };
+            (i = document.createElement("link")).rel = "stylesheet",
+            i.href = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css',
+            document.head.appendChild(i);
+        }
+    
+        var runningOnBrowser = typeof window !== "undefined";
+        var isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+        var supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    
+        setTimeout(function () {
+            if (!isBot && supportsIntersectionObserver) {
+                var comment_observer = new IntersectionObserver(function(entries) {
+                    if (entries[0].isIntersecting) {
+                        loadComment();
+                        comment_observer.disconnect();
+                    }
+                }, { threshold: [0] });
+                comment_observer.observe(document.getElementById('comment'));
+            } else {
+                loadComment();
+            }
+        }, 1);
+    </script>
+
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>
