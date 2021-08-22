@@ -138,6 +138,44 @@
                     <div class="post-entry__header"></div>
 <div class="post-entry__content">
     <h2 class="post-entry__title">
+        Rust 基础 | 结构体
+    </h2>
+    
+        <p>在有类的编程语言中，组织数据的方式可以定义一个类，而在 Rust 中，组织数据的方式，使用 struct。struct 可以定义三种不同的类型，一种是带有字段名字的结构体，一种是没有字段名字的元组结构体，一种是没有任何字段的单元结构体。</p>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2020/04/" class="post-meta__date button">2020-04-02</a>
+    
+ 
+</div>
+<div class="post-entry__tags"><a href="/tags/Rust/" class="post-tags__link button"># Rust</a></div> 
+<a href="/2020/04/02/rust-syntax-summary-04/" class="post-entry__link">Rust 基础 | 结构体</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        Rust 基础 | 引用、切片
+    </h2>
+    
+        <p>在阅读Rust官方教程时，会看到两个词，引用和借用，也就是 References and Borrowing。这里很容易让人混乱，如果了解C/C++这类有指针的语言，则引用很容易理解，但是 Rust 中的<strong>借用</strong>这个词是什么意思呢？我觉得，在初学 Rust 时，可以忽略这个词，或者就简单理解为，它所涉及到的东西，就是引用，就是一个指针，就可以了，避免陷入进去。所以，接下来我就就聊一聊引用。</p>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2020/04/" class="post-meta__date button">2020-04-01</a>
+    
+ 
+</div>
+<div class="post-entry__tags"><a href="/tags/Rust/" class="post-tags__link button"># Rust</a></div> 
+<a href="/2020/04/01/rust-syntax-summary-03/" class="post-entry__link">Rust 基础 | 引用、切片</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
         Rust 基础 | 所有权
     </h2>
     
@@ -305,52 +343,6 @@
 </div>
 <div class="post-entry__tags"><a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/" class="post-tags__link button"># 游戏开发</a><a href="/tags/Shader/" class="post-tags__link button"># Shader</a></div> 
 <a href="/2020/02/24/unity-shader-basis-01/" class="post-entry__link">Unity Shader | 基础</a>
-                </div>
-            
-                <div class='post-entry content-card'>
-                    <div class="post-entry__header"></div>
-<div class="post-entry__content">
-    <h2 class="post-entry__title">
-        SVN Cleanup错误 Faild to run the wc db work queue associated with
-    </h2>
-    
-        <p>今天svn更新时，因为一个文件问题，导致了 <code>Faild to run the wc db work queue associated with....</code> 的错误，无法 Cleanup，也无法 Update，无法 Revert，现在记录一下解决方法，很简单，只需要三个 sqlite 命令即可。</p>
-<p>这个过程要用到 sqlite3 的命令行工具，可以在<a target="_blank" rel="noopener" href="https://sqlite.org/download.html">官网下载</a>。找到 <strong>Precompiled Binaries for WIndows</strong> 中的 <strong>sqlite-tools-win32-x86-xxxxxx.zip</strong>，点击下载即可，xxxxxx 是指版本号，下载官网上的最新版本即可。</p>
-<p>要在 cmd 中运行，还要将下载并解压后的 sqlite 目录加到环境变量的 Path 中，这样就可以直接在 cmd 中使用 sqlite 命令了。</p>
-<p>下面是解决问题的流程</p>
-    
-</div>
-<div class="post-entry__meta">
-    <a href="/archives/2020/02/" class="post-meta__date button">2020-02-13</a>
-    
- 
-</div>
-<div class="post-entry__tags"><a href="/tags/SVN/" class="post-tags__link button"># SVN</a></div> 
-<a href="/2020/02/13/solve-svn-clean-up-error/" class="post-entry__link">SVN Cleanup错误 Faild to run the wc db work queue associated with</a>
-                </div>
-            
-                <div class='post-entry content-card'>
-                    <div class="post-entry__header"></div>
-<div class="post-entry__content">
-    <h2 class="post-entry__title">
-        使用 Python 去掉 Kindle PC 复制时自动添加的内容
-    </h2>
-    
-        <p>在使用 Kindle PC 软件看英文电子书时，常常会配合 CopyTranslator 软件做剪切板内容翻译，但是最近发现 Kindle PC 在复制内容时，会在剪切板中自动附加上书籍的内容，就像下面这样</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">There’s nothing wrong with pursuing venture funding and attempting to grow fast like eBay</span><br><span class="line"></span><br><span class="line">Walling, Rob; Taber, Mike. Start Small, Stay Small: A Developer&#x27;s Guide to Launching a Startup (Kindle位置28). The Numa Group, LLC. Kindle 版本.</span><br></pre></td></tr></table></figure>
-
-
-<p>上面的内容，第一行是我要复制的内容，<code>Walling, Rob; Taber, Mike. Start Small, Stay Small: A Developer&#39;s Guide to Launching a Startup (Kindle位置28). The Numa Group, LLC. Kindle 版本. </code>是Kindle PC自动附加的书籍信息内容，这一点很烦人。</p>
-<p>要解决这个问题其实很简单，只要监控剪切板变化时，将剪切板中的字符串，去掉自动附加的内容，然后将新的字符串替换回剪切板即可。接下来我们使用Python来做这件事情，代码只需要很少几行即可。</p>
-    
-</div>
-<div class="post-entry__meta">
-    <a href="/archives/2020/02/" class="post-meta__date button">2020-02-11</a>
-    
- 
-</div>
-<div class="post-entry__tags"><a href="/tags/Python/" class="post-tags__link button"># Python</a></div> 
-<a href="/2020/02/11/python-delete-kindle-pc-content/" class="post-entry__link">使用 Python 去掉 Kindle PC 复制时自动添加的内容</a>
                 </div>
             
         

@@ -35,30 +35,28 @@
     <!-- meta -->
 
 
-<title>我做了一个无法上架的彩票App | 萌一小栈</title>
+<title>This Week In Moeif 9 | 萌一小栈</title>
 
 
-    <meta name="keywords" content="独立开发者">
+    <meta name="keywords" content="This Week In Moeif">
 
 
 
 
     <!-- OpenGraph -->
  
-    <meta name="description" content="前两个月做了一个项目，彩票玩家，但是因为政策问题，无法上架。那就从技术的角度来聊一下这个产品。彩票玩家的规划是一个可以查看开奖信息，可以管理自己想要的彩票号码，可以查看历史开奖信息的App。">
+    <meta name="description" content="这周上架了诗仙与诗魔项目，不过没有多少玩家，国内只上架了TapTap，其他的Android商店等待著作权下来。这周有了一个新的项目构思，一个模拟养成的游戏，具体还在构思中，细节比较多。音乐与僵尸游戏进入了Demo阶段的开发流程。 这周还整理了一下博客，换了一下主题，回到了以内容为中心的模式。后面会慢慢提高写作输入的频率。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="我做了一个无法上架的彩票App">
-<meta property="og:url" content="http://imoegirl.com/2021/07/11/unlisted-lottery-project/index.html">
+<meta property="og:title" content="This Week In Moeif 9">
+<meta property="og:url" content="http://imoegirl.com/2021/08/22/this-week-in-moeif-9/index.html">
 <meta property="og:site_name" content="萌一小栈">
-<meta property="og:description" content="前两个月做了一个项目，彩票玩家，但是因为政策问题，无法上架。那就从技术的角度来聊一下这个产品。彩票玩家的规划是一个可以查看开奖信息，可以管理自己想要的彩票号码，可以查看历史开奖信息的App。">
+<meta property="og:description" content="这周上架了诗仙与诗魔项目，不过没有多少玩家，国内只上架了TapTap，其他的Android商店等待著作权下来。这周有了一个新的项目构思，一个模拟养成的游戏，具体还在构思中，细节比较多。音乐与僵尸游戏进入了Demo阶段的开发流程。 这周还整理了一下博客，换了一下主题，回到了以内容为中心的模式。后面会慢慢提高写作输入的频率。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://imoegirl.com/2021/07/11/unlisted-lottery-project/lottery_fans.png">
-<meta property="article:published_time" content="2021-07-11T14:33:28.000Z">
-<meta property="article:modified_time" content="2021-08-22T13:31:04.939Z">
+<meta property="article:published_time" content="2021-08-22T12:49:12.000Z">
+<meta property="article:modified_time" content="2021-08-22T12:53:23.875Z">
 <meta property="article:author" content="iMoegirl">
-<meta property="article:tag" content="独立开发者">
+<meta property="article:tag" content="This Week In Moeif">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://imoegirl.com/2021/07/11/unlisted-lottery-project/lottery_fans.png">
 
 
     
@@ -133,10 +131,10 @@
 
 <div class="post-title">
     <h1 class="post-title__text">
-        我做了一个无法上架的彩票App
+        This Week In Moeif 9
     </h1>
     <div class="post-title__meta">
-        <a href="/archives/2021/07/" class="post-meta__date button">2021-07-11</a>
+        <a href="/archives/2021/08/" class="post-meta__date button">2021-08-22</a>
         
  
         
@@ -155,27 +153,26 @@
 <article class="post content-card">
     <div class="post__header"></div>
     <div class="post__content">
-        <p>前两个月做了一个项目，彩票玩家，但是因为政策问题，无法上架。那就从技术的角度来聊一下这个产品。彩票玩家的规划是一个可以查看开奖信息，可以管理自己想要的彩票号码，可以查看历史开奖信息的App。</p>
+        <p>这周上架了诗仙与诗魔项目，不过没有多少玩家，国内只上架了TapTap，其他的Android商店等待著作权下来。这周有了一个新的项目构思，一个模拟养成的游戏，具体还在构思中，细节比较多。音乐与僵尸游戏进入了Demo阶段的开发流程。</p>
+<p>这周还整理了一下博客，换了一下主题，回到了以内容为中心的模式。后面会慢慢提高写作输入的频率。</p>
 <span id="more"></span>
 
-<p><img src="lottery_fans.png"></p>
-<p>这个项目目前的状态是，只上架了 Google Play，但这和没有上架区别不大。</p>
-<p>AppStore审核通不过，第一次拒绝原因是关于数据版权问题。修改Apple Store Connect产品信息页的一些配置，改了一点Bug，又提交了一次，还是被拒绝，但这次似乎不是因为产品了，收到苹果的删号警告，说违反了苹果的开发者协议，也不知道为什么，然后提交了申诉，现在也还没有收到答复。</p>
-<p>软件著作权的申请被要求提交彩票中心授权或合作开发的文件，无解。目前关于上架相关的情况就是这样，从产品的角度出发，死透。</p>
-<p>接下来就只能聊一下技术实现方面。</p>
-<h2 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h2><p>客户端这一块，还是用Unity做的。至于为什么不用原生，主要因为是我不会。其次，用Unity实现，也并没有什么不妥（对于这个App来说）。无论从开发效率，还是跨平台，还是产品的表现效果，都还不错。再加上之前的能用模块代码的积累，对于我来说使用 Unity 开发这个 App 是最优的选择。我觉得从产品的角度出发，一个产品到达用户手中，只要各方面好用，那用什么技术做出来的，对于用户来说就不是那么重要了。</p>
-<p>客户端有一个更新模块，启动后会拉取版本配置信息，对比版本号，如果远程配置的版本号比较大，就会弹出强制或非强制更新弹窗，点击更新后会跳转到AppStore。是的，这个模块只对iOS有效。对于国内Android来说，由于没有统一的市场，因为成本问题我也不想购买第三方存储服务，所以就直接在Android上关掉了这个功能。</p>
-<p>产品本身已经内置了彩票的大部分开奖数据，从上架那天之前的。由于彩票的开奖时间基本上是固定的，所以客户端会有一个协程，每隔1分钟判断系统时间是否大于配置的开奖时间，如果大于，并且当前缺少本期的开奖数据，就会向服务器请求。这样做，对于服务器的压力也比较小。</p>
-<p>客户端向服务器的请求内容，使用了 aes 加密，一定程度上防止了请求内容被破解。</p>
-<p>广告方面，使用了 Unity 的广告，经过测试，现在的填充还可以。</p>
-<p>推送方面，Android 没有加，因为太麻烦了，国内Android手机各个厂商都不统一，Google的firebase在国内又用不了。国内有第三方的推送服务，要收费，也不太想用。iOS版本使用了OneSignal插件，当然也需要在他们后台配置苹果的证书相关的东西。</p>
-<p>对于界面的设计，谈不上什么设计。就是找其他看起来设计不错的App，进行参考，很少有某个App的设计是可以完全拿来抄的，基本只能从形上参考一下，然后多找几个综合来考虑。先把布局确定好，然后颜色上因为是App，也不用太多的色彩。</p>
-<p>产品的具体逻辑就没什么好说的了，对于Unity来说就是UI的管理，以及UI的搭建。</p>
-<h2 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h2><p>服务器方面，使用了 Rust 来写的，终于把 Rust 用在了项目上。即使写的很烂，但是能跑，能满足需求，目前来说足够了。</p>
-<p>服务器主要就是两方面，一个是官网获取开奖数据，然后存入数据库。另一方面就是处理客户端的数据请求。从官网获取开奖数据使用了 reqwest。处理客户端请求使用了 actix-web。</p>
-<p>数据库方面使用了 diesel 和 PostgreSQL，这一块也折腾了好久，基本上现学现用。因为能满足最开始的需求，就没有上 Redis。</p>
-<p>客户端和服务器之间通信的请求数据使用了 aes 加密，服务器收到请求后，会先解密请求内容，如果解密不了，就直接抛弃。经过压力测试，在不加密的情况下，我那一年108块的垃圾服务器可以处理 70 req/s，但是加上加密，就只能处理 40 req/s 了，其实也还好，够用，毕竟已经死透了，即使没有死透，前期也够用。</p>
-<h2 id="然而"><a href="#然而" class="headerlink" title="然而"></a>然而</h2><p>项目虽然死透了，但是服务器方面学习到的东西，也用在下一个项目上。这个项目在做的时候也考虑过可能上不了架，但是没有想太多，就直接做了，客户端部分投入的时间和精力基本上算是浪费了，服务器方面的积累是有用的。</p>
+<h2 id="项目进度"><a href="#项目进度" class="headerlink" title="项目进度"></a><strong>项目进度</strong></h2><ul>
+<li><p><strong>诗仙与诗魔</strong><br>国内已上架了TapTap，国外上架了GooglePlay，以及一些其他的商店，像华为，三星，小米，APKPure等。国内其他的Android商店等待著作权。</p>
+</li>
+<li><p><strong>音乐与僵尸</strong><br>开始了核心玩法的Demo逻辑开发，目前完成了Node点的逻辑。Beat点的规则下周再确定一下。预计这个月底可以完成整个核心玩法Demo的开发，然后就可以开始加音乐和做UI逻辑。</p>
+</li>
+<li><p><strong>动物旅行</strong><br>动物旅行目前只有周末会开发一天，今天写了一下数据方面的结构，游戏状态的描述逻辑基本上确定了，写了一些基类，下周可以继续填充细节。UI方面的资源有一些缺失，暂时先放一下，等待补全。</p>
+</li>
+</ul>
+<h2 id="本周电影"><a href="#本周电影" class="headerlink" title="本周电影"></a>本周电影</h2><ul>
+<li>第四公民 Citizenfour (2014)</li>
+<li>黑白魔女库伊拉 Cruella (2021)</li>
+</ul>
+<h2 id="下周初步计划"><a href="#下周初步计划" class="headerlink" title="下周初步计划"></a><strong>下周初步计划</strong></h2><ul>
+<li><input disabled="" type="checkbox"> 音乐与僵尸游戏Demo逻辑</li>
+<li><input disabled="" type="checkbox"> 动物旅行游戏核心玩法逻辑</li>
+</ul>
 
     </div>
     
@@ -187,7 +184,7 @@
             <strong>
                 Permalink: 
             </strong>
-            <a href="http://imoegirl.com/2021/07/11/unlisted-lottery-project/">http://imoegirl.com/2021/07/11/unlisted-lottery-project/</a>
+            <a href="http://imoegirl.com/2021/08/22/this-week-in-moeif-9/">http://imoegirl.com/2021/08/22/this-week-in-moeif-9/</a>
         </p>
         
             <strong>
@@ -203,14 +200,14 @@
     </div>
  
     <div class="post-footer__meta"><p>updated at 2021-08-22</p></div> 
-    <div class="post-entry__tags"><a href="/tags/%E7%8B%AC%E7%AB%8B%E5%BC%80%E5%8F%91%E8%80%85/" class="post-tags__link button"># 独立开发者</a></div> 
+    <div class="post-entry__tags"><a href="/tags/This-Week-In-Moeif/" class="post-tags__link button"># This Week In Moeif</a></div> 
 </article>
 
 
     <div class="nav">
         <div class="nav__prev">
             
-                <a href="/2021/07/18/this-week-in-moeif-4/" class="nav__link">
+                <a href="/2021/08/22/unity-2d-bg-adaptive/" class="nav__link">
                     <div>
                         <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
                     </div>
@@ -219,7 +216,7 @@
                             Previous Post
                         </div>
                         <div class="nav__title">
-                            This Week In Moeif 4
+                            Unity 2D 游戏背景适配
                         </div>
                     </div>
                 </a>
@@ -227,13 +224,13 @@
         </div>
         <div class="nav__next">
             
-                <a href="/2021/07/11/this-week-in-moeif-3/" class="nav__link">
+                <a href="/2021/08/21/unity-sprite-full-rect-tight/" class="nav__link">
                     <div>
                         <div class="nav__label">
                             Next Post
                         </div>
                         <div class="nav__title">
-                            This Week In Moeif 3
+                            Unity Sprites Full-Rect 和 Tight 设置
                         </div>
                     </div>
                     <div>
